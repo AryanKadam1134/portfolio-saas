@@ -3,6 +3,8 @@ import api from "./api";
 export const userEndpoints = {
   getCurrentUser: () => api.get("/users"),
 
+  getUserSessions: () => api.get("/users/user-sessions"),
+
   updateUser: (body) => api.patch("/users", body),
 
   deleteUser: () => api.delete("/users"),

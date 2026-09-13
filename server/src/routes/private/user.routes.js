@@ -7,6 +7,7 @@ import {
   getUserDetails,
   getUserImage,
   getUserResume,
+  getUserSessions,
   hasPassowrd,
   updateUserDetails,
   updateUserImage,
@@ -21,6 +22,7 @@ const userRouter = Router();
 userRouter.use(verifyJWT);
 
 userRouter.route("/check-password").get(hasPassowrd);
+userRouter.route("/user-sessions").get(getUserSessions);
 
 userRouter
   .route("/")

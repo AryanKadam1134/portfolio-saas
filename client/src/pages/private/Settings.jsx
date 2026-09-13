@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { LockKeyholeOpen, Trash2 } from "lucide-react";
+import { FingerprintPattern, LockKeyholeOpen, Trash2 } from "lucide-react";
 
 import DeleteUserModal from "../../components/settings/DeleteUserModal";
 
@@ -49,7 +49,12 @@ export default function Settings() {
           {
             name: "Change Password",
             icon: LockKeyholeOpen,
-            onClick: () => navigate("change_password"),
+            onClick: () => navigate("change-password"),
+          },
+          {
+            name: "Active Sessions",
+            icon: FingerprintPattern,
+            onClick: () => navigate("user-sessions"),
           },
           {
             name: "Delete Account",

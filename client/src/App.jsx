@@ -50,6 +50,7 @@ import { NotificationsProvider } from "./context/notification/NotificationsProvi
 
 import { useAuth } from "./context/auth/useAuth";
 import { useTheme } from "./context/theme/useTheme.js";
+import UserSessions from "./pages/private/UserSessions.jsx";
 
 function SessionLoader() {
   return (
@@ -223,9 +224,10 @@ function App() {
                     <Route path="/settings" element={<CommonLayout />}>
                       <Route index element={<Settings />} />
                       <Route
-                        path="change_password"
+                        path="change-password"
                         element={<ChangePassword />}
                       />
+                      <Route path="user-sessions" element={<UserSessions />} />
                     </Route>
                   </Route>
                 </Routes>

@@ -1,11 +1,4 @@
-import jwt from "jsonwebtoken";
-import { OAuth2Client } from "google-auth-library";
-
-import {
-  accessTokenOptions,
-  options,
-  refreshTokenOptions,
-} from "../../constants.js";
+import { UAParser } from "ua-parser-js";
 
 import { User } from "../../models/user.model.js";
 import { Skill } from "../../models/skill.model.js";
@@ -106,6 +99,52 @@ const getUserDetails = asynchandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiRes(200, req.user, "user details fetched successfully!"));
+});
+
+const getUserSessions = asynchandler(async (req, res) => {
+  const user = await User.findById(req.user?._id);
+
+  if (!user) {
+    throw new ApiError(404, "user not found!");
+  }
+
+  const rawSessions = user?.sessions || [];
+
+  const sessions = rawSessions?.map((session) => {
+    const { refreshToken, userAgent, ...sessionData } = session.toObject();
+    const parse = new UAParser(userAgent);
+    const result = parse.getResult();
+
+    return {
+      ...sessionData,
+      userAgent: {
+        browser: {
+          name: result.browser.name || null,
+          version: result.browser.version || null,
+        },
+        device: {
+          type: result.device.type || "desktop",
+          vendor: result.device.vendor || null,
+          model: result.device.model || null,
+        },
+        os: {
+          name: result.os.name || null,
+          version: result.os.version || null,
+        },
+        cpu: {
+          architecture: result.cpu.architecture || null,
+        },
+      },
+    };
+  });
+
+  if (!sessions.length) {
+    throw new ApiError(404, "no sessions found!");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, sessions, "user sessions fetched successfully!"));
 });
 
 const getUserImage = asynchandler(async (req, res) => {
@@ -367,6 +406,7 @@ export {
   hasPassowrd,
   updateUserDetails,
   getUserDetails,
+  getUserSessions,
   getUserImage,
   getUserResume,
   updateUserImage,
