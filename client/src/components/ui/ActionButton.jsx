@@ -1,7 +1,3 @@
-import React from "react";
-
-import { FilePenLine, Trash2 } from "lucide-react";
-
 const variants = {
   green: "text-white bg-green-500 hover:bg-green-600",
   red: "text-white bg-red-500 hover:bg-red-600",

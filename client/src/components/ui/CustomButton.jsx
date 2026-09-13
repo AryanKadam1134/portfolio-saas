@@ -1,5 +1,3 @@
-import React from "react";
-
 const variants = {
   default: "text-white bg-blue-500 hover:bg-blue-600",
   red: "text-white bg-red-500 hover:bg-red-600",

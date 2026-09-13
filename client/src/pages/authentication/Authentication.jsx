@@ -74,7 +74,12 @@ export default function Authentication() {
         >
           {/* First Name */}
           {!isLogin && (
-            <LabelInput id="firstName" label="First Name" required>
+            <LabelInput
+              id="firstName"
+              label="First Name"
+              required
+              error={errors?.firstName?.message}
+            >
               <CustomInput
                 id="firstName"
                 type="text"
@@ -82,27 +87,34 @@ export default function Authentication() {
                 {...register("firstName", {
                   required: "First Name is required!",
                 })}
-                error={errors?.firstName?.message}
               />
             </LabelInput>
           )}
 
           {/* Last Name */}
           {!isLogin && (
-            <LabelInput id="lastName" label="Last Name">
+            <LabelInput
+              id="lastName"
+              label="Last Name"
+              error={errors?.lastName?.message}
+            >
               <CustomInput
                 id="lastName"
                 type="text"
                 placeholder="Doe"
                 {...register("lastName")}
-                error={errors?.lastName?.message}
               />
             </LabelInput>
           )}
 
           {/* Username */}
           {!isLogin && (
-            <LabelInput id="username" label="Username" required>
+            <LabelInput
+              id="username"
+              label="Username"
+              required
+              error={errors?.username?.message}
+            >
               <CustomInput
                 id="username"
                 type="text"
@@ -110,14 +122,18 @@ export default function Authentication() {
                 {...register("username", {
                   required: "username is required!",
                 })}
-                error={errors?.username?.message}
               />
             </LabelInput>
           )}
 
           {/* User Credential */}
           {isLogin && (
-            <LabelInput id="userCredential" label="Username or Email" required>
+            <LabelInput
+              id="userCredential"
+              label="Username or Email"
+              required
+              error={errors?.userCredential?.message}
+            >
               <CustomInput
                 id="userCredential"
                 type="text"
@@ -125,14 +141,18 @@ export default function Authentication() {
                 {...register("userCredential", {
                   required: "username or email is required!",
                 })}
-                error={errors?.userCredential?.message}
               />
             </LabelInput>
           )}
 
           {/* Email */}
           {!isLogin && (
-            <LabelInput id="email" label="Email" required>
+            <LabelInput
+              id="email"
+              label="Email"
+              required
+              error={errors?.email?.message}
+            >
               <CustomInput
                 id="email"
                 type="email"
@@ -145,7 +165,6 @@ export default function Authentication() {
                     message: "Invalid email format",
                   },
                 })}
-                error={errors?.email?.message}
               />
             </LabelInput>
           )}
@@ -165,6 +184,7 @@ export default function Authentication() {
               )
             }
             required
+            error={errors?.password?.message}
           >
             <CustomInputPassword
               id="password"
@@ -181,8 +201,6 @@ export default function Authentication() {
                   message: "Maximum 16 characters",
                 },
               })}
-              className="pr-10"
-              error={errors?.password?.message}
             />
           </LabelInput>
 
@@ -190,12 +208,13 @@ export default function Authentication() {
 
           {/* Remember Me */}
           {isLogin && (
-            <LabelInput id="rememberMe" label="Remember Me?" type="checkbox">
-              <CustomCheckbox
-                id="rememberMe"
-                {...register("rememberMe")}
-                error={errors?.rememberMe?.message}
-              />
+            <LabelInput
+              id="rememberMe"
+              label="Remember Me?"
+              type="checkbox"
+              error={errors?.rememberMe?.message}
+            >
+              <CustomCheckbox id="rememberMe" {...register("rememberMe")} />
             </LabelInput>
           )}
 
