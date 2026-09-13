@@ -10,7 +10,6 @@ export default defineConfig({
     port: 5173,
     hmr: {
       // set this to the host IP (the address other clients will use)
-
       protocol: "ws",
     },
   },

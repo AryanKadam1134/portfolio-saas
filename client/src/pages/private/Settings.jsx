@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, LockKeyholeOpen, Trash2 } from "lucide-react";
+import { LockKeyholeOpen, Trash2 } from "lucide-react";
 
 import DeleteUserModal from "../../components/settings/DeleteUserModal";
 
