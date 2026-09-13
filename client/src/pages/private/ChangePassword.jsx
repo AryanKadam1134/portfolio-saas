@@ -78,6 +78,7 @@ export default function ChangePassword() {
           label="Current Password"
           colSpan="col-span-12 sm:col-span-6"
           required
+          error={errors?.old_password?.message}
         >
           <CustomInputPassword
             id="old_password"
@@ -94,8 +95,6 @@ export default function ChangePassword() {
                 message: "Password must not exceed 16 characters",
               },
             })}
-            className="pr-10"
-            error={errors?.old_password?.message}
           />
         </LabelInput>
       )}
@@ -106,6 +105,7 @@ export default function ChangePassword() {
         label="New Password"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.new_password?.message}
       >
         <CustomInputPassword
           id="new_password"
@@ -122,8 +122,6 @@ export default function ChangePassword() {
               message: "Password must not exceed 16 characters",
             },
           })}
-          className="pr-10"
-          error={errors?.new_password?.message}
         />
       </LabelInput>
 
@@ -133,6 +131,7 @@ export default function ChangePassword() {
         label="Confirm New Password"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.confirm_password?.message}
       >
         <CustomInputPassword
           id="confirm_password"
@@ -155,8 +154,6 @@ export default function ChangePassword() {
               return true;
             },
           })}
-          className="pr-10"
-          error={errors?.confirm_password?.message}
         />
       </LabelInput>
 

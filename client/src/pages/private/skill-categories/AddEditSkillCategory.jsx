@@ -112,6 +112,7 @@ export default function AddEditSkillCategory() {
         label="Category Name"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.name?.message}
       >
         <CustomInput
           id="name"
@@ -128,7 +129,6 @@ export default function AddEditSkillCategory() {
               message: "Category name must not exceed 50 characters",
             },
           })}
-          error={errors?.name?.message}
         />
       </LabelInput>
 
@@ -137,13 +137,13 @@ export default function AddEditSkillCategory() {
         id="logoUrl"
         label="Logo URL"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.logoUrl?.message}
       >
         <CustomInput
           id="logoUrl"
           type="text"
           placeholder="e.g. /images/frontend.svg"
           {...register("logoUrl")}
-          error={errors?.logoUrl?.message}
         />
       </LabelInput>
 
@@ -152,6 +152,7 @@ export default function AddEditSkillCategory() {
         id="sortOrder"
         label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.sortOrder?.message}
       >
         <CustomInput
           id="sortOrder"
@@ -159,7 +160,6 @@ export default function AddEditSkillCategory() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -169,6 +169,7 @@ export default function AddEditSkillCategory() {
         label="Visibility"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.visibility?.message}
       >
         <CustomRadioButtons
           id="visibility"
@@ -177,7 +178,6 @@ export default function AddEditSkillCategory() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility?.message}
         />
       </LabelInput>
 

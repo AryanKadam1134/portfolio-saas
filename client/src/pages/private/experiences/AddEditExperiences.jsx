@@ -258,6 +258,7 @@ export default function AddEditExperiences() {
         label="Organization Name"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.organization?.message}
       >
         <CustomInput
           id="organization"
@@ -274,7 +275,6 @@ export default function AddEditExperiences() {
               message: "Organization name must not exceed 100 characters",
             },
           })}
-          error={errors?.organization?.message}
         />
       </LabelInput>
 
@@ -284,6 +284,7 @@ export default function AddEditExperiences() {
         label="Employment Type"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.employmentType?.message}
       >
         <Controller
           name="employmentType"
@@ -296,7 +297,6 @@ export default function AddEditExperiences() {
               options={employmentTypes}
               value={field.value}
               onChange={field.onChange}
-              error={errors?.employmentType?.message}
             />
           )}
         />
@@ -307,6 +307,7 @@ export default function AddEditExperiences() {
         id="organizationSize"
         label="Organization Size"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.organizationSize?.message}
       >
         <CustomInput
           id="organizationSize"
@@ -318,7 +319,6 @@ export default function AddEditExperiences() {
               message: "Organization size must not exceed 50 characters",
             },
           })}
-          error={errors?.organizationSize?.message}
         />
       </LabelInput>
 
@@ -327,6 +327,7 @@ export default function AddEditExperiences() {
         id="organizationWebsite"
         label="Company Website"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.organizationWebsite?.message}
         attachment={
           organizationWebsite && (
             <a
@@ -350,7 +351,6 @@ export default function AddEditExperiences() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.organizationWebsite?.message}
         />
       </LabelInput>
 
@@ -359,6 +359,7 @@ export default function AddEditExperiences() {
         id="description"
         label="Description"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.description?.message}
       >
         <CustomTextArea
           id="description"
@@ -370,7 +371,6 @@ export default function AddEditExperiences() {
               message: "Description must not exceed 1000 characters",
             },
           })}
-          error={errors?.description?.message}
         />
       </LabelInput>
 
@@ -379,6 +379,7 @@ export default function AddEditExperiences() {
         id="techStack"
         label="Tech Stack"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.techStack?.message}
       >
         <Controller
           name="techStack"
@@ -390,7 +391,6 @@ export default function AddEditExperiences() {
               options={skillsList}
               value={field.value}
               onChange={field.onChange}
-              error={errors?.techStack?.message}
             />
           )}
         />
@@ -401,6 +401,7 @@ export default function AddEditExperiences() {
         id="location"
         label="Location"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.location?.message}
       >
         <CustomInput
           id="location"
@@ -412,7 +413,6 @@ export default function AddEditExperiences() {
               message: "Location must not exceed 100 characters",
             },
           })}
-          error={errors?.location?.message}
         />
       </LabelInput>
 
@@ -422,6 +422,7 @@ export default function AddEditExperiences() {
         label="Location Type"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.locationType?.message}
       >
         <Controller
           name="locationType"
@@ -434,7 +435,6 @@ export default function AddEditExperiences() {
               options={locationTypesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
-              error={errors?.locationType?.message}
             />
           )}
         />
@@ -446,6 +446,7 @@ export default function AddEditExperiences() {
         label="Visibility"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.visibility?.message}
       >
         <CustomRadioButtons
           id="visibility"
@@ -454,7 +455,6 @@ export default function AddEditExperiences() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility?.message}
         />
       </LabelInput>
 
@@ -492,13 +492,18 @@ export default function AddEditExperiences() {
             className="pb-4 flex items-center justify-between gap-6"
           >
             <div className="w-full">
-              <CustomInput
-                placeholder={`Highlight ${idx + 1}`}
-                {...register(`highlights.${idx}`, {
-                  required: "Highlight is required",
-                })}
+              <LabelInput
+                id={`highlights-${idx}`}
+                label={`Highlight ${idx + 1}`}
                 error={errors?.highlights?.[idx]?.message}
-              />
+              >
+                <CustomInput
+                  placeholder={`Highlight ${idx + 1}`}
+                  {...register(`highlights.${idx}`, {
+                    required: "Highlight is required",
+                  })}
+                />
+              </LabelInput>
             </div>
 
             <ActionButton
@@ -544,6 +549,7 @@ export default function AddEditExperiences() {
               label="Role"
               colSpan="col-span-12 sm:col-span-6"
               required
+              error={errors?.positions?.[idx]?.role?.message}
             >
               <CustomInput
                 id={`positions-${idx}.role`}
@@ -551,7 +557,6 @@ export default function AddEditExperiences() {
                 {...register(`positions.${idx}.role`, {
                   required: "Role is required!",
                 })}
-                error={errors?.positions?.[idx]?.role?.message}
               />
             </LabelInput>
 
@@ -561,6 +566,7 @@ export default function AddEditExperiences() {
               label="Start Date"
               colSpan="col-span-12 sm:col-span-6"
               required
+              error={errors?.positions?.[idx]?.startDate?.message}
             >
               <CustomDatePicker
                 id={`positions-${idx}.startDate`}
@@ -569,7 +575,6 @@ export default function AddEditExperiences() {
                 {...register(`positions.${idx}.startDate`, {
                   required: "Start Date is required!",
                 })}
-                error={errors?.positions?.[idx]?.startDate?.message}
               />
             </LabelInput>
 
@@ -579,12 +584,12 @@ export default function AddEditExperiences() {
               icon={Calendar}
               label="End Date"
               colSpan="col-span-12 sm:col-span-6"
+              error={errors?.positions?.[idx]?.endDate?.message}
             >
               <CustomDatePicker
                 id={`positions-${idx}.endDate`}
                 placeholder="Select Date"
                 {...register(`positions.${idx}.endDate`)}
-                error={errors?.positions?.[idx]?.endDate?.message}
               />
             </LabelInput>
 
@@ -594,11 +599,11 @@ export default function AddEditExperiences() {
               label="Currently working on this position"
               colSpan="col-span-9 sm:col-span-4 lg:col-span-5"
               type="checkbox"
+              error={errors?.positions?.[idx]?.isCurrent?.message}
             >
               <CustomCheckbox
                 id={`positions-${idx}.isCurrent`}
                 {...register(`positions.${idx}.isCurrent`)}
-                error={errors?.positions?.[idx]?.isCurrent?.message}
               />
             </LabelInput>
 

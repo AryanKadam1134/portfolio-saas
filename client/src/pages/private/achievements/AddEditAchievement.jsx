@@ -225,6 +225,7 @@ export default function AddEditAchievement() {
         label="Achievement Name"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.title?.message}
       >
         <CustomInput
           id="title"
@@ -241,7 +242,6 @@ export default function AddEditAchievement() {
               message: "Achievement name must not exceed 100 characters",
             },
           })}
-          error={errors?.title?.message}
         />
       </LabelInput>
 
@@ -251,6 +251,7 @@ export default function AddEditAchievement() {
         label="Issued By"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.issuer?.message}
       >
         <CustomInput
           id="issuer"
@@ -267,7 +268,6 @@ export default function AddEditAchievement() {
               message: "Issuer name must not exceed 100 characters",
             },
           })}
-          error={errors?.issuer?.message}
         />
       </LabelInput>
 
@@ -276,6 +276,7 @@ export default function AddEditAchievement() {
         id="certificateId"
         label="Attach Existing Certificate"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.certificateId?.message}
       >
         <Controller
           name="certificateId"
@@ -287,7 +288,6 @@ export default function AddEditAchievement() {
               options={certificatesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
-              error={errors?.certificateId?.message}
             />
           )}
         />
@@ -298,6 +298,7 @@ export default function AddEditAchievement() {
         id="link"
         label="Reffered Link"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.link?.message}
         attachment={
           link && (
             <a
@@ -321,7 +322,6 @@ export default function AddEditAchievement() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.link?.message}
         />
       </LabelInput>
 
@@ -330,6 +330,7 @@ export default function AddEditAchievement() {
         id="description"
         label="Description"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.description?.message}
       >
         <CustomTextArea
           id="description"
@@ -341,7 +342,6 @@ export default function AddEditAchievement() {
               message: "Max 1000 characters allowed!",
             },
           })}
-          error={errors?.description?.message}
         />
       </LabelInput>
 
@@ -351,6 +351,7 @@ export default function AddEditAchievement() {
         label="Date"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.date?.message}
       >
         <CustomDatePicker
           id="date"
@@ -359,7 +360,6 @@ export default function AddEditAchievement() {
           {...register("date", {
             required: "Date is required!",
           })}
-          error={errors?.date?.message}
         />
       </LabelInput>
 

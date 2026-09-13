@@ -7,7 +7,6 @@ import { LockKeyholeOpen, Mail } from "lucide-react";
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
-import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { authEndpoints } from "../../services/authService";
 
@@ -62,7 +61,12 @@ export default function ForogtPassword() {
         >
           {/* Email */}
           {!isOtp && (
-            <LabelInput id="email" label="Email" required>
+            <LabelInput
+              id="email"
+              label="Email"
+              required
+              error={errors?.email?.message}
+            >
               <CustomInput
                 id="email"
                 type="email"
@@ -75,14 +79,18 @@ export default function ForogtPassword() {
                     message: "Invalid email format",
                   },
                 })}
-                error={errors?.email?.message}
               />
             </LabelInput>
           )}
 
           {/* OTP */}
           {isOtp && (
-            <LabelInput id="otp" label="OTP" required>
+            <LabelInput
+              id="otp"
+              label="OTP"
+              required
+              error={errors?.otp?.message}
+            >
               <CustomInput
                 id="otp"
                 type="number"
@@ -91,7 +99,6 @@ export default function ForogtPassword() {
                   minLength: 6,
                   maxLength: 6,
                 })}
-                error={errors?.otp?.message}
               />
             </LabelInput>
           )}

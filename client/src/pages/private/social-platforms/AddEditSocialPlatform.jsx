@@ -380,6 +380,7 @@ export default function AddEditSocialPlatform() {
         label="Platform Name"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.name?.message}
       >
         <CustomInput
           id="name"
@@ -396,7 +397,6 @@ export default function AddEditSocialPlatform() {
               message: "Platform name must not exceed 50 characters",
             },
           })}
-          error={errors?.name?.message}
         />
       </LabelInput>
 
@@ -405,13 +405,13 @@ export default function AddEditSocialPlatform() {
         id="logoUrl"
         label="Logo URL"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.logoUrl?.message}
       >
         <CustomInput
           id="logoUrl"
           type="text"
           placeholder="e.g., /images/github.svg"
           {...register("logoUrl")}
-          error={errors?.logoUrl?.message}
         />
       </LabelInput>
 
@@ -432,6 +432,7 @@ export default function AddEditSocialPlatform() {
           )
         }
         required
+        error={errors?.link?.message}
       >
         <CustomInput
           id="link"
@@ -445,7 +446,6 @@ export default function AddEditSocialPlatform() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.link?.message}
         />
       </LabelInput>
 
@@ -454,6 +454,7 @@ export default function AddEditSocialPlatform() {
         id="sortOrder"
         label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.sortOrder?.message}
       >
         <CustomInput
           id="sortOrder"
@@ -461,7 +462,6 @@ export default function AddEditSocialPlatform() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -471,6 +471,7 @@ export default function AddEditSocialPlatform() {
         label="Visibility"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.visibility?.message}
       >
         <CustomRadioButtons
           id="visibility"
@@ -479,7 +480,6 @@ export default function AddEditSocialPlatform() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility?.message}
         />
       </LabelInput>
 

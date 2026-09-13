@@ -242,6 +242,7 @@ export default function AddEditProject() {
         label="Project Name"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.title?.message}
       >
         <CustomInput
           id="title"
@@ -258,7 +259,6 @@ export default function AddEditProject() {
               message: "Project name must not exceed 100 characters",
             },
           })}
-          error={errors?.title?.message}
         />
       </LabelInput>
 
@@ -267,6 +267,7 @@ export default function AddEditProject() {
         id="organizationId"
         label="Organization (Link Company you worked in)"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.organizationId?.message}
       >
         <Controller
           name="organizationId"
@@ -278,7 +279,6 @@ export default function AddEditProject() {
               options={organizationsList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
-              error={errors?.organizationId?.message}
             />
           )}
         />
@@ -289,6 +289,7 @@ export default function AddEditProject() {
         id="liveLink"
         label="Live Link"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.liveLink?.message}
         attachment={
           liveLink && (
             <a
@@ -312,7 +313,6 @@ export default function AddEditProject() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.liveLink?.message}
         />
       </LabelInput>
 
@@ -321,6 +321,7 @@ export default function AddEditProject() {
         id="githubLink"
         label="GitHub Link"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.githubLink?.message}
         attachment={
           githubLink && (
             <a
@@ -344,7 +345,6 @@ export default function AddEditProject() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.githubLink?.message}
         />
       </LabelInput>
 
@@ -353,6 +353,7 @@ export default function AddEditProject() {
         id="description"
         label="Description"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.description?.message}
       >
         <CustomTextArea
           id="description"
@@ -364,7 +365,6 @@ export default function AddEditProject() {
               message: "Description must not exceed 1000 characters",
             },
           })}
-          error={errors?.description?.message}
         />
       </LabelInput>
 
@@ -373,6 +373,7 @@ export default function AddEditProject() {
         id="techStack"
         label="Tech Stack"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.techStack?.message}
       >
         <Controller
           name="techStack"
@@ -384,7 +385,6 @@ export default function AddEditProject() {
               options={skillsList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
-              error={errors?.techStack?.message}
             />
           )}
         />
@@ -395,6 +395,7 @@ export default function AddEditProject() {
         id="category"
         label="Project Category"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.category?.message}
       >
         <Controller
           name="category"
@@ -406,7 +407,6 @@ export default function AddEditProject() {
               options={projectCategoriesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
-              error={errors?.category?.message}
             />
           )}
         />
@@ -418,17 +418,14 @@ export default function AddEditProject() {
         label="Featured"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
+        error={errors?.featured?.message}
         attachment={
           <p className="font-normal text-xs opacity-80">
             Helps in filtering the projects
           </p>
         }
       >
-        <CustomCheckbox
-          id="featured"
-          {...register("featured")}
-          error={errors?.featured?.message}
-        />
+        <CustomCheckbox id="featured" {...register("featured")} />
       </LabelInput>
 
       {/* Start Date */}
@@ -437,6 +434,7 @@ export default function AddEditProject() {
         label="Start Date"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.startDate?.message}
       >
         <CustomDatePicker
           id="startDate"
@@ -451,7 +449,6 @@ export default function AddEditProject() {
               return true;
             },
           })}
-          error={errors?.startDate?.message}
         />
       </LabelInput>
 
@@ -460,6 +457,7 @@ export default function AddEditProject() {
         id="endDate"
         label="End Date"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.endDate?.message}
       >
         <CustomDatePicker
           id="endDate"
@@ -477,7 +475,6 @@ export default function AddEditProject() {
               return true;
             },
           })}
-          error={errors?.endDate?.message}
         />
       </LabelInput>
 
@@ -487,12 +484,9 @@ export default function AddEditProject() {
         label="Currently working"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
+        error={errors?.isCurrent?.message}
       >
-        <CustomCheckbox
-          id="isCurrent"
-          {...register("isCurrent")}
-          error={errors?.isCurrent?.message}
-        />
+        <CustomCheckbox id="isCurrent" {...register("isCurrent")} />
       </LabelInput>
 
       {/* Sort Order */}
@@ -500,6 +494,7 @@ export default function AddEditProject() {
         id="sortOrder"
         label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.sortOrder?.message}
       >
         <CustomInput
           id="sortOrder"
@@ -507,7 +502,6 @@ export default function AddEditProject() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -517,6 +511,7 @@ export default function AddEditProject() {
         label="Visibility"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.visibility?.message}
       >
         <CustomRadioButtons
           id="visibility"
@@ -525,7 +520,6 @@ export default function AddEditProject() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility?.message}
         />
       </LabelInput>
 

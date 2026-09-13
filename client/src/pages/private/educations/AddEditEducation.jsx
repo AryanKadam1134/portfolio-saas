@@ -185,6 +185,7 @@ export default function AddEditEducation() {
         label="Institute Name"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.instituteName?.message}
       >
         <CustomInput
           id="instituteName"
@@ -201,7 +202,6 @@ export default function AddEditEducation() {
               message: "Institute name must not exceed 100 characters",
             },
           })}
-          error={errors?.instituteName?.message}
         />
       </LabelInput>
 
@@ -211,6 +211,7 @@ export default function AddEditEducation() {
         label="Degree / Field of Study"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.qualification?.message}
       >
         <CustomInput
           id="qualification"
@@ -227,7 +228,6 @@ export default function AddEditEducation() {
               message: "Degree must not exceed 100 characters",
             },
           })}
-          error={errors?.qualification?.message}
         />
       </LabelInput>
 
@@ -236,6 +236,7 @@ export default function AddEditEducation() {
         id="description"
         label="Description"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.description?.message}
       >
         <CustomTextArea
           id="description"
@@ -247,7 +248,6 @@ export default function AddEditEducation() {
               message: "Description must not exceed 1000 characters",
             },
           })}
-          error={errors?.description?.message}
         />
       </LabelInput>
 
@@ -256,6 +256,7 @@ export default function AddEditEducation() {
         id="location"
         label="Location"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.location?.message}
       >
         <CustomInput
           id="location"
@@ -267,7 +268,6 @@ export default function AddEditEducation() {
               message: "Location must not exceed 100 characters",
             },
           })}
-          error={errors?.location?.message}
         />
       </LabelInput>
 
@@ -277,6 +277,7 @@ export default function AddEditEducation() {
         label="Start Year"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.startYear?.message}
       >
         <CustomInput
           id="startYear"
@@ -293,7 +294,6 @@ export default function AddEditEducation() {
               message: `Start year cannot be in the future`,
             },
           })}
-          error={errors?.startYear?.message}
         />
       </LabelInput>
 
@@ -302,6 +302,7 @@ export default function AddEditEducation() {
         id="endYear"
         label="End Year"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.endYear?.message}
       >
         <CustomInput
           id="endYear"
@@ -323,7 +324,6 @@ export default function AddEditEducation() {
               return true;
             },
           })}
-          error={errors?.endYear?.message}
         />
       </LabelInput>
 
@@ -333,12 +333,9 @@ export default function AddEditEducation() {
         label="Currently studying here"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
+        error={errors?.isCurrent?.message}
       >
-        <CustomCheckbox
-          id="isCurrent"
-          {...register("isCurrent")}
-          error={errors?.isCurrent?.message}
-        />
+        <CustomCheckbox id="isCurrent" {...register("isCurrent")} />
       </LabelInput>
 
       {/* Percentage */}
@@ -346,6 +343,7 @@ export default function AddEditEducation() {
         id="percentage"
         label="Percentage / Grade"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.percentage?.message}
       >
         <CustomInput
           id="percentage"
@@ -364,12 +362,16 @@ export default function AddEditEducation() {
               message: "Percentage cannot be more than 100",
             },
           })}
-          error={errors?.percentage?.message}
         />
       </LabelInput>
 
       {/* CGPA */}
-      <LabelInput id="cgpa" label="CGPA" colSpan="col-span-12 sm:col-span-6">
+      <LabelInput
+        id="cgpa"
+        label="CGPA"
+        colSpan="col-span-12 sm:col-span-6"
+        error={errors?.cgpa?.message}
+      >
         <CustomInput
           id="cgpa"
           type="number"
@@ -387,7 +389,6 @@ export default function AddEditEducation() {
               message: "CGPA cannot be more than 10",
             },
           })}
-          error={errors?.cgpa?.message}
         />
       </LabelInput>
 

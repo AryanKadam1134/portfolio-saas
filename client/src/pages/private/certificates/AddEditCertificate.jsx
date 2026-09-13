@@ -210,6 +210,7 @@ export default function AddEditCertificate() {
         label="Certificate Name"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.title?.message}
       >
         <CustomInput
           id="title"
@@ -226,7 +227,6 @@ export default function AddEditCertificate() {
               message: "Certificate name must not exceed 100 characters",
             },
           })}
-          error={errors?.title?.message}
         />
       </LabelInput>
 
@@ -236,6 +236,7 @@ export default function AddEditCertificate() {
         label="Issued By"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.issuer?.message}
       >
         <CustomInput
           id="issuer"
@@ -252,7 +253,6 @@ export default function AddEditCertificate() {
               message: "Issuer name must not exceed 100 characters",
             },
           })}
-          error={errors?.issuer?.message}
         />
       </LabelInput>
 
@@ -261,6 +261,7 @@ export default function AddEditCertificate() {
         id="credentialId"
         label="Credential ID"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.credentialId?.message}
       >
         <CustomInput
           id="credentialId"
@@ -272,7 +273,6 @@ export default function AddEditCertificate() {
               message: "Credential ID must not exceed 50 characters",
             },
           })}
-          error={errors?.credentialId?.message}
         />
       </LabelInput>
 
@@ -281,6 +281,7 @@ export default function AddEditCertificate() {
         id="credentialUrl"
         label="Credential URL"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.credentialUrl?.message}
         attachment={
           credentialUrl && (
             <a
@@ -304,7 +305,6 @@ export default function AddEditCertificate() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.credentialUrl?.message}
         />
       </LabelInput>
 
@@ -313,6 +313,7 @@ export default function AddEditCertificate() {
         id="description"
         label="Description"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.description?.message}
       >
         <CustomTextArea
           id="description"
@@ -324,7 +325,6 @@ export default function AddEditCertificate() {
               message: "Description must not exceed 1000 characters",
             },
           })}
-          error={errors?.description?.message}
         />
       </LabelInput>
 
@@ -333,6 +333,7 @@ export default function AddEditCertificate() {
         id="skills"
         label="Skills"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.skills?.message}
       >
         <Controller
           name="skills"
@@ -344,7 +345,6 @@ export default function AddEditCertificate() {
               options={skillsList}
               value={field.value}
               onChange={field.onChange}
-              error={errors?.skills?.message}
             />
           )}
         />
@@ -356,6 +356,7 @@ export default function AddEditCertificate() {
         label="Issue Date"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.issueDate?.message}
       >
         <CustomDatePicker
           id="issueDate"
@@ -374,7 +375,6 @@ export default function AddEditCertificate() {
               return true;
             },
           })}
-          error={errors?.issueDate?.message}
         />
       </LabelInput>
 
@@ -383,6 +383,7 @@ export default function AddEditCertificate() {
         id="expiryDate"
         label="Expiry Date"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.expiryDate?.message}
       >
         <CustomDatePicker
           id="expiryDate"
@@ -400,7 +401,6 @@ export default function AddEditCertificate() {
               return true;
             },
           })}
-          error={errors?.expiryDate?.message}
         />
       </LabelInput>
 
@@ -410,17 +410,14 @@ export default function AddEditCertificate() {
         label="Featured"
         colSpan="col-span-12 sm:col-span-6"
         type="checkbox"
+        error={errors?.featured?.message}
         attachment={
           <p className="font-normal text-xs opacity-80">
             Helps in filtering the certificates
           </p>
         }
       >
-        <CustomCheckbox
-          id="featured"
-          {...register("featured")}
-          error={errors?.featured?.message}
-        />
+        <CustomCheckbox id="featured" {...register("featured")} />
       </LabelInput>
 
       {/* Sort Order */}
@@ -428,6 +425,7 @@ export default function AddEditCertificate() {
         id="sortOrder"
         label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.sortOrder?.message}
       >
         <CustomInput
           id="sortOrder"
@@ -435,7 +433,6 @@ export default function AddEditCertificate() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -445,6 +442,7 @@ export default function AddEditCertificate() {
         label="Visibility"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.visibility?.message}
       >
         <CustomRadioButtons
           id="visibility"
@@ -453,7 +451,6 @@ export default function AddEditCertificate() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility?.message}
         />
       </LabelInput>
 

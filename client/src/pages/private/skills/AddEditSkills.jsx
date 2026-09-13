@@ -185,6 +185,7 @@ export default function AddEditSkills() {
         label="Skill Name"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.name?.message}
       >
         <CustomInput
           id="name"
@@ -201,7 +202,6 @@ export default function AddEditSkills() {
               message: "Skill name must not exceed 50 characters",
             },
           })}
-          error={errors?.name?.message}
         />
       </LabelInput>
 
@@ -211,6 +211,7 @@ export default function AddEditSkills() {
         label="Skill Category"
         colSpan="col-span-12 sm:col-span-6"
         className="w-full"
+        error={errors?.categoryId?.message}
       >
         <Controller
           name="categoryId"
@@ -222,7 +223,6 @@ export default function AddEditSkills() {
               options={categoriesList}
               value={field.value}
               onChange={field.onChange} // send value to hook form
-              error={errors?.categoryId?.message}
             />
           )}
         />
@@ -233,13 +233,13 @@ export default function AddEditSkills() {
         id="logoUrl"
         label="Logo URL"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.logoUrl?.message}
       >
         <CustomInput
           id="logoUrl"
           type="text"
           placeholder="/images/react_light.svg"
           {...register("logoUrl")}
-          error={errors?.logoUrl?.message}
         />
       </LabelInput>
 
@@ -250,6 +250,7 @@ export default function AddEditSkills() {
         colSpan="col-span-12 sm:col-span-6"
         className="w-full"
         required
+        error={errors?.level?.message}
       >
         <Controller
           name="level"
@@ -262,7 +263,6 @@ export default function AddEditSkills() {
               options={skillLevels}
               value={field.value}
               onChange={field.onChange}
-              error={errors?.level?.message} // send value to hook form
             />
           )}
         />
@@ -273,6 +273,7 @@ export default function AddEditSkills() {
         id="sortOrder"
         label="Display Order"
         colSpan="col-span-12 sm:col-span-6"
+        error={errors?.sortOrder?.message}
       >
         <CustomInput
           id="sortOrder"
@@ -280,7 +281,6 @@ export default function AddEditSkills() {
           min={0}
           placeholder="0 (appears first)"
           {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder?.message}
         />
       </LabelInput>
 
@@ -290,6 +290,7 @@ export default function AddEditSkills() {
         label="Visibility"
         colSpan="col-span-12 sm:col-span-6"
         required
+        error={errors?.visibility?.message}
       >
         <CustomRadioButtons
           id="visibility"
@@ -298,7 +299,6 @@ export default function AddEditSkills() {
           {...register("visibility", {
             required: "Visibility is required!",
           })}
-          error={errors?.visibility?.message}
         />
       </LabelInput>
 

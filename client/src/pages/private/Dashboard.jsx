@@ -111,6 +111,7 @@ export default function Dashboard() {
         label="First Name"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         required
+        error={errors?.firstName?.message}
       >
         <CustomInput
           id="firstName"
@@ -127,7 +128,6 @@ export default function Dashboard() {
               message: "First name must not exceed 50 characters",
             },
           })}
-          error={errors?.firstName?.message}
         />
       </LabelInput>
 
@@ -136,13 +136,13 @@ export default function Dashboard() {
         id="middleName"
         label="Middle Name"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        error={errors?.middleName?.message}
       >
         <CustomInput
           id="middleName"
           type="text"
           placeholder="Enter middle name (optional)"
           {...register("middleName", {})}
-          error={errors?.middleName?.message}
         />
       </LabelInput>
 
@@ -151,6 +151,7 @@ export default function Dashboard() {
         id="lastName"
         label="Last Name"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        error={errors?.lastName?.message}
       >
         <CustomInput
           id="lastName"
@@ -162,7 +163,6 @@ export default function Dashboard() {
               message: "Last name must not exceed 50 characters",
             },
           })}
-          error={errors?.lastName?.message}
         />
       </LabelInput>
 
@@ -172,6 +172,7 @@ export default function Dashboard() {
         label="Username"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         required
+        error={errors?.username?.message}
       >
         <CustomInput
           id="username"
@@ -193,7 +194,6 @@ export default function Dashboard() {
                 "Username can only contain letters, numbers, hyphens, and underscores",
             },
           })}
-          error={errors?.username?.message}
         />
       </LabelInput>
 
@@ -208,6 +208,7 @@ export default function Dashboard() {
         // }
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         required
+        error={errors?.email?.message}
       >
         <CustomInput
           id="email"
@@ -222,7 +223,6 @@ export default function Dashboard() {
             },
           })}
           disabled
-          error={errors?.email?.message}
         />
       </LabelInput>
 
@@ -232,6 +232,7 @@ export default function Dashboard() {
         label="Mobile No."
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         required
+        error={errors?.mobileNo?.message}
       >
         <CustomInput
           id="mobileNo"
@@ -245,7 +246,6 @@ export default function Dashboard() {
               message: "Mobile number must be exactly 10 digits",
             },
           })}
-          error={errors?.mobileNo?.message}
         />
       </LabelInput>
 
@@ -255,6 +255,7 @@ export default function Dashboard() {
         label="Gender"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         required
+        error={errors?.gender?.message}
       >
         <CustomRadioButtons
           name="gender"
@@ -262,7 +263,6 @@ export default function Dashboard() {
           {...register("gender", {
             required: "Gender is required!",
           })}
-          error={errors?.gender?.message}
         />
       </LabelInput>
 
@@ -284,6 +284,7 @@ export default function Dashboard() {
         id="headline"
         label="Professional Headline"
         colSpan="row-span-3 col-span-12 lg:col-span-3"
+        error={errors?.headline?.message}
       >
         <CustomTextArea
           id="headline"
@@ -295,7 +296,6 @@ export default function Dashboard() {
               message: "Headline must not exceed 100 characters",
             },
           })}
-          error={errors?.headline?.message}
         />
       </LabelInput>
 
@@ -304,6 +304,7 @@ export default function Dashboard() {
         id="about"
         label="About You"
         colSpan="row-span-3 col-span-12 lg:col-span-6"
+        error={errors?.about?.message}
       >
         <CustomTextArea
           id="about"
@@ -315,7 +316,6 @@ export default function Dashboard() {
               message: "About section must not exceed 1000 characters",
             },
           })}
-          error={errors?.about?.message}
         />
       </LabelInput>
 
@@ -325,6 +325,7 @@ export default function Dashboard() {
         label="Resume Link"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
         className="order-[99] lg:order-0"
+        error={errors?.documentUrl?.message}
       >
         <CustomInput
           id="documentUrl"
@@ -337,7 +338,6 @@ export default function Dashboard() {
               message: "URL must start with https://",
             },
           })}
-          error={errors?.documentUrl?.message}
         />
       </LabelInput>
 
@@ -346,6 +346,7 @@ export default function Dashboard() {
         id="city"
         label="City"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        error={errors?.location?.city?.message}
       >
         <CustomInput
           id="city"
@@ -357,7 +358,6 @@ export default function Dashboard() {
               message: "City name must not exceed 50 characters",
             },
           })}
-          error={errors?.location?.city?.message}
         />
       </LabelInput>
 
@@ -366,6 +366,7 @@ export default function Dashboard() {
         id="state"
         label="State / Province"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        error={errors?.location?.state?.message}
       >
         <CustomInput
           id="state"
@@ -377,7 +378,6 @@ export default function Dashboard() {
               message: "State name must not exceed 50 characters",
             },
           })}
-          error={errors?.location?.state?.message}
         />
       </LabelInput>
 
@@ -386,6 +386,7 @@ export default function Dashboard() {
         id="country"
         label="Country"
         colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+        error={errors?.location?.country?.message}
       >
         <CustomInput
           id="country"
@@ -397,7 +398,6 @@ export default function Dashboard() {
               message: "Country name must not exceed 50 characters",
             },
           })}
-          error={errors?.location?.country?.message}
         />
       </LabelInput>
 
