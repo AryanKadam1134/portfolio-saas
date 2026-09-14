@@ -48,19 +48,19 @@ const VISIBILITY = [
   { label: "Private", value: "private" },
 ];
 
-const options = {
+const COOKIE_OPTIONS = {
   httpOnly: true, // set to true in production
   secure: isProduction ? true : false,
   sameSite: isProduction ? "none" : "strict",
 };
 
-const accessTokenOptions = {
+const ACCESS_TOKEN_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: isProduction ? true : false, // set to true in production
   sameSite: isProduction ? "none" : "strict",
 };
 
-const refreshTokenOptions = {
+const REFRESH_TOKEN_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: isProduction ? true : false, // true in production (HTTPS)
   sameSite: isProduction ? "none" : "strict",
@@ -76,7 +76,7 @@ export {
   LOCATION_TYPE,
   VISIBILITY,
   isProduction,
-  options,
-  accessTokenOptions,
-  refreshTokenOptions,
+  COOKIE_OPTIONS,
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  REFRESH_TOKEN_COOKIE_OPTIONS,
 };

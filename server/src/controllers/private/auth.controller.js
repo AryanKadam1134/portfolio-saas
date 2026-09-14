@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
 import {
-  accessTokenOptions,
-  options,
-  refreshTokenOptions,
+  COOKIE_OPTIONS,
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  REFRESH_TOKEN_COOKIE_OPTIONS,
 } from "../../constants.js";
 
 import { User } from "../../models/user.model.js";
@@ -175,11 +175,11 @@ const googleAuth = asynchandler(async (req, res) => {
   // ✅ SAME cookie logic as your login
   return res
     .status(200)
-    .cookie("accessToken", accessToken, accessTokenOptions)
+    .cookie("accessToken", accessToken, ACCESS_TOKEN_COOKIE_OPTIONS)
     .cookie(
       "refreshToken",
       refreshToken,
-      rememberMe ? refreshTokenOptions : options,
+      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
     .json(new ApiRes(200, { user: loggedUser }, "Google login successful!"));
 });
@@ -233,11 +233,11 @@ const refreshAccessToken = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, accessTokenOptions)
+    .cookie("accessToken", accessToken, ACCESS_TOKEN_COOKIE_OPTIONS)
     .cookie(
       "refreshToken",
       refreshToken,
-      rememberMe ? refreshTokenOptions : options,
+      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
     .json(
       new ApiRes(
@@ -339,11 +339,11 @@ const loginUser = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, accessTokenOptions)
+    .cookie("accessToken", accessToken, ACCESS_TOKEN_COOKIE_OPTIONS)
     .cookie(
       "refreshToken",
       refreshToken,
-      rememberMe ? refreshTokenOptions : options,
+      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
     .json(
       new ApiRes(200, { user: loggedUser }, "user logged in successfully!"),
@@ -359,8 +359,8 @@ const logoutUser = asynchandler(async (req, res) => {
 
   return res
     .status(204)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", COOKIE_OPTIONS)
+    .clearCookie("refreshToken", COOKIE_OPTIONS)
     .json(new ApiRes(204, "user logged out successfully!"));
 });
 
