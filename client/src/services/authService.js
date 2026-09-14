@@ -9,6 +9,8 @@ export const authEndpoints = {
 
   logout: () => api.post(`/auth/logout`),
 
+  removeSession: (body) => api.post(`/auth/remove-session`, body),
+
   restoreSession: (config) => api.post(`/auth/restoreSession`, {}, config),
 
   changePassword: (body) => api.patch(`/auth/password`, body),

@@ -13,6 +13,7 @@ import {
   forgotPassword,
   verifyOTP,
   resetPassword,
+  removeSession,
 } from "../../controllers/private/auth.controller.js";
 
 const authRouter = Router();
@@ -36,6 +37,8 @@ authRouter.route("/register").post(
 authRouter.route("/login").post(loginUser);
 
 authRouter.route("/logout").post(verifyJWT, logoutUser);
+
+authRouter.route("/remove-session").post(verifyJWT, removeSession);
 
 authRouter.route("/password").patch(verifyJWT, changePassword);
 

@@ -360,6 +360,46 @@ const logoutUser = asynchandler(async (req, res) => {
     .json(new ApiRes(204, "user logged out successfully!"));
 });
 
+const removeSession = asynchandler(async (req, res) => {
+  const userId = req.user?._id;
+  const { sessionId } = req.body;
+  const cookieRefreshToken = req.cookies?.refreshToken;
+
+  if (!sessionId) {
+    throw new ApiError(400, "sessionId is required!");
+  }
+
+  const user = await User.findById(userId);
+
+  const currentSession = user?.sessions?.find(
+    (session) => session?.refreshToken === cookieRefreshToken,
+  );
+
+  if (!currentSession) {
+    throw new ApiError(401, "Current session not found!");
+  }
+
+  const isCurrentSession = currentSession?._id.toString() === sessionId;
+
+  await User.findByIdAndUpdate(userId, {
+    $pull: { sessions: { _id: sessionId } },
+  });
+
+  if (isCurrentSession) {
+    return res
+      .status(200)
+      .clearCookie("accessToken", COOKIE_OPTIONS)
+      .clearCookie("refreshToken", COOKIE_OPTIONS)
+      .json(
+        new ApiRes(200, { isCurrentSession }, "user logged out successfully!"),
+      );
+  }
+
+  return res
+    .status(200)
+    .json(new ApiRes(200, {}, "user session logged out successfully!"));
+});
+
 const changePassword = asynchandler(async (req, res) => {
   const { isInitializing, old_password, new_password, confirm_password } =
     req.body;
@@ -500,6 +540,7 @@ export {
   registerUser,
   loginUser,
   logoutUser,
+  removeSession,
   refreshAccessToken,
   changePassword,
   forgotPassword,
