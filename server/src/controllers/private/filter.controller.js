@@ -1,3 +1,11 @@
+import { Skill } from "../../models/skill.model.js";
+import { Experience } from "../../models/experience.model.js";
+import { Certificate } from "../../models/certificate.model.js";
+import { SkillCategory } from "../../models/skillCategory.model.js";
+
+import ApiRes from "../../utils/ApiRes.js";
+import asynchandler from "../../utils/asynchandler.js";
+
 import {
   SKILL_LEVEL,
   SOCIAL_PLATFORMS,
@@ -7,13 +15,6 @@ import {
   PROJECT_CATEGORIES,
   LOCATION_TYPE,
 } from "../../constants.js";
-import { Certificate } from "../../models/certificate.model.js";
-import { Experience } from "../../models/experience.model.js";
-import { Skill } from "../../models/skill.model.js";
-import { SkillCategory } from "../../models/skillCategory.model.js";
-
-import ApiRes from "../../utils/ApiRes.js";
-import asynchandler from "../../utils/asynchandler.js";
 
 const getSocialPlatforms = asynchandler(async (req, res) => {
   return res

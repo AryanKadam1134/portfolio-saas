@@ -1,11 +1,8 @@
-import mongoose from "mongoose";
-
 import { Experience } from "../../models/experience.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
-import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
 import {
   uploadToCloudinary,
   deleteFromCloudinary,
@@ -292,12 +289,20 @@ const getAllExperiences = asynchandler(async (req, res) => {
   });
 
   if (paginatedExperiences?.data?.length === 0) {
-    return res.status(200).json(new ApiRes(200, paginatedExperiences, "no experiences found!"));
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedExperiences, "no experiences found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedExperiences, "experiences fetched successfully!"));
+    .json(
+      new ApiRes(
+        200,
+        paginatedExperiences,
+        "experiences fetched successfully!",
+      ),
+    );
 });
 
 export {

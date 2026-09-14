@@ -1,5 +1,9 @@
 import { Router } from "express";
 
+import { upload } from "../../middlewares/multer.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getExperienceById } from "../../middlewares/experience.middleware.js";
+
 import {
   addExperience,
   deleteExperience,
@@ -9,10 +13,6 @@ import {
   updateExperience,
   updateOrganizationImage,
 } from "../../controllers/private/experience.controller.js";
-
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import { upload } from "../../middlewares/multer.middleware.js";
-import { getExperienceById } from "../../middlewares/experience.middleware.js";
 
 const experienceRouter = Router();
 

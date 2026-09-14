@@ -1,5 +1,9 @@
 import { Router } from "express";
 
+import { upload } from "../../middlewares/multer.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getProjectById } from "../../middlewares/project.middleware.js";
+
 import {
   addProject,
   deleteProject,
@@ -9,10 +13,6 @@ import {
   updateProjectDetails,
   updateProjectImages,
 } from "../../controllers/private/project.controller.js";
-
-import { upload } from "../../middlewares/multer.middleware.js";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import { getProjectById } from "../../middlewares/project.middleware.js";
 
 const projectRouter = Router();
 

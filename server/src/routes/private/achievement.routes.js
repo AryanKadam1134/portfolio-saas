@@ -1,5 +1,9 @@
 import { Router } from "express";
 
+import { upload } from "../../middlewares/multer.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getAchievementById } from "../../middlewares/achievement.middleware.js";
+
 import {
   addAchievement,
   deleteAchievement,
@@ -9,10 +13,6 @@ import {
   updateAchievement,
   updateAchievementImages,
 } from "../../controllers/private/achievement.controller.js";
-
-import { upload } from "../../middlewares/multer.middleware.js";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import { getAchievementById } from "../../middlewares/achievement.middleware.js";
 
 const achievementRouter = Router();
 

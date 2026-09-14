@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-
 import { SkillCategory } from "../../models/skillCategory.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";

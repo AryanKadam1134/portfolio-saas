@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-
 import { Certificate } from "../../models/certificate.model.js";
 import { Achievement } from "../../models/achievement.model.js";
 
@@ -325,12 +323,20 @@ const getAllAchievement = asynchandler(async (req, res) => {
   });
 
   if (paginatedAchievements?.data?.length === 0) {
-    return res.status(200).json(new ApiRes(200, paginatedAchievements, "no achievements found!"));
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedAchievements, "no achievements found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedAchievements, "achievements fetched successfully!"));
+    .json(
+      new ApiRes(
+        200,
+        paginatedAchievements,
+        "achievements fetched successfully!",
+      ),
+    );
 });
 
 export {

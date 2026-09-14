@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-
 import { Project } from "../../models/project.model.js";
 import { Experience } from "../../models/experience.model.js";
 
@@ -325,7 +323,9 @@ const getAllProjects = asynchandler(async (req, res) => {
   });
 
   if (paginatedProjects?.data?.length === 0) {
-    return res.status(200).json(new ApiRes(200, paginatedProjects, "No projects found!"));
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedProjects, "No projects found!"));
   }
 
   return res

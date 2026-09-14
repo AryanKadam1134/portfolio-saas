@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-
 import { Certificate } from "../../models/certificate.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";

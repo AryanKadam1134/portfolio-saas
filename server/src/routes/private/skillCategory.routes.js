@@ -1,5 +1,8 @@
 import { Router } from "express";
 
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getCategoryById } from "../../middlewares/skillCategory.middleware.js";
+
 import {
   addSkillCategory,
   deleteSkillCategory,
@@ -7,9 +10,6 @@ import {
   getSkillCategory,
   updateSkillCategory,
 } from "../../controllers/private/skillCategory.controller.js";
-
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import { getCategoryById } from "../../middlewares/skillCategory.middleware.js";
 
 const skillCategoryRouter = Router();
 

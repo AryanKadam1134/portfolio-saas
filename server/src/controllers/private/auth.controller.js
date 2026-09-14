@@ -1,25 +1,21 @@
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
-import {
-  COOKIE_OPTIONS,
-  ACCESS_TOKEN_COOKIE_OPTIONS,
-  REFRESH_TOKEN_COOKIE_OPTIONS,
-} from "../../constants.js";
-
 import { User } from "../../models/user.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
 import asynchandler from "../../utils/asynchandler.js";
 import { shootEmail } from "../../utils/resendMailShooter.js";
-import {
-  uploadToCloudinary,
-  deleteFromCloudinary,
-} from "../../utils/cloudinary.js";
 import { welcomeUser } from "../../utils/emailTemplates/welcomeUser.js";
 import { passwordChangedTemplate } from "../../utils/emailTemplates/passwordChanged.js";
 import { resetPasswordOTPTemplate } from "../../utils/emailTemplates/otpSentTemplate.js";
+
+import {
+  COOKIE_OPTIONS,
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  REFRESH_TOKEN_COOKIE_OPTIONS,
+} from "../../constants.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 

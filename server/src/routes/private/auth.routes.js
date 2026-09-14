@@ -1,5 +1,8 @@
 import { Router } from "express";
 
+import { upload } from "../../middlewares/multer.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+
 import {
   changePassword,
   loginUser,
@@ -11,9 +14,6 @@ import {
   verifyOTP,
   resetPassword,
 } from "../../controllers/private/auth.controller.js";
-
-import { upload } from "../../middlewares/multer.middleware.js";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const authRouter = Router();
 

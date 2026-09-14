@@ -2,8 +2,6 @@ import mongoose, { Schema, model } from "mongoose";
 
 import { VISIBILITY } from "../constants.js";
 
-import ApiError from "../utils/ApiError.js";
-
 const certificateSchema = new Schema(
   {
     owner: {

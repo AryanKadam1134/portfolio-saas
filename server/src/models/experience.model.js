@@ -1,8 +1,8 @@
 import mongoose, { Schema, model } from "mongoose";
 
-import { EMPLOYMENT_TYPE, LOCATION_TYPE, VISIBILITY } from "../constants.js";
-
 import ApiError from "../utils/ApiError.js";
+
+import { EMPLOYMENT_TYPE, LOCATION_TYPE, VISIBILITY } from "../constants.js";
 
 const positionSchema = new Schema(
   {

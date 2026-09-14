@@ -1,5 +1,9 @@
 import { Router } from "express";
 
+import { upload } from "../../middlewares/multer.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getEducationById } from "../../middlewares/education.middleware.js";
+
 import {
   addEducation,
   deleteEducation,
@@ -9,10 +13,6 @@ import {
   updateEducationDetails,
   updateInstituteImage,
 } from "../../controllers/private/education.controller.js";
-
-import { upload } from "../../middlewares/multer.middleware.js";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import { getEducationById } from "../../middlewares/education.middleware.js";
 
 const educationRouter = Router();
 

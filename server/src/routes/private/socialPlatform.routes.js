@@ -1,5 +1,8 @@
 import { Router } from "express";
 
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { getSocialPlatformById } from "../../middlewares/socialPlatform.middleware.js";
+
 import {
   manageSocialPlatforms,
   getAllUserSocialPlatforms,
@@ -8,9 +11,6 @@ import {
   updateSocialPlatform,
   getSocialPlatform,
 } from "../../controllers/private/socialPlatform.controller.js";
-
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import { getSocialPlatformById } from "../../middlewares/socialPlatform.middleware.js";
 
 const socialPlatformRouter = Router();
 

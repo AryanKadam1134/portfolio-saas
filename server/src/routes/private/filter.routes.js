@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+
 import {
   getAllCertificates,
   getAllOrganizations,
@@ -13,8 +15,6 @@ import {
   getSocialPlatforms,
   getVisibility,
 } from "../../controllers/private/filter.controller.js";
-
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const filterRoutes = Router();
 
