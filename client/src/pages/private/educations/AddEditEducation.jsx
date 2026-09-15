@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
-import { Trash2, Loader } from "lucide-react";
 
 import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
@@ -11,7 +10,6 @@ import DragDropUpload from "../../../components/common/DragDropUpload";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
-import ActionButton from "../../../components/ui/ActionButton";
 import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 

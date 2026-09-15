@@ -12,7 +12,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { formatDate } from "../../utils/formatDate";
+import { formatDateInAlphaNumeric } from "../../utils/formatDate";
 
 import { authEndpoints } from "../../services/authService";
 import { userEndpoints } from "../../services/userService";
@@ -36,23 +36,19 @@ export default function UserSessions() {
 
   const deviceId = localStorage.getItem("deviceId");
 
-  useEffect(() => {
-    const fetchUserSessions = async () => {
-      try {
-        const res = await userEndpoints.getUserSessions();
+  const fetchUserSessions = async () => {
+    try {
+      const res = await userEndpoints.getUserSessions();
 
-        setUserSessions(res.data || []);
-      } catch (error) {
-        if (error?.statusCode !== 404) {
-          notify.msgError(error?.message || "Failed to load active sessions");
-        }
-      } finally {
-        setIsLoading(false);
+      setUserSessions(res.data || []);
+    } catch (error) {
+      if (error?.statusCode !== 404) {
+        notify.msgError(error?.message || "Failed to load active sessions");
       }
-    };
-
-    fetchUserSessions();
-  }, [notify]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const removeSession = async (sessionId) => {
     setRemovingSessionId(sessionId);
@@ -66,9 +62,7 @@ export default function UserSessions() {
         return;
       }
 
-      setUserSessions((sessions) =>
-        sessions.filter((session) => session._id !== sessionId),
-      );
+      await fetchUserSessions();
       notify.msgSuccess("Session removed successfully");
     } catch (error) {
       notify.msgError(error?.message || "Failed to remove session");
@@ -81,6 +75,10 @@ export default function UserSessions() {
     const Icon = deviceIcons[deviceType] || Laptop;
     return <Icon size={20} />;
   };
+
+  useEffect(() => {
+    fetchUserSessions();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6 text-sm">
@@ -169,7 +167,8 @@ export default function UserSessions() {
                       Last active
                     </p>
                     <p className="flex items-center gap-1.5 font-medium text-light-text-primary dark:text-dark-text-primary">
-                      <Clock3 size={14} /> {formatDate(session.createdAt)}
+                      <Clock3 size={14} />{" "}
+                      {formatDateInAlphaNumeric(session.createdAt)}
                     </p>
                   </div>
                   <div>

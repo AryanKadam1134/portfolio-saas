@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Trash2, Loader, ExternalLink, Link, Calendar } from "lucide-react";
+import { ExternalLink, Link, Calendar } from "lucide-react";
 
 import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
@@ -12,14 +12,13 @@ import DragDropUpload from "../../../components/common/DragDropUpload";
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
-import ActionButton from "../../../components/ui/ActionButton";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { formatDate } from "../../../utils/formatDate";
+import { formatDateInISO } from "../../../utils/formatDate";
 
 import { certificateEndpoints } from "../../../services/certificateService";
 
@@ -89,8 +88,8 @@ export default function AddEditCertificate() {
 
       reset({
         ...data,
-        issueDate: formatDate(data?.issueDate),
-        expiryDate: formatDate(data?.expiryDate),
+        issueDate: formatDateInISO(data?.issueDate),
+        expiryDate: formatDateInISO(data?.expiryDate),
       });
       console.log("Certificate: ", data);
     } catch (error) {

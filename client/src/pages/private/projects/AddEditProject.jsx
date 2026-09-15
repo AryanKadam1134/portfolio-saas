@@ -3,16 +3,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import {
-  Trash2,
-  Loader,
-  ChevronLeft,
-  ChevronRight,
-  Image,
-  ExternalLink,
-  Link,
-  Calendar,
-} from "lucide-react";
+import { ExternalLink, Link, Calendar } from "lucide-react";
 
 import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
@@ -28,7 +19,7 @@ import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { formatDate } from "../../../utils/formatDate";
+import { formatDateInISO } from "../../../utils/formatDate";
 
 import { projectEndpoints } from "../../../services/projectService";
 
@@ -104,8 +95,8 @@ export default function AddEditProject() {
 
       reset({
         ...data,
-        startDate: formatDate(data?.startDate),
-        endDate: formatDate(data?.endDate),
+        startDate: formatDateInISO(data?.startDate),
+        endDate: formatDateInISO(data?.endDate),
       });
       console.log("Project: ", data);
     } catch (error) {

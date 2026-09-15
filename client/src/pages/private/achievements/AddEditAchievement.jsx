@@ -2,16 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import {
-  Trash2,
-  Loader,
-  ChevronLeft,
-  ChevronRight,
-  Image,
-  ExternalLink,
-  Link,
-  Calendar,
-} from "lucide-react";
+import { ExternalLink, Link, Calendar } from "lucide-react";
 
 import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
@@ -26,7 +17,7 @@ import CustomTextArea from "../../../components/ui/CustomTextArea";
 import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { formatDate } from "../../../utils/formatDate";
+import { formatDateInISO } from "../../../utils/formatDate";
 
 import { achievementEndpoints } from "../../../services/achievementService";
 
@@ -95,7 +86,7 @@ export default function AddEditAchievement() {
 
       reset({
         ...data,
-        date: formatDate(data?.date),
+        date: formatDateInISO(data?.date),
       });
       console.log("Achievement: ", data);
     } catch (error) {

@@ -2,14 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
-import {
-  Trash2,
-  Loader,
-  ExternalLink,
-  Plus,
-  Link,
-  Calendar,
-} from "lucide-react";
+import { Trash2, ExternalLink, Plus, Link, Calendar } from "lucide-react";
 
 import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
@@ -26,7 +19,7 @@ import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { formatDate } from "../../../utils/formatDate";
+import { formatDateInISO } from "../../../utils/formatDate";
 
 import { experienceEndpoints } from "../../../services/experienceService";
 
@@ -131,8 +124,8 @@ export default function AddEditExperiences() {
         ...data,
         positions: data?.positions?.map((pos) => ({
           ...pos,
-          startDate: formatDate(pos?.startDate),
-          endDate: formatDate(pos?.endDate),
+          startDate: formatDateInISO(pos?.startDate),
+          endDate: formatDateInISO(pos?.endDate),
         })),
         highlights: data?.highlights || [""],
       });
