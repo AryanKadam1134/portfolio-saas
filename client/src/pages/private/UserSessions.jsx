@@ -13,10 +13,11 @@ import {
 } from "lucide-react";
 
 import PageHeader from "../../components/common/PageHeader";
+
 import { formatDateInAlphaNumeric } from "../../utils/formatDate";
 
-import { authEndpoints } from "../../services/authService";
-import { userEndpoints } from "../../services/userService";
+import { authEndpoints } from "../../services/auth.service";
+import { userEndpoints } from "../../services/user.service";
 
 import { useAuth } from "../../context/auth/useAuth";
 import { useNotify } from "../../context/notification/useNotify";

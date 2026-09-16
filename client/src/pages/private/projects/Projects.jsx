@@ -14,7 +14,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { projectEndpoints } from "../../../services/projectService";
+import { projectEndpoints } from "../../../services/project.service";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 

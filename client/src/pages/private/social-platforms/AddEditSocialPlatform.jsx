@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { ExternalLink, Link } from "lucide-react";
 
+import PageHeader from "../../../components/common/PageHeader";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
 import LabelInput from "../../../components/ui/LabelInput";
@@ -12,12 +13,11 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { socialPlatformEndpoints } from "../../../services/socialPlatformService";
+import { socialPlatformEndpoints } from "../../../services/socialPlatform.service";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/notification/useNotify";
-import PageHeader from "../../../components/common/PageHeader";
 
 const SOCIAL_APPS_LIST = [
   {

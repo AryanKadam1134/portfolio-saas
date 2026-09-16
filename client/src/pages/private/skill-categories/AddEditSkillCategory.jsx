@@ -3,15 +3,15 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import PageHeader from "../../../components/common/PageHeader";
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { skillCategoryEndpoints } from "../../../services/skillCategoryService";
+import { skillCategoryEndpoints } from "../../../services/skillCategory.service";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 

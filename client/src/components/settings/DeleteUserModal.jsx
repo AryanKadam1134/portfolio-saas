@@ -13,10 +13,7 @@ export default function DeleteUserModal({ onConfirm, isDeleting }) {
     <div className="flex flex-col gap-6 w-full">
       {/* Warning Icon & Title */}
       <div className="flex items-start gap-3">
-        <AlertTriangle
-          size={24}
-          className="text-red-500 flex-shrink-0 mt-0.5"
-        />
+        <AlertTriangle size={24} className="text-red-500 shrink-0 mt-0.5" />
         <div className="flex flex-col gap-2">
           <h3 className="font-semibold text-light-text-primary dark:text-dark-text-primary">
             Delete Account Permanently

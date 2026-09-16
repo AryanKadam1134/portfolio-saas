@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./api.service";
 
 export const filterEndpoints = {
   getSkillCategoriesList: () => api.get(`/filters/skill-categories`),

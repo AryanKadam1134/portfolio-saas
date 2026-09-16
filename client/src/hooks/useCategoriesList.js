@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { filterEndpoints } from "../services/filterService";
+import { filterEndpoints } from "../services/filter.service";
 
 export default function useCategoriesList() {
   const [categoriesLoading, setLoading] = useState(true);

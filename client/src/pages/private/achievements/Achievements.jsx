@@ -14,7 +14,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { achievementEndpoints } from "../../../services/achievementService";
+import { achievementEndpoints } from "../../../services/achievement.service";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 

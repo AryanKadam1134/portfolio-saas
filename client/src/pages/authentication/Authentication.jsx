@@ -14,7 +14,7 @@ import CustomButton from "../../components/ui/CustomButton";
 import CustomCheckbox from "../../components/ui/CustomCheckbox";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
-import { authEndpoints } from "../../services/authService";
+import { authEndpoints } from "../../services/auth.service";
 
 import { useAuth } from "../../context/auth/useAuth";
 

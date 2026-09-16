@@ -2,14 +2,15 @@ import React, { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { LockKeyholeOpen, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
+
+import PageHeader from "../../components/common/PageHeader";
 
 import LabelInput from "../../components/ui/LabelInput";
-import PageHeader from "../../components/common/PageHeader";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 
-import { authEndpoints } from "../../services/authService";
+import { authEndpoints } from "../../services/auth.service";
 
 import { useNotify } from "../../context/notification/useNotify";
 

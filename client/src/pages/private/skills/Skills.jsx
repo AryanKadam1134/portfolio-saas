@@ -14,7 +14,7 @@ import ActionButton from "../../../components/ui/ActionButton";
 import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { skillEndpoints } from "../../../services/skillService";
+import { skillEndpoints } from "../../../services/skill.service";
 
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";

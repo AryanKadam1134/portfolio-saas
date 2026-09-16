@@ -81,7 +81,7 @@ export default function ImageGallery({
                       prev === public_id ? null : public_id,
                     )
                   }
-                  className={`relative group h-[140px] w-auto shrink-0 rounded-md overflow-hidden transition-all ${
+                  className={`relative group h-35 w-auto shrink-0 rounded-md overflow-hidden transition-all ${
                     isCoverImage
                       ? "ring-1 ring-green-500 border-0 shadow-md"
                       : "border border-light-border-primary dark:border-dark-border-primary hover:shadow-md"

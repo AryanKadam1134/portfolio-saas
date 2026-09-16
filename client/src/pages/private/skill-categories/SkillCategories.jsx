@@ -14,7 +14,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { skillCategoryEndpoints } from "../../../services/skillCategoryService";
+import { skillCategoryEndpoints } from "../../../services/skillCategory.service";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 

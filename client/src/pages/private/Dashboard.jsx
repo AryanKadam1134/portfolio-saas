@@ -15,7 +15,7 @@ import CustomButton from "../../components/ui/CustomButton";
 import CustomTextArea from "../../components/ui/CustomTextArea";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
-import { userEndpoints } from "../../services/userService";
+import { userEndpoints } from "../../services/user.service";
 
 import useGenders from "../../hooks/useGenders";
 

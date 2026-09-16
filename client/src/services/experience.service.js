@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./api.service";
 
 export const experienceEndpoints = {
   addExperience: (body) => api.post(`/experiences`, body),

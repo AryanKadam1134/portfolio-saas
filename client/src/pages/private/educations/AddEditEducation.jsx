@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 
+import PageHeader from "../../../components/common/PageHeader";
 import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
-import PageHeader from "../../../components/common/PageHeader";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -14,7 +14,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 
-import { educationEndpoints } from "../../../services/educationService";
+import { educationEndpoints } from "../../../services/education.service";
 
 import { useNotify } from "../../../context/notification/useNotify";
 

@@ -6,7 +6,7 @@ import { FingerprintPattern, LockKeyholeOpen, Trash2 } from "lucide-react";
 import PageHeader from "../../components/common/PageHeader";
 import DeleteUserModal from "../../components/settings/DeleteUserModal";
 
-import { userEndpoints } from "../../services/userService";
+import { userEndpoints } from "../../services/user.service";
 
 import { useAuth } from "../../context/auth/useAuth";
 import { useModal } from "../../context/modal/useModal";

@@ -43,6 +43,7 @@ import AddEditAchievement from "./pages/private/achievements/AddEditAchievement"
 
 import Settings from "./pages/private/Settings";
 import ChangePassword from "./pages/private/ChangePassword";
+import UserSessions from "./pages/private/UserSessions.jsx";
 
 import { AuthProvider } from "./context/auth/AuthProvider.jsx";
 import { ModalProvider } from "./context/modal/ModalProvider.jsx";
@@ -50,7 +51,6 @@ import { NotificationsProvider } from "./context/notification/NotificationsProvi
 
 import { useAuth } from "./context/auth/useAuth";
 import { useTheme } from "./context/theme/useTheme.js";
-import UserSessions from "./pages/private/UserSessions.jsx";
 
 function SessionLoader() {
   return (

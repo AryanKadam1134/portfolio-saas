@@ -4,10 +4,10 @@ import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { ExternalLink, Link, Calendar } from "lucide-react";
 
+import PageHeader from "../../../components/common/PageHeader";
 import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
-import PageHeader from "../../../components/common/PageHeader";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -20,7 +20,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDateInISO } from "../../../utils/formatDate";
 
-import { achievementEndpoints } from "../../../services/achievementService";
+import { achievementEndpoints } from "../../../services/achievement.service";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCertificatesList from "../../../hooks/useCertificatesList";

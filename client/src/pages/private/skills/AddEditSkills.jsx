@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
-import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import PageHeader from "../../../components/common/PageHeader";
+import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -12,7 +12,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
-import { skillEndpoints } from "../../../services/skillService";
+import { skillEndpoints } from "../../../services/skill.service";
 
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { FileText, Loader, Trash2 } from "lucide-react";
 
-import { userEndpoints } from "../../services/userService";
+import { userEndpoints } from "../../services/user.service";
 
 import { useNotify } from "../../context/notification/useNotify";
 

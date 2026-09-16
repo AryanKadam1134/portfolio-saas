@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { Loader, SquarePen, Trash2 } from "lucide-react";
 
-import { userEndpoints } from "../../services/userService";
+import { userEndpoints } from "../../services/user.service";
 
 import { useAuth } from "../../context/auth/useAuth";
 import { useNotify } from "../../context/notification/useNotify";

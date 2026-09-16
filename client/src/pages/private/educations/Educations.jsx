@@ -13,7 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { educationEndpoints } from "../../../services/educationService";
+import { educationEndpoints } from "../../../services/education.service";
 
 import { useModal } from "../../../context/modal/useModal";
 import { useNotify } from "../../../context/notification/useNotify";

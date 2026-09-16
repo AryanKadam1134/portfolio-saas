@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./api.service";
 
 export const authEndpoints = {
   googleAuth: (body, config) => api.post(`/auth/google`, body, config),

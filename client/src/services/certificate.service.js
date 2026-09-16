@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./api.service";
 
 export const certificateEndpoints = {
   addCertificate: (body) => api.post(`/certificates`, body),
