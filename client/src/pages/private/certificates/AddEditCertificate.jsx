@@ -8,6 +8,7 @@ import { ExternalLink, Link, Calendar } from "lucide-react";
 import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
+import PageHeader from "../../../components/common/PageHeader";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -167,10 +168,16 @@ export default function AddEditCertificate() {
   }
 
   return (
-    <form
+    <div className="flex flex-col gap-6 text-sm">
+      <PageHeader
+        heading={id ? "Edit Certificate" : "Add Certificate"}
+        subHeading={id ? "Update this professional certification" : "Add a professional certification"}
+      />
+
+      <form
       onSubmit={handleSubmit(addUpdateCertificate)}
       className="grid grid-cols-12 gap-6 text-sm"
-    >
+      >
       {id && (
         <>
           {/* Upload Certificate Image  */}
@@ -460,6 +467,7 @@ export default function AddEditCertificate() {
       >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
-    </form>
+      </form>
+    </div>
   );
 }

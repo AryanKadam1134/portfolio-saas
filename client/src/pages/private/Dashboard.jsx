@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Mail, Phone, Link } from "lucide-react";
 
+import PageHeader from "../../components/common/PageHeader";
+
 import UploadUserImage from "../../components/user/UploadUserImage";
 import UploadUserResume from "../../components/user/UploadUserResume";
 import UserDetailsSkeleton from "../../components/user/UserDetailsSkeleton";
@@ -96,318 +98,326 @@ export default function Dashboard() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="grid grid-cols-12 gap-6 text-sm"
-    >
-      {/* User Image */}
-      <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
-        <UploadUserImage />
-      </div>
+    <div>
+      <PageHeader
+        heading="User Details"
+        subHeading="Manage the personal information shown on your portfolio"
+        className="mb-6"
+      />
 
-      {/* First Name */}
-      <LabelInput
-        id="firstName"
-        label="First Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
-        error={errors?.firstName?.message}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-cols-12 gap-6 text-sm"
       >
-        <CustomInput
+        {/* User Image */}
+        <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
+          <UploadUserImage />
+        </div>
+
+        {/* First Name */}
+        <LabelInput
           id="firstName"
-          type="text"
-          placeholder="Enter your first name"
-          {...register("firstName", {
-            required: "First name is required!",
-            minLength: {
-              value: 2,
-              message: "First name must be at least 2 characters",
-            },
-            maxLength: {
-              value: 50,
-              message: "First name must not exceed 50 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="First Name"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          required
+          error={errors?.firstName?.message}
+        >
+          <CustomInput
+            id="firstName"
+            type="text"
+            placeholder="Enter your first name"
+            {...register("firstName", {
+              required: "First name is required!",
+              minLength: {
+                value: 2,
+                message: "First name must be at least 2 characters",
+              },
+              maxLength: {
+                value: 50,
+                message: "First name must not exceed 50 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Middle Name */}
-      <LabelInput
-        id="middleName"
-        label="Middle Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        error={errors?.middleName?.message}
-      >
-        <CustomInput
+        {/* Middle Name */}
+        <LabelInput
           id="middleName"
-          type="text"
-          placeholder="Enter middle name (optional)"
-          {...register("middleName", {})}
-        />
-      </LabelInput>
+          label="Middle Name"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          error={errors?.middleName?.message}
+        >
+          <CustomInput
+            id="middleName"
+            type="text"
+            placeholder="Enter middle name (optional)"
+            {...register("middleName", {})}
+          />
+        </LabelInput>
 
-      {/* Last Name */}
-      <LabelInput
-        id="lastName"
-        label="Last Name"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        error={errors?.lastName?.message}
-      >
-        <CustomInput
+        {/* Last Name */}
+        <LabelInput
           id="lastName"
-          type="text"
-          placeholder="Enter your last name"
-          {...register("lastName", {
-            maxLength: {
-              value: 50,
-              message: "Last name must not exceed 50 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Last Name"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          error={errors?.lastName?.message}
+        >
+          <CustomInput
+            id="lastName"
+            type="text"
+            placeholder="Enter your last name"
+            {...register("lastName", {
+              maxLength: {
+                value: 50,
+                message: "Last name must not exceed 50 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Username */}
-      <LabelInput
-        id="username"
-        label="Username"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
-        error={errors?.username?.message}
-      >
-        <CustomInput
+        {/* Username */}
+        <LabelInput
           id="username"
-          type="text"
-          placeholder="Enter a unique username"
-          {...register("username", {
-            required: "Username is required!",
-            minLength: {
-              value: 3,
-              message: "Username must be at least 3 characters",
-            },
-            maxLength: {
-              value: 30,
-              message: "Username must not exceed 30 characters",
-            },
-            pattern: {
-              value: /^[a-zA-Z0-9_-]+$/,
-              message:
-                "Username can only contain letters, numbers, hyphens, and underscores",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Username"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          required
+          error={errors?.username?.message}
+        >
+          <CustomInput
+            id="username"
+            type="text"
+            placeholder="Enter a unique username"
+            {...register("username", {
+              required: "Username is required!",
+              minLength: {
+                value: 3,
+                message: "Username must be at least 3 characters",
+              },
+              maxLength: {
+                value: 30,
+                message: "Username must not exceed 30 characters",
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9_-]+$/,
+                message:
+                  "Username can only contain letters, numbers, hyphens, and underscores",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Email */}
-      <LabelInput
-        id="email"
-        label="Email"
-        // attachment={
-        //   <div className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
-        //     <Edit size={13} /> <p>Update Email</p>
-        //   </div>
-        // }
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
-        error={errors?.email?.message}
-      >
-        <CustomInput
+        {/* Email */}
+        <LabelInput
           id="email"
-          type="email"
-          icon={Mail}
-          placeholder="your.email@example.com"
-          {...register("email", {
-            required: "Email is required!",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Please enter a valid email address",
-            },
-          })}
-          disabled
-        />
-      </LabelInput>
+          label="Email"
+          // attachment={
+          //   <div className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
+          //     <Edit size={13} /> <p>Update Email</p>
+          //   </div>
+          // }
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          required
+          error={errors?.email?.message}
+        >
+          <CustomInput
+            id="email"
+            type="email"
+            icon={Mail}
+            placeholder="your.email@example.com"
+            {...register("email", {
+              required: "Email is required!",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Please enter a valid email address",
+              },
+            })}
+            disabled
+          />
+        </LabelInput>
 
-      {/* Mobile No. */}
-      <LabelInput
-        id="mobileNo"
-        label="Mobile No."
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
-        error={errors?.mobileNo?.message}
-      >
-        <CustomInput
+        {/* Mobile No. */}
+        <LabelInput
           id="mobileNo"
-          type="tel"
-          icon={Phone}
-          placeholder="Enter 10-digit phone number"
-          {...register("mobileNo", {
-            required: "Mobile number is required!",
-            pattern: {
-              value: /^[0-9]{10}$/,
-              message: "Mobile number must be exactly 10 digits",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Mobile No."
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          required
+          error={errors?.mobileNo?.message}
+        >
+          <CustomInput
+            id="mobileNo"
+            type="tel"
+            icon={Phone}
+            placeholder="Enter 10-digit phone number"
+            {...register("mobileNo", {
+              required: "Mobile number is required!",
+              pattern: {
+                value: /^[0-9]{10}$/,
+                message: "Mobile number must be exactly 10 digits",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Gender */}
-      <LabelInput
-        id="gender"
-        label="Gender"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        required
-        error={errors?.gender?.message}
-      >
-        <CustomRadioButtons
-          name="gender"
-          options={genders}
-          {...register("gender", {
-            required: "Gender is required!",
-          })}
-        />
-      </LabelInput>
+        {/* Gender */}
+        <LabelInput
+          id="gender"
+          label="Gender"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          required
+          error={errors?.gender?.message}
+        >
+          <CustomRadioButtons
+            name="gender"
+            options={genders}
+            {...register("gender", {
+              required: "Gender is required!",
+            })}
+          />
+        </LabelInput>
 
-      <div className="hidden lg:block col-span-6"></div>
+        <div className="hidden lg:block col-span-6"></div>
 
-      {/* Resume PDF - Drag & Drop */}
-      <LabelInput
-        id="resumeOrCv"
-        label="Resume PDF"
-        colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
-        className="order-[98] lg:order-0"
-        required
-      >
-        <UploadUserResume />
-      </LabelInput>
+        {/* Resume PDF - Drag & Drop */}
+        <LabelInput
+          id="resumeOrCv"
+          label="Resume PDF"
+          colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
+          className="order-[98] lg:order-0"
+          required
+        >
+          <UploadUserResume />
+        </LabelInput>
 
-      {/* Headline */}
-      <LabelInput
-        id="headline"
-        label="Professional Headline"
-        colSpan="row-span-3 col-span-12 lg:col-span-3"
-        error={errors?.headline?.message}
-      >
-        <CustomTextArea
+        {/* Headline */}
+        <LabelInput
           id="headline"
-          rows={6}
-          placeholder="e.g., Full Stack Developer | React & Node.js Expert"
-          {...register("headline", {
-            maxLength: {
-              value: 100,
-              message: "Headline must not exceed 100 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Professional Headline"
+          colSpan="row-span-3 col-span-12 lg:col-span-3"
+          error={errors?.headline?.message}
+        >
+          <CustomTextArea
+            id="headline"
+            rows={6}
+            placeholder="e.g., Full Stack Developer | React & Node.js Expert"
+            {...register("headline", {
+              maxLength: {
+                value: 100,
+                message: "Headline must not exceed 100 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* About */}
-      <LabelInput
-        id="about"
-        label="About You"
-        colSpan="row-span-3 col-span-12 lg:col-span-6"
-        error={errors?.about?.message}
-      >
-        <CustomTextArea
+        {/* About */}
+        <LabelInput
           id="about"
-          rows={6}
-          placeholder="Tell us about yourself, your experience, and what you're passionate about..."
-          {...register("about", {
-            maxLength: {
-              value: 1000,
-              message: "About section must not exceed 1000 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="About You"
+          colSpan="row-span-3 col-span-12 lg:col-span-6"
+          error={errors?.about?.message}
+        >
+          <CustomTextArea
+            id="about"
+            rows={6}
+            placeholder="Tell us about yourself, your experience, and what you're passionate about..."
+            {...register("about", {
+              maxLength: {
+                value: 1000,
+                message: "About section must not exceed 1000 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Resume Link */}
-      <LabelInput
-        id="documentUrl"
-        label="Resume Link"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        className="order-[99] lg:order-0"
-        error={errors?.documentUrl?.message}
-      >
-        <CustomInput
+        {/* Resume Link */}
+        <LabelInput
           id="documentUrl"
-          type="text"
-          icon={Link}
-          placeholder="https://drive.google.com/... (optional)"
-          {...register("documentUrl", {
-            pattern: {
-              value: /^(https:\/\/.+)?$/,
-              message: "URL must start with https://",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Resume Link"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          className="order-[99] lg:order-0"
+          error={errors?.documentUrl?.message}
+        >
+          <CustomInput
+            id="documentUrl"
+            type="text"
+            icon={Link}
+            placeholder="https://drive.google.com/... (optional)"
+            {...register("documentUrl", {
+              pattern: {
+                value: /^(https:\/\/.+)?$/,
+                message: "URL must start with https://",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* City */}
-      <LabelInput
-        id="city"
-        label="City"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        error={errors?.location?.city?.message}
-      >
-        <CustomInput
+        {/* City */}
+        <LabelInput
           id="city"
-          type="text"
-          placeholder="Enter your city"
-          {...register("location.city", {
-            maxLength: {
-              value: 50,
-              message: "City name must not exceed 50 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="City"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          error={errors?.location?.city?.message}
+        >
+          <CustomInput
+            id="city"
+            type="text"
+            placeholder="Enter your city"
+            {...register("location.city", {
+              maxLength: {
+                value: 50,
+                message: "City name must not exceed 50 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* State */}
-      <LabelInput
-        id="state"
-        label="State / Province"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        error={errors?.location?.state?.message}
-      >
-        <CustomInput
+        {/* State */}
+        <LabelInput
           id="state"
-          type="text"
-          placeholder="Enter your state or province"
-          {...register("location.state", {
-            maxLength: {
-              value: 50,
-              message: "State name must not exceed 50 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="State / Province"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          error={errors?.location?.state?.message}
+        >
+          <CustomInput
+            id="state"
+            type="text"
+            placeholder="Enter your state or province"
+            {...register("location.state", {
+              maxLength: {
+                value: 50,
+                message: "State name must not exceed 50 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Country */}
-      <LabelInput
-        id="country"
-        label="Country"
-        colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-        error={errors?.location?.country?.message}
-      >
-        <CustomInput
+        {/* Country */}
+        <LabelInput
           id="country"
-          type="text"
-          placeholder="Enter your country"
-          {...register("location.country", {
-            maxLength: {
-              value: 50,
-              message: "Country name must not exceed 50 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Country"
+          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+          error={errors?.location?.country?.message}
+        >
+          <CustomInput
+            id="country"
+            type="text"
+            placeholder="Enter your country"
+            {...register("location.country", {
+              maxLength: {
+                value: 50,
+                message: "Country name must not exceed 50 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      <CustomButton
-        type="submit"
-        className="col-span-12 place-self-end order-last lg:order-0"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Saving..." : "Save"}
-      </CustomButton>
-    </form>
+        <CustomButton
+          type="submit"
+          className="col-span-12 place-self-end order-last lg:order-0"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : "Save"}
+        </CustomButton>
+      </form>
+    </div>
   );
 }

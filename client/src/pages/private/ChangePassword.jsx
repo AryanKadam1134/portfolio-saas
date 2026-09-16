@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { LockKeyholeOpen } from "lucide-react";
 
 import CommonSkeleton from "../../components/common/CommonSkeleton";
+import PageHeader from "../../components/common/PageHeader";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomButton from "../../components/ui/CustomButton";
@@ -67,10 +68,16 @@ export default function ChangePassword() {
   }
 
   return (
-    <form
+    <div className="flex flex-col gap-6 text-sm">
+      <PageHeader
+        heading="Change Password"
+        subHeading="Keep your account secure with a strong password"
+      />
+
+      <form
       onSubmit={handleSubmit(changePassword)}
       className="grid grid-cols-12 gap-6 text-sm"
-    >
+      >
       {/* Old Password */}
       {hasPassword && (
         <LabelInput
@@ -164,6 +171,7 @@ export default function ChangePassword() {
       >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
-    </form>
+      </form>
+    </div>
   );
 }

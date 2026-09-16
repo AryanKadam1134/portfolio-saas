@@ -3,6 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ExternalLink, FilePenLine, Plus, Trash2 } from "lucide-react";
 
+import PageHeader from "../../../components/common/PageHeader";
 import DeleteItemModal from "../../../components/common/DeleteItemModal";
 
 import Table from "../../../components/ui/Table";
@@ -132,12 +133,14 @@ export default function Certificates() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <CustomButton
-        onClick={() => navigate("add")}
-        className="self-end flex items-center gap-2"
-      >
-        <Plus size={18} /> Add Certificate
-      </CustomButton>
+      <PageHeader heading="Certificates" subHeading="Showcase your professional certifications">
+        <CustomButton
+          onClick={() => navigate("add")}
+          className="self-end flex items-center gap-2"
+        >
+          <Plus size={18} /> Add Certificate
+        </CustomButton>
+      </PageHeader>
 
       <Table
         loading={loading}

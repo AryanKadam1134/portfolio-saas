@@ -7,6 +7,7 @@ import { ExternalLink, Link, Calendar } from "lucide-react";
 import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
+import PageHeader from "../../../components/common/PageHeader";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -176,10 +177,16 @@ export default function AddEditAchievement() {
   }
 
   return (
-    <form
+    <div className="flex flex-col gap-6 text-sm">
+      <PageHeader
+        heading={id ? "Edit Achievement" : "Add Achievement"}
+        subHeading={id ? "Update this portfolio achievement" : "Highlight an award or milestone"}
+      />
+
+      <form
       onSubmit={handleSubmit(addUpdateAchievement)}
       className="grid grid-cols-12 gap-6 text-sm"
-    >
+      >
       {id && (
         <>
           {/* Upload Achievement Images  */}
@@ -414,6 +421,7 @@ export default function AddEditAchievement() {
       >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
-    </form>
+      </form>
+    </div>
   );
 }

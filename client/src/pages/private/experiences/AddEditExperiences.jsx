@@ -7,6 +7,7 @@ import { Trash2, ExternalLink, Plus, Link, Calendar } from "lucide-react";
 import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
+import PageHeader from "../../../components/common/PageHeader";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -209,10 +210,16 @@ export default function AddEditExperiences() {
   }
 
   return (
-    <form
+    <div className="flex flex-col gap-6 text-sm">
+      <PageHeader
+        heading={id ? "Edit Experience" : "Add Experience"}
+        subHeading={id ? "Update this role in your professional history" : "Document a role in your professional history"}
+      />
+
+      <form
       onSubmit={handleSubmit(addUpdateExperience)}
       className="grid grid-cols-12 gap-6 text-sm"
-    >
+      >
       {id && (
         <>
           {/* Upload Image  */}
@@ -618,6 +625,7 @@ export default function AddEditExperiences() {
       >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
-    </form>
+      </form>
+    </div>
   );
 }

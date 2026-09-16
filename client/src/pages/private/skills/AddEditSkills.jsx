@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
+import PageHeader from "../../../components/common/PageHeader";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -153,10 +154,16 @@ export default function AddEditSkills() {
   }
 
   return (
-    <form
+    <div className="flex flex-col gap-6 text-sm">
+      <PageHeader
+        heading={id ? "Edit Skill" : "Add Skill"}
+        subHeading={id ? "Update this skill in your portfolio" : "Add a skill to your portfolio"}
+      />
+
+      <form
       onSubmit={handleSubmit(addUpdateSkill)}
       className="grid grid-cols-12 gap-6 text-sm"
-    >
+      >
       {!id && (
         <>
           <LabelInput
@@ -309,6 +316,7 @@ export default function AddEditSkills() {
       >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
-    </form>
+      </form>
+    </div>
   );
 }

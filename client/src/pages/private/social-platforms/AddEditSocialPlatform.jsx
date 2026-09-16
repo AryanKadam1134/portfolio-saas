@@ -17,6 +17,7 @@ import { socialPlatformEndpoints } from "../../../services/socialPlatformService
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/notification/useNotify";
+import PageHeader from "../../../components/common/PageHeader";
 
 const SOCIAL_APPS_LIST = [
   {
@@ -350,146 +351,158 @@ export default function AddEditSocialPlatform() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(addUpdatePlatform)}
-      className="grid grid-cols-12 gap-6 text-sm"
-    >
-      {!id && (
-        <>
-          <LabelInput
-            id="popular"
-            label="Popular Platforms"
-            colSpan="col-span-12 sm:col-span-6"
-          >
-            <CustomSelect
-              id="popular"
-              placeholder="Select Platform"
-              options={SOCIAL_APPS}
-              value={null}
-              onChange={(value) => reset({ name: value })} // send value to hook form
-            />
-          </LabelInput>
-
-          <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
-        </>
-      )}
-
-      {/* Platform Name */}
-      <LabelInput
-        id="name"
-        label="Platform Name"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.name?.message}
-      >
-        <CustomInput
-          id="name"
-          type="text"
-          placeholder="e.g., GitHub, LinkedIn, Twitter"
-          {...register("name", {
-            required: "Platform name is required!",
-            minLength: {
-              value: 1,
-              message: "Platform name must be at least 2 characters",
-            },
-            maxLength: {
-              value: 50,
-              message: "Platform name must not exceed 50 characters",
-            },
-          })}
-        />
-      </LabelInput>
-
-      {/* Logo URL */}
-      <LabelInput
-        id="logoUrl"
-        label="Logo URL"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.logoUrl?.message}
-      >
-        <CustomInput
-          id="logoUrl"
-          type="text"
-          placeholder="e.g., /images/github.svg"
-          {...register("logoUrl")}
-        />
-      </LabelInput>
-
-      {/* Platform Link */}
-      <LabelInput
-        id="link"
-        label="Link"
-        colSpan="col-span-12 sm:col-span-6"
-        attachment={
-          platformLink && (
-            <a
-              href={platformLink}
-              target="_blank"
-              className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
-            >
-              <ExternalLink size={13} /> <p>Visit Link</p>
-            </a>
-          )
+    <div>
+      <PageHeader
+        heading={id ? "Edit Platform" : "Add Platform"}
+        subHeading={
+          id
+            ? "Update this social platform in your portfolio"
+            : "Add a social platform to your portfolio"
         }
-        required
-        error={errors?.link?.message}
+        className="mb-6"
+      />
+
+      <form
+        onSubmit={handleSubmit(addUpdatePlatform)}
+        className="grid grid-cols-12 gap-6 text-sm"
       >
-        <CustomInput
+        {!id && (
+          <>
+            <LabelInput
+              id="popular"
+              label="Popular Platforms"
+              colSpan="col-span-12 sm:col-span-6"
+            >
+              <CustomSelect
+                id="popular"
+                placeholder="Select Platform"
+                options={SOCIAL_APPS}
+                value={null}
+                onChange={(value) => reset({ name: value })} // send value to hook form
+              />
+            </LabelInput>
+
+            <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+          </>
+        )}
+
+        {/* Platform Name */}
+        <LabelInput
+          id="name"
+          label="Platform Name"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.name?.message}
+        >
+          <CustomInput
+            id="name"
+            type="text"
+            placeholder="e.g., GitHub, LinkedIn, Twitter"
+            {...register("name", {
+              required: "Platform name is required!",
+              minLength: {
+                value: 1,
+                message: "Platform name must be at least 2 characters",
+              },
+              maxLength: {
+                value: 50,
+                message: "Platform name must not exceed 50 characters",
+              },
+            })}
+          />
+        </LabelInput>
+
+        {/* Logo URL */}
+        <LabelInput
+          id="logoUrl"
+          label="Logo URL"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.logoUrl?.message}
+        >
+          <CustomInput
+            id="logoUrl"
+            type="text"
+            placeholder="e.g., /images/github.svg"
+            {...register("logoUrl")}
+          />
+        </LabelInput>
+
+        {/* Platform Link */}
+        <LabelInput
           id="link"
-          type="text"
-          icon={Link}
-          placeholder="https://github.com/username or your profile URL"
-          {...register("link", {
-            required: "Platform link is required!",
-            pattern: {
-              value: /^(https:\/\/.+)?$/,
-              message: "URL must start with https://",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Link"
+          colSpan="col-span-12 sm:col-span-6"
+          attachment={
+            platformLink && (
+              <a
+                href={platformLink}
+                target="_blank"
+                className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+              >
+                <ExternalLink size={13} /> <p>Visit Link</p>
+              </a>
+            )
+          }
+          required
+          error={errors?.link?.message}
+        >
+          <CustomInput
+            id="link"
+            type="text"
+            icon={Link}
+            placeholder="https://github.com/username or your profile URL"
+            {...register("link", {
+              required: "Platform link is required!",
+              pattern: {
+                value: /^(https:\/\/.+)?$/,
+                message: "URL must start with https://",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Sort Order */}
-      <LabelInput
-        id="sortOrder"
-        label="Display Order"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.sortOrder?.message}
-      >
-        <CustomInput
+        {/* Sort Order */}
+        <LabelInput
           id="sortOrder"
-          type="number"
-          min={0}
-          placeholder="0 (appears first)"
-          {...register("sortOrder", { valueAsNumber: true })}
-        />
-      </LabelInput>
+          label="Display Order"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.sortOrder?.message}
+        >
+          <CustomInput
+            id="sortOrder"
+            type="number"
+            min={0}
+            placeholder="0 (appears first)"
+            {...register("sortOrder", { valueAsNumber: true })}
+          />
+        </LabelInput>
 
-      {/* Visibility  */}
-      <LabelInput
-        id="visibility"
-        label="Visibility"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.visibility?.message}
-      >
-        <CustomRadioButtons
+        {/* Visibility  */}
+        <LabelInput
           id="visibility"
-          name="visibility"
-          options={visibilities}
-          {...register("visibility", {
-            required: "Visibility is required!",
-          })}
-        />
-      </LabelInput>
+          label="Visibility"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.visibility?.message}
+        >
+          <CustomRadioButtons
+            id="visibility"
+            name="visibility"
+            options={visibilities}
+            {...register("visibility", {
+              required: "Visibility is required!",
+            })}
+          />
+        </LabelInput>
 
-      <CustomButton
-        type="submit"
-        className="col-span-12 place-self-end"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Saving..." : "Save"}
-      </CustomButton>
-    </form>
+        <CustomButton
+          type="submit"
+          className="col-span-12 place-self-end"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : "Save"}
+        </CustomButton>
+      </form>
+    </div>
   );
 }

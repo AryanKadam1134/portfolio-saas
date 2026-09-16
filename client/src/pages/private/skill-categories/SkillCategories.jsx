@@ -3,6 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 
+import PageHeader from "../../../components/common/PageHeader";
 import DeleteItemModal from "../../../components/common/DeleteItemModal";
 
 import Table from "../../../components/ui/Table";
@@ -120,12 +121,17 @@ export default function SkillCategories() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <CustomButton
-        onClick={() => navigate("add")}
-        className="self-end flex items-center gap-2"
+      <PageHeader
+        heading="Skill Categories"
+        subHeading="Organize your skills into clear categories"
       >
-        <Plus size={18} /> Add Skill Category
-      </CustomButton>
+        <CustomButton
+          onClick={() => navigate("add")}
+          className="self-end flex items-center gap-2"
+        >
+          <Plus size={18} /> Add Skill Category
+        </CustomButton>
+      </PageHeader>
 
       <Table
         loading={loading}

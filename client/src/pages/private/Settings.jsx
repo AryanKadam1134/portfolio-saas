@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FingerprintPattern, LockKeyholeOpen, Trash2 } from "lucide-react";
 
+import PageHeader from "../../components/common/PageHeader";
 import DeleteUserModal from "../../components/settings/DeleteUserModal";
 
 import { userEndpoints } from "../../services/userService";
@@ -44,6 +45,11 @@ export default function Settings() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
+      <PageHeader
+        heading="Settings"
+        subHeading="Manage your password, active sessions, and account"
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
           {

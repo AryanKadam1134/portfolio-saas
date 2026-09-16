@@ -8,6 +8,7 @@ import { ExternalLink, Link, Calendar } from "lucide-react";
 import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
+import PageHeader from "../../../components/common/PageHeader";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -193,10 +194,16 @@ export default function AddEditProject() {
   }
 
   return (
-    <form
+    <div className="flex flex-col gap-6 text-sm">
+      <PageHeader
+        heading={id ? "Edit Project" : "Add Project"}
+        subHeading={id ? "Update this project in your portfolio" : "Showcase a project in your portfolio"}
+      />
+
+      <form
       onSubmit={handleSubmit(addUpdateProject)}
       className="grid grid-cols-12 gap-6 text-sm"
-    >
+      >
       {id && (
         <>
           {/* Upload Project Images */}
@@ -523,6 +530,7 @@ export default function AddEditProject() {
       >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
-    </form>
+      </form>
+    </div>
   );
 }

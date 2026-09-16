@@ -1,6 +1,6 @@
 # 🚀 Profilo
 
-> A modern, real-time portfolio management platform with public APIs to showcase your professional profile using just your username.
+> A modern portfolio management platform with public APIs to showcase your professional profile using just your username.
 
 [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
 [![Node.js](https://img.shields.io/badge/Node.js-v16+-green)](https://nodejs.org/)
@@ -29,11 +29,11 @@
 
 ## 🎯 Overview
 
-**Profilo** is a comprehensive portfolio management platform that empowers professionals to build and maintain their online presence. The platform provides:
+**Profilo** is a portfolio management platform that helps professionals build and maintain a public online presence. It provides:
 
-- **Real-time Portfolio Management**: Create and update your portfolio sections instantly
+- **Portfolio Management**: Create, edit, order, publish, and remove portfolio content
 - **Public APIs**: Share your portfolio with others using public endpoints (username-based access)
-- **Multi-tenant Architecture**: Each user has complete control over their portfolio
+- **Account Isolation**: Each authenticated user can access and manage only their own resources
 - **Professional Design**: Modern UI with light/dark mode support
 - **Secure Authentication**: Email/password and Google OAuth integration
 
@@ -46,27 +46,48 @@ Whether you're a developer, designer, or any professional, Profilo makes it easy
 ### 🔐 Authentication
 - **Email/Password Authentication**: Traditional sign-up and login
 - **Google OAuth**: Seamless Google account integration
-- **JWT Sessions**: Secure token-based authentication with refresh tokens
-- **Multi-Device Support**: Manage active sessions across multiple devices
+- **JWT Sessions**: Short-lived access tokens and rotating refresh tokens stored in cookies
+- **Multi-Device Support**: Track up to five device sessions, with remembered-session limits
+- **Session Management**: Review browser, operating system, device, and sign-in preference details; remove individual sessions
+- **Protected Routing**: Separate public authentication routes and authenticated dashboard routes
 - **Password Reset**: Secure OTP-based password recovery via email
+- **Password Updates**: Change passwords for existing accounts or initialize a password for OAuth users
+- **Account Deletion**: Delete the account and associated Cloudinary media
 
 ### 📇 Portfolio Management
 Users can manage comprehensive portfolio sections:
 - **Profile**: Name, headline, about, location, contact information
-- **Social Platforms**: Links to GitHub, LinkedIn, Twitter, and other platforms
-- **Skills**: Organize skills by categories
-- **Projects**: Showcase completed projects with descriptions and links
-- **Experiences**: Document job history and roles
+- **Social Platforms**: Links to GitHub, LinkedIn, Twitter, LeetCode, Instagram, and other platforms
+- **Skills**: Organize skills by categories and proficiency level
+- **Projects**: Showcase completed projects with descriptions, links, related organizations, technology stacks, featured status, and multiple images
+- **Experiences**: Document organizations, employment types, locations, technology stacks, highlights, multiple positions, and current roles
 - **Education**: List educational background
 - **Certificates**: Display professional certifications
 - **Achievements**: Highlight awards and recognitions
-- **Media**: Upload profile picture and resume/CV to Cloudinary
+- **Visibility Controls**: Mark supported portfolio content as public or private
+- **Ordering and Filtering**: Set display order, featured status where supported, and use paginated dashboard tables
+- **Media**: Upload and replace profile pictures, resumes/CVs, organization images, institute images, certificate images, project galleries, and achievement galleries through Cloudinary
+- **Image Management**: Select cover images and remove individual gallery images
+
+### 🧭 Dashboard Experience
+- **Responsive Dashboard**: Mobile-friendly sidebar, header, tables, forms, pagination, and upload controls
+- **Light and Dark Themes**: Theme-aware pages, inputs, tables, modals, and upload controls
+- **Reusable Form Controls**: Selects, multi-selects, radio buttons, checkboxes, date pickers, validation messages, skeleton loading states, and confirmation modals
+- **Partial Updates**: Edit forms submit only changed fields where supported
+- **Notifications**: Success and error feedback for authentication, CRUD, uploads, and account actions
 
 ### 🌐 Public API
 Anyone can fetch public portfolio data using just the username:
 - Completely open and accessible (no authentication required)
 - Perfect for portfolio websites, portfolios, or third-party integrations
 - Read-only access to public portfolio data
+- Includes a profile summary endpoint with content counts
+- Supports pagination for projects, experiences, education, certificates, and achievements
+- Supports featured filtering for projects, certificates, and achievements where implemented
+- Returns only public content for portfolio collections; profile summary includes education counts
+
+### 🩺 Health Check
+- `GET /api/health` returns an `OK` response for service availability checks.
 
 ### 🎨 Theme System
 - **Light Mode**: Clean, professional light theme
@@ -158,7 +179,7 @@ PORT=5000
 FRONTEND_URL=http://localhost:5173
 
 # Database
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/portfolio-saas
+MONGODB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/portfolio-saas
 
 # JWT Secrets
 ACCESS_TOKEN_SECRET=your_access_token_secret_key_here
@@ -171,15 +192,14 @@ GOOGLE_CLIENT_ID=your_google_client_id_here
 GOOGLE_CLIENT_SECRET=your_google_client_secret_here
 
 # Cloudinary (File Uploads)
-CLOUDINARY_NAME=your_cloudinary_name
+CLOUDINARY_CLOUD_NAME=your_cloudinary_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+CLOUDINARY_API_SECRET_KEY=your_cloudinary_api_secret
+CLOUDINARY_URL=your_cloudinary_url
 
-# Email Service (Nodemailer)
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASSWORD=your_app_password_here
-
-# Email Service (Resend - Alternative)
+# Email Service
+SHOOTER_EMAIL=your_email@gmail.com
+SHOOTER_PASS=your_email_password_or_app_password
 RESEND_API_KEY=your_resend_api_key_here
 ```
 
@@ -190,7 +210,6 @@ Create a `.env` file in the `client` directory:
 ```env
 # API Configuration
 VITE_BASE_URL=http://localhost:5000/api/admin
-VITE_PUBLIC_API_URL=http://localhost:5000/api
 
 # Google OAuth
 VITE_GOOGLE_CLIENT_ID=your_google_client_id_here
@@ -259,6 +278,18 @@ Requirements:
 - Show example usage in a React component (or the framework used in this project).
 ```
 
+#### Service Health
+```
+GET /api/health
+```
+Returns an `OK` response when the API is available.
+
+#### Get Profile Summary
+```
+GET /api/portfolio/:username/summary
+```
+Returns counts for the user's public portfolio sections.
+
 #### Get User Details
 ```
 GET /api/portfolio/:username/details
@@ -287,35 +318,35 @@ Returns skills organized by categories
 ```
 GET /api/portfolio/:username/projects
 ```
-Returns all projects
+Returns paginated public projects. Optional query parameters include `page`, `limit`, and `featured=true|false|all`.
 
 #### Get Experiences
 ```
 GET /api/portfolio/:username/experiences
 ```
-Returns job experiences and history
+Returns paginated public experiences. Optional query parameters include `page` and `limit`.
 
 #### Get Education
 ```
 GET /api/portfolio/:username/educations
 ```
-Returns educational background
+Returns paginated public education records. Optional query parameters include `page` and `limit`.
 
 #### Get Certificates
 ```
 GET /api/portfolio/:username/certificates
 ```
-Returns professional certificates
+Returns paginated public certificates. Optional query parameters include `page`, `limit`, and `featured=true|false|all`.
 
 #### Get Achievements
 ```
 GET /api/portfolio/:username/achievements
 ```
-Returns achievements and awards
+Returns paginated public achievements. Optional query parameters include `page`, `limit`, and `featured=true|false|all`.
 
 ### Admin API Endpoints (Authentication Required)
 
-All admin endpoints require JWT token in `Authorization` header.
+Admin endpoints require a valid JWT. The server accepts the access token from the `accessToken` cookie or a `Bearer` token in the `Authorization` header. Requests that create or restore sessions also use the `x-device-id` header.
 
 #### Authentication Routes
 ```
@@ -323,6 +354,7 @@ POST   /api/admin/auth/register
 POST   /api/admin/auth/login
 POST   /api/admin/auth/google
 POST   /api/admin/auth/logout
+POST   /api/admin/auth/remove-session
 POST   /api/admin/auth/restoreSession
 PATCH  /api/admin/auth/password
 POST   /api/admin/auth/forgot-password
@@ -336,11 +368,28 @@ GET    /api/admin/users/
 PATCH  /api/admin/users/
 DELETE /api/admin/users/
 GET    /api/admin/users/check-password
+GET    /api/admin/users/user-sessions
 PATCH  /api/admin/users/image
 DELETE /api/admin/users/image
 PATCH  /api/admin/users/resume
 DELETE /api/admin/users/resume
 ```
+
+#### Filter and Lookup Data
+```
+GET /api/admin/filters/social-platforms
+GET /api/admin/filters/skill-categories
+GET /api/admin/filters/organizations
+GET /api/admin/filters/project-categories
+GET /api/admin/filters/skills
+GET /api/admin/filters/certificates
+GET /api/admin/filters/skill-levels
+GET /api/admin/filters/genders
+GET /api/admin/filters/employment-types
+GET /api/admin/filters/location-types
+GET /api/admin/filters/visibility
+```
+Several lookup endpoints are public within the admin API; resource-dependent lookups require authentication.
 
 #### Resource Management (CRUD Operations)
 ```
@@ -356,6 +405,8 @@ DELETE /api/admin/users/resume
 
 Each resource supports: `GET`, `POST`, `PATCH`, `DELETE`
 
+List endpoints support pagination through `page` and `limit` query parameters. Project, experience, education, certificate, and achievement resources also expose dedicated media endpoints where applicable.
+
 ---
 
 ## 📂 Project Structure
@@ -367,24 +418,29 @@ portfolio-saas/
 │   │   ├── pages/                  # Route pages
 │   │   │   ├── authentication/     # Auth pages
 │   │   │   └── private/            # Protected pages
-│   │   │       ├── Dashboard
-│   │   │       ├── social_platforms/
+│   │   │       ├── Dashboard.jsx
+│   │   │       ├── UserSessions.jsx
+│   │   │       ├── ChangePassword.jsx
+│   │   │       ├── Settings.jsx
+│   │   │       ├── social-platforms/
+│   │   │       ├── skill-categories/
 │   │   │       ├── skills/
 │   │   │       ├── projects/
 │   │   │       ├── experiences/
 │   │   │       ├── educations/
 │   │   │       ├── certificates/
-│   │   │       ├── achievements/
-│   │   │       └── Settings
+│   │   │       └── achievements/
 │   │   ├── components/             # Reusable components
 │   │   ├── context/                # React contexts
-│   │   │   ├── AuthContext.jsx
-│   │   │   ├── ThemeContext.jsx
-│   │   │   └── NotificationContext.jsx
+│   │   │   ├── auth/
+│   │   │   ├── theme/
+│   │   │   ├── modal/
+│   │   │   └── notification/
 │   │   ├── layouts/                # Layout components
 │   │   ├── hooks/                  # Custom hooks
 │   │   ├── utils/                  # Utility functions
-│   │   ├── api.jsx                 # API client setup
+│   │   ├── services/               # API endpoint clients
+│   │   ├── api.js                  # Axios client setup
 │   │   ├── App.jsx                 # Main router
 │   │   └── main.jsx                # Entry point
 │   ├── public/                     # Static assets
@@ -478,7 +534,7 @@ The project includes a comprehensive theme system with professional light and da
 
 ### Theme Management
 
-The theme is managed by `ThemeContext`:
+The theme is managed by `ThemeProvider` and `useTheme`:
 - Persists to localStorage
 - Respects system preference on first load
 - Toggle available in the header
@@ -493,10 +549,11 @@ For more details, see [THEME_SYSTEM.md](./THEME_SYSTEM.md)
 - ✅ Refresh token rotation with httpOnly cookies
 - ✅ Bcrypt password hashing
 - ✅ CORS protection
-- ✅ Input validation and sanitization
+- ✅ Request validation and ownership checks for private resources
 - ✅ Multi-device session management
 - ✅ OTP-based password reset
 - ✅ Secure file uploads via Cloudinary
+- ✅ Public/private visibility controls for portfolio resources
 
 ---
 
@@ -507,22 +564,25 @@ For more details, see [THEME_SYSTEM.md](./THEME_SYSTEM.md)
 |----------|-------------|---------|
 | `PORT` | Server port | `5000` |
 | `FRONTEND_URL` | Frontend URL for CORS | `http://localhost:5173` |
-| `MONGODB_URI` | MongoDB connection string | See Prerequisites |
+| `MONGODB_URL` | MongoDB connection string | See Prerequisites |
 | `ACCESS_TOKEN_SECRET` | JWT access token secret | Random string |
 | `ACCESS_TOKEN_EXPIRY` | Access token expiry | `15m` |
 | `REFRESH_TOKEN_SECRET` | JWT refresh token secret | Random string |
 | `REFRESH_TOKEN_EXPIRY` | Refresh token expiry | `7d` |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID | From Google Cloud |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | From Google Cloud |
-| `CLOUDINARY_NAME` | Cloudinary cloud name | From Cloudinary |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | From Cloudinary |
 | `CLOUDINARY_API_KEY` | Cloudinary API key | From Cloudinary |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret | From Cloudinary |
+| `CLOUDINARY_API_SECRET_KEY` | Cloudinary API secret | From Cloudinary |
+| `CLOUDINARY_URL` | Optional Cloudinary connection URL | From Cloudinary |
+| `SHOOTER_EMAIL` | Sender email address | Your email provider |
+| `SHOOTER_PASS` | Sender email password or app password | Your email provider |
+| `RESEND_API_KEY` | Resend email API key | From Resend |
 
 ### Client (`.env`)
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `VITE_BASE_URL` | Admin API base URL | `http://localhost:5000/api/admin` |
-| `VITE_PUBLIC_API_URL` | Public API base URL | `http://localhost:5000/api` |
 | `VITE_GOOGLE_CLIENT_ID` | Google OAuth client ID | From Google Cloud |
 
 ---
@@ -534,11 +594,13 @@ For more details, see [THEME_SYSTEM.md](./THEME_SYSTEM.md)
 cd server
 npm test
 ```
+The current backend `test` script starts the server; no automated test suite is configured yet.
 
 ### Frontend
 ```bash
 cd client
-npm test
+npm run lint
+npm run build
 ```
 
 ---

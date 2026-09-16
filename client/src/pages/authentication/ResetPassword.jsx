@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { LockKeyholeOpen, Mail } from "lucide-react";
 
 import LabelInput from "../../components/ui/LabelInput";
+import PageHeader from "../../components/common/PageHeader";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
@@ -51,9 +52,11 @@ export default function ResetPassword() {
   return (
     <div className="min-h-screen p-6 flex items-center justify-center bg-light-bg-secondary dark:bg-dark-bg-secondary">
       <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-2xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
-        <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">
-          Reset Passowrd
-        </h2>
+        <PageHeader
+          heading="Reset Password"
+          subHeading="Choose a new password for your Profilo account"
+          className="mb-6 justify-center text-center"
+        />
 
         <form
           onSubmit={handleSubmit(onSubmit)}

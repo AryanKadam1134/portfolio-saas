@@ -6,6 +6,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { LockKeyholeOpen, Mail } from "lucide-react";
 
 import AppLogo from "../../components/common/AppLogo";
+import PageHeader from "../../components/common/PageHeader";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -64,9 +65,15 @@ export default function Authentication() {
       <AppLogo className="size-12" />
 
       <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
-        <h2 className="text-2xl font-bold text-center mb-6 text-light-text-primary dark:text-dark-text-primary">
-          Profilo
-        </h2>
+        <PageHeader
+          heading={isLogin ? "Welcome to Profilo" : "Create your Profilo account"}
+          subHeading={
+            isLogin
+              ? "Sign in to manage your professional portfolio"
+              : "Build and share your professional portfolio"
+          }
+          className="mb-6 justify-center text-center"
+        />
 
         <form
           onSubmit={handleSubmit(onSubmit)}

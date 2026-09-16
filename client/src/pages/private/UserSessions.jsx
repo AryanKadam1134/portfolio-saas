@@ -12,6 +12,7 @@ import {
   Trash2,
 } from "lucide-react";
 
+import PageHeader from "../../components/common/PageHeader";
 import { formatDateInAlphaNumeric } from "../../utils/formatDate";
 
 import { authEndpoints } from "../../services/authService";
@@ -82,26 +83,15 @@ export default function UserSessions() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-light-text-secondary dark:text-dark-text-secondary">
-          Security
-        </p>
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-light-text-primary dark:text-dark-text-primary">
-              Active sessions
-            </h1>
-            <p className="mt-1 text-light-text-secondary dark:text-dark-text-secondary">
-              Review where your account is signed in and remove access you no
-              longer recognize.
-            </p>
-          </div>
-          <div className="hidden items-center gap-2 rounded-md border border-light-border-primary bg-light-bg-primary px-3 py-2 text-xs text-light-text-secondary shadow-sm dark:border-dark-border-primary dark:bg-dark-bg-tertiary dark:text-dark-text-secondary sm:flex">
-            <LogOut size={15} />
-            {userSessions.length} active
-          </div>
+      <PageHeader
+        heading="Active Sessions"
+        subHeading="Review where your account is signed in and remove access you no longer recognize"
+      >
+        <div className="hidden items-center gap-2 rounded-md border border-light-border-primary bg-light-bg-primary px-3 py-2 text-xs text-light-text-secondary shadow-sm dark:border-dark-border-primary dark:bg-dark-bg-tertiary dark:text-dark-text-secondary sm:flex">
+          <LogOut size={15} />
+          {userSessions.length} active
         </div>
-      </div>
+      </PageHeader>
 
       {isLoading && (
         <div className="flex items-center justify-center rounded-md border border-light-border-primary bg-light-bg-primary py-16 text-light-text-secondary dark:border-dark-border-primary dark:bg-dark-bg-tertiary dark:text-dark-text-secondary">

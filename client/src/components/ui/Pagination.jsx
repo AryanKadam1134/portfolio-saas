@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Grid } from "antd";
 const { useBreakpoint } = Grid;
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -23,7 +21,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   for (let i = startPage; i <= endPage; i++) pageNumbers.push(i);
 
   const buttonBaseClasses =
-    "px-3 py-1.5 text-light-text-primary dark:text-dark-text-primary rounded-md transition-colors font-medium";
+    "px-3.5 py-1.5 text-dark-text-primary rounded-md transition-colors font-medium";
   const inactiveButtonClasses = `${buttonBaseClasses} bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover cursor-pointer`;
   const disabledButtonClasses = `${buttonBaseClasses} bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-tertiary dark:text-dark-text-tertiary opacity-50 cursor-not-allowed`;
   const activeButtonClasses = `${buttonBaseClasses} bg-blue-500 hover:bg-blue-600`;
@@ -33,7 +31,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       : `${buttonBaseClasses} bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover cursor-pointer`;
 
   return (
-    <div className="flex justify-center mt-6 gap-2 text-sm">
+    <div className="flex justify-center gap-2 text-sm">
       {/* Prev Button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}

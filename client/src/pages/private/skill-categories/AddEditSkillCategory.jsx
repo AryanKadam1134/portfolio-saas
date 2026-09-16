@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
+import PageHeader from "../../../components/common/PageHeader";
 
 import LabelInput from "../../../components/ui/LabelInput";
 import CustomInput from "../../../components/ui/CustomInput";
@@ -102,10 +103,16 @@ export default function AddEditSkillCategory() {
   }
 
   return (
-    <form
+    <div className="flex flex-col gap-6 text-sm">
+      <PageHeader
+        heading={id ? "Edit Skill Category" : "Add Skill Category"}
+        subHeading={id ? "Update this skill category" : "Create a category for your skills"}
+      />
+
+      <form
       onSubmit={handleSubmit(addUpdateSkillCategory)}
       className="grid grid-cols-12 gap-6 text-sm"
-    >
+      >
       {/* Category Name */}
       <LabelInput
         id="name"
@@ -188,6 +195,7 @@ export default function AddEditSkillCategory() {
       >
         {isSubmitting ? "Saving..." : "Save"}
       </CustomButton>
-    </form>
+      </form>
+    </div>
   );
 }
