@@ -70,4 +70,3 @@ export default function DeleteUserModal({ onConfirm, isDeleting }) {
     </div>
   );
 }
-

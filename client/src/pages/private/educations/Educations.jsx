@@ -119,7 +119,10 @@ export default function Educations() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <PageHeader heading="Education" subHeading="Manage your academic background">
+      <PageHeader
+        heading="Education"
+        subHeading="Manage your academic background"
+      >
         <CustomButton
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"

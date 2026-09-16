@@ -153,7 +153,10 @@ export default function Projects() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <PageHeader heading="Projects" subHeading="Manage the work in your portfolio">
+      <PageHeader
+        heading="Projects"
+        subHeading="Manage the work in your portfolio"
+      >
         <CustomButton
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"

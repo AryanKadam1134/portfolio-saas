@@ -180,247 +180,251 @@ export default function AddEditAchievement() {
     <div className="flex flex-col gap-6 text-sm">
       <PageHeader
         heading={id ? "Edit Achievement" : "Add Achievement"}
-        subHeading={id ? "Update this portfolio achievement" : "Highlight an award or milestone"}
+        subHeading={
+          id
+            ? "Update this portfolio achievement"
+            : "Highlight an award or milestone"
+        }
       />
 
       <form
-      onSubmit={handleSubmit(addUpdateAchievement)}
-      className="grid grid-cols-12 gap-6 text-sm"
+        onSubmit={handleSubmit(addUpdateAchievement)}
+        className="grid grid-cols-12 gap-6 text-sm"
       >
-      {id && (
-        <>
-          {/* Upload Achievement Images  */}
-          <LabelInput
-            id="upload"
-            label="Upload Achievement Images"
-            colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          >
-            <DragDropUpload
+        {id && (
+          <>
+            {/* Upload Achievement Images  */}
+            <LabelInput
               id="upload"
-              multiple
-              accept="image/*"
-              loading={imagesUploading}
-              onChange={(files) => updateAchievementImage(files)}
-            />
-          </LabelInput>
-
-          <ImageGallery
-            className="col-span-12 sm:col-span-9"
-            images={achievementImages}
-            coverImageIndex={coverImageIndex}
-            imageDeletingId={imageDeleting}
-            handleCoverChange={handleCoverChange}
-            deleteImage={deleteAchievementImage}
-          />
-
-          <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
-        </>
-      )}
-
-      {/* Achievement Name */}
-      <LabelInput
-        id="title"
-        label="Achievement Name"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.title?.message}
-      >
-        <CustomInput
-          id="title"
-          type="text"
-          placeholder="Enter achievement name"
-          {...register("title", {
-            required: "Achievement name is required!",
-            minLength: {
-              value: 2,
-              message: "Achievement name must be at least 2 characters",
-            },
-            maxLength: {
-              value: 100,
-              message: "Achievement name must not exceed 100 characters",
-            },
-          })}
-        />
-      </LabelInput>
-
-      {/* Issuer */}
-      <LabelInput
-        id="issuer"
-        label="Issued By"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.issuer?.message}
-      >
-        <CustomInput
-          id="issuer"
-          type="text"
-          placeholder="Organization or person name"
-          {...register("issuer", {
-            required: "Issuer is required!",
-            minLength: {
-              value: 2,
-              message: "Issuer name must be at least 2 characters",
-            },
-            maxLength: {
-              value: 100,
-              message: "Issuer name must not exceed 100 characters",
-            },
-          })}
-        />
-      </LabelInput>
-
-      {/* Attached Certificate */}
-      <LabelInput
-        id="certificateId"
-        label="Attach Existing Certificate"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.certificateId?.message}
-      >
-        <Controller
-          name="certificateId"
-          control={control}
-          render={({ field }) => (
-            <CustomSelect
-              id="certificateId"
-              placeholder="Select"
-              options={certificatesList}
-              value={field.value}
-              onChange={field.onChange} // send value to hook form
-            />
-          )}
-        />
-      </LabelInput>
-
-      {/* Reffered Link */}
-      <LabelInput
-        id="link"
-        label="Reffered Link"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.link?.message}
-        attachment={
-          link && (
-            <a
-              href={link}
-              target="_blank"
-              className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+              label="Upload Achievement Images (5 max)"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
             >
-              <ExternalLink size={13} /> <p>Visit Link</p>
-            </a>
-          )
-        }
-      >
-        <CustomInput
+              <DragDropUpload
+                id="upload"
+                multiple
+                accept="image/*"
+                loading={imagesUploading}
+                onChange={(files) => updateAchievementImage(files)}
+              />
+            </LabelInput>
+
+            <ImageGallery
+              className="col-span-12 sm:col-span-9"
+              images={achievementImages}
+              coverImageIndex={coverImageIndex}
+              imageDeletingId={imageDeleting}
+              handleCoverChange={handleCoverChange}
+              deleteImage={deleteAchievementImage}
+            />
+
+            <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+          </>
+        )}
+
+        {/* Achievement Name */}
+        <LabelInput
+          id="title"
+          label="Achievement Name"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.title?.message}
+        >
+          <CustomInput
+            id="title"
+            type="text"
+            placeholder="Enter achievement name"
+            {...register("title", {
+              required: "Achievement name is required!",
+              minLength: {
+                value: 2,
+                message: "Achievement name must be at least 2 characters",
+              },
+              maxLength: {
+                value: 100,
+                message: "Achievement name must not exceed 100 characters",
+              },
+            })}
+          />
+        </LabelInput>
+
+        {/* Issuer */}
+        <LabelInput
+          id="issuer"
+          label="Issued By"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.issuer?.message}
+        >
+          <CustomInput
+            id="issuer"
+            type="text"
+            placeholder="Organization or person name"
+            {...register("issuer", {
+              required: "Issuer is required!",
+              minLength: {
+                value: 2,
+                message: "Issuer name must be at least 2 characters",
+              },
+              maxLength: {
+                value: 100,
+                message: "Issuer name must not exceed 100 characters",
+              },
+            })}
+          />
+        </LabelInput>
+
+        {/* Attached Certificate */}
+        <LabelInput
+          id="certificateId"
+          label="Attach Existing Certificate"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.certificateId?.message}
+        >
+          <Controller
+            name="certificateId"
+            control={control}
+            render={({ field }) => (
+              <CustomSelect
+                id="certificateId"
+                placeholder="Select"
+                options={certificatesList}
+                value={field.value}
+                onChange={field.onChange} // send value to hook form
+              />
+            )}
+          />
+        </LabelInput>
+
+        {/* Reffered Link */}
+        <LabelInput
           id="link"
-          type="text"
-          icon={Link}
-          placeholder="https://example.com (optional)"
-          {...register("link", {
-            pattern: {
-              value: /^https:\/\/.+$/,
-              message: "URL must start with https://",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Reffered Link"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.link?.message}
+          attachment={
+            link && (
+              <a
+                href={link}
+                target="_blank"
+                className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+              >
+                <ExternalLink size={13} /> <p>Visit Link</p>
+              </a>
+            )
+          }
+        >
+          <CustomInput
+            id="link"
+            type="text"
+            icon={Link}
+            placeholder="https://example.com (optional)"
+            {...register("link", {
+              pattern: {
+                value: /^https:\/\/.+$/,
+                message: "URL must start with https://",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Description */}
-      <LabelInput
-        id="description"
-        label="Description"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.description?.message}
-      >
-        <CustomTextArea
+        {/* Description */}
+        <LabelInput
           id="description"
-          rows={6}
-          placeholder="Describe your achievement and why it matters..."
-          {...register("description", {
-            maxLength: {
-              value: 1000,
-              message: "Max 1000 characters allowed!",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Description"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.description?.message}
+        >
+          <CustomTextArea
+            id="description"
+            rows={6}
+            placeholder="Describe your achievement and why it matters..."
+            {...register("description", {
+              maxLength: {
+                value: 1000,
+                message: "Max 1000 characters allowed!",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Date */}
-      <LabelInput
-        id="date"
-        label="Date"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.date?.message}
-      >
-        <CustomDatePicker
+        {/* Date */}
+        <LabelInput
           id="date"
-          icon={Calendar}
-          placeholder="Select Date"
-          {...register("date", {
-            required: "Date is required!",
-          })}
-        />
-      </LabelInput>
+          label="Date"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.date?.message}
+        >
+          <CustomDatePicker
+            id="date"
+            icon={Calendar}
+            placeholder="Select Date"
+            {...register("date", {
+              required: "Date is required!",
+            })}
+          />
+        </LabelInput>
 
-      {/* Featured */}
-      <LabelInput
-        id="featured"
-        label="Featured"
-        colSpan="col-span-12 sm:col-span-6"
-        type="checkbox"
-        attachment={
-          <p className="font-normal text-xs opacity-80">
-            Helps in filtering the achievements
-          </p>
-        }
-      >
-        <CustomCheckbox
+        {/* Featured */}
+        <LabelInput
           id="featured"
-          {...register("featured")}
-          error={errors?.featured?.message}
-        />
-      </LabelInput>
+          label="Featured"
+          colSpan="col-span-12 sm:col-span-6"
+          type="checkbox"
+          attachment={
+            <p className="font-normal text-xs opacity-80">
+              Helps in filtering the achievements
+            </p>
+          }
+        >
+          <CustomCheckbox
+            id="featured"
+            {...register("featured")}
+            error={errors?.featured?.message}
+          />
+        </LabelInput>
 
-      {/* Sort Order */}
-      <LabelInput
-        id="sortOrder"
-        label="Sort Order"
-        colSpan="col-span-12 sm:col-span-6"
-      >
-        <CustomInput
+        {/* Sort Order */}
+        <LabelInput
           id="sortOrder"
-          type="number"
-          min={0}
-          placeholder="Sort Order"
-          {...register("sortOrder", { valueAsNumber: true })}
-          error={errors?.sortOrder?.message}
-        />
-      </LabelInput>
+          label="Sort Order"
+          colSpan="col-span-12 sm:col-span-6"
+        >
+          <CustomInput
+            id="sortOrder"
+            type="number"
+            min={0}
+            placeholder="Sort Order"
+            {...register("sortOrder", { valueAsNumber: true })}
+            error={errors?.sortOrder?.message}
+          />
+        </LabelInput>
 
-      {/* Visibility  */}
-      <LabelInput
-        id="visibility"
-        label="Visibility"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-      >
-        <CustomRadioButtons
+        {/* Visibility  */}
+        <LabelInput
           id="visibility"
-          name="visibility"
-          options={visibilities}
-          {...register("visibility", {
-            required: "Visibility is required!",
-          })}
-          error={errors?.visibility?.message}
-        />
-      </LabelInput>
+          label="Visibility"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+        >
+          <CustomRadioButtons
+            id="visibility"
+            name="visibility"
+            options={visibilities}
+            {...register("visibility", {
+              required: "Visibility is required!",
+            })}
+            error={errors?.visibility?.message}
+          />
+        </LabelInput>
 
-      <CustomButton
-        type="submit"
-        className="col-span-12 place-self-end"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Saving..." : "Save"}
-      </CustomButton>
+        <CustomButton
+          type="submit"
+          className="col-span-12 place-self-end"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : "Save"}
+        </CustomButton>
       </form>
     </div>
   );

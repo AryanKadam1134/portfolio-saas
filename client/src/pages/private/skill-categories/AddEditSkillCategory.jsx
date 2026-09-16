@@ -106,95 +106,99 @@ export default function AddEditSkillCategory() {
     <div className="flex flex-col gap-6 text-sm">
       <PageHeader
         heading={id ? "Edit Skill Category" : "Add Skill Category"}
-        subHeading={id ? "Update this skill category" : "Create a category for your skills"}
+        subHeading={
+          id
+            ? "Update this skill category"
+            : "Create a category for your skills"
+        }
       />
 
       <form
-      onSubmit={handleSubmit(addUpdateSkillCategory)}
-      className="grid grid-cols-12 gap-6 text-sm"
+        onSubmit={handleSubmit(addUpdateSkillCategory)}
+        className="grid grid-cols-12 gap-6 text-sm"
       >
-      {/* Category Name */}
-      <LabelInput
-        id="name"
-        label="Category Name"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.name?.message}
-      >
-        <CustomInput
+        {/* Category Name */}
+        <LabelInput
           id="name"
-          type="text"
-          placeholder="e.g., Frontend, Backend, DevOps"
-          {...register("name", {
-            required: "Category name is required!",
-            minLength: {
-              value: 2,
-              message: "Category name must be at least 2 characters",
-            },
-            maxLength: {
-              value: 50,
-              message: "Category name must not exceed 50 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Category Name"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.name?.message}
+        >
+          <CustomInput
+            id="name"
+            type="text"
+            placeholder="e.g., Frontend, Backend, DevOps"
+            {...register("name", {
+              required: "Category name is required!",
+              minLength: {
+                value: 2,
+                message: "Category name must be at least 2 characters",
+              },
+              maxLength: {
+                value: 50,
+                message: "Category name must not exceed 50 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Category Logo URL */}
-      <LabelInput
-        id="logoUrl"
-        label="Logo URL"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.logoUrl?.message}
-      >
-        <CustomInput
+        {/* Category Logo URL */}
+        <LabelInput
           id="logoUrl"
-          type="text"
-          placeholder="e.g. /images/frontend.svg"
-          {...register("logoUrl")}
-        />
-      </LabelInput>
+          label="Logo URL"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.logoUrl?.message}
+        >
+          <CustomInput
+            id="logoUrl"
+            type="text"
+            placeholder="e.g. /images/frontend.svg"
+            {...register("logoUrl")}
+          />
+        </LabelInput>
 
-      {/* Sort Order */}
-      <LabelInput
-        id="sortOrder"
-        label="Display Order"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.sortOrder?.message}
-      >
-        <CustomInput
+        {/* Sort Order */}
+        <LabelInput
           id="sortOrder"
-          type="number"
-          min={0}
-          placeholder="0 (appears first)"
-          {...register("sortOrder", { valueAsNumber: true })}
-        />
-      </LabelInput>
+          label="Display Order"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.sortOrder?.message}
+        >
+          <CustomInput
+            id="sortOrder"
+            type="number"
+            min={0}
+            placeholder="0 (appears first)"
+            {...register("sortOrder", { valueAsNumber: true })}
+          />
+        </LabelInput>
 
-      {/* Visibility  */}
-      <LabelInput
-        id="visibility"
-        label="Visibility"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.visibility?.message}
-      >
-        <CustomRadioButtons
+        {/* Visibility  */}
+        <LabelInput
           id="visibility"
-          name="visibility"
-          options={visibilities}
-          {...register("visibility", {
-            required: "Visibility is required!",
-          })}
-        />
-      </LabelInput>
+          label="Visibility"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.visibility?.message}
+        >
+          <CustomRadioButtons
+            id="visibility"
+            name="visibility"
+            options={visibilities}
+            {...register("visibility", {
+              required: "Visibility is required!",
+            })}
+          />
+        </LabelInput>
 
-      <CustomButton
-        type="submit"
-        className="col-span-12 place-self-end"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Saving..." : "Save"}
-      </CustomButton>
+        <CustomButton
+          type="submit"
+          className="col-span-12 place-self-end"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : "Save"}
+        </CustomButton>
       </form>
     </div>
   );

@@ -136,7 +136,10 @@ export default function Experiences() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <PageHeader heading="Experience" subHeading="Document your professional journey">
+      <PageHeader
+        heading="Experience"
+        subHeading="Document your professional journey"
+      >
         <CustomButton
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"

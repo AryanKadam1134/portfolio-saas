@@ -135,7 +135,10 @@ export default function Achievements() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <PageHeader heading="Achievements" subHeading="Highlight awards and milestones">
+      <PageHeader
+        heading="Achievements"
+        subHeading="Highlight awards and milestones"
+      >
         <CustomButton
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"

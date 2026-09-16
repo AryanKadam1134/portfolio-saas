@@ -157,165 +157,169 @@ export default function AddEditSkills() {
     <div className="flex flex-col gap-6 text-sm">
       <PageHeader
         heading={id ? "Edit Skill" : "Add Skill"}
-        subHeading={id ? "Update this skill in your portfolio" : "Add a skill to your portfolio"}
+        subHeading={
+          id
+            ? "Update this skill in your portfolio"
+            : "Add a skill to your portfolio"
+        }
       />
 
       <form
-      onSubmit={handleSubmit(addUpdateSkill)}
-      className="grid grid-cols-12 gap-6 text-sm"
+        onSubmit={handleSubmit(addUpdateSkill)}
+        className="grid grid-cols-12 gap-6 text-sm"
       >
-      {!id && (
-        <>
-          <LabelInput
-            id="popular"
-            label="Popular Skills"
-            colSpan="col-span-12 sm:col-span-6"
-          >
-            <CustomSelect
+        {!id && (
+          <>
+            <LabelInput
               id="popular"
-              placeholder="Select Skill"
-              options={SKILLS}
-              value={null}
-              onChange={(value) => reset({ name: value })} // send value to hook form
-            />
-          </LabelInput>
+              label="Popular Skills"
+              colSpan="col-span-12 sm:col-span-6"
+            >
+              <CustomSelect
+                id="popular"
+                placeholder="Select Skill"
+                options={SKILLS}
+                value={null}
+                onChange={(value) => reset({ name: value })} // send value to hook form
+              />
+            </LabelInput>
 
-          <div className="hidden sm:block col-span-6" />
+            <div className="hidden sm:block col-span-6" />
 
-          <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
-        </>
-      )}
+            <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+          </>
+        )}
 
-      {/* Skill Name */}
-      <LabelInput
-        id="name"
-        label="Skill Name"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.name?.message}
-      >
-        <CustomInput
+        {/* Skill Name */}
+        <LabelInput
           id="name"
-          type="text"
-          placeholder="e.g., React, Python, UI Design"
-          {...register("name", {
-            required: "Skill name is required!",
-            minLength: {
-              value: 2,
-              message: "Skill name must be at least 2 characters",
-            },
-            maxLength: {
-              value: 50,
-              message: "Skill name must not exceed 50 characters",
-            },
-          })}
-        />
-      </LabelInput>
+          label="Skill Name"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.name?.message}
+        >
+          <CustomInput
+            id="name"
+            type="text"
+            placeholder="e.g., React, Python, UI Design"
+            {...register("name", {
+              required: "Skill name is required!",
+              minLength: {
+                value: 2,
+                message: "Skill name must be at least 2 characters",
+              },
+              maxLength: {
+                value: 50,
+                message: "Skill name must not exceed 50 characters",
+              },
+            })}
+          />
+        </LabelInput>
 
-      {/* Skill Category */}
-      <LabelInput
-        id="categoryId"
-        label="Skill Category"
-        colSpan="col-span-12 sm:col-span-6"
-        className="w-full"
-        error={errors?.categoryId?.message}
-      >
-        <Controller
-          name="categoryId"
-          control={control}
-          render={({ field }) => (
-            <CustomSelect
-              id="categoryId"
-              placeholder="Select Category"
-              options={categoriesList}
-              value={field.value}
-              onChange={field.onChange} // send value to hook form
-            />
-          )}
-        />
-      </LabelInput>
+        {/* Skill Category */}
+        <LabelInput
+          id="categoryId"
+          label="Skill Category"
+          colSpan="col-span-12 sm:col-span-6"
+          className="w-full"
+          error={errors?.categoryId?.message}
+        >
+          <Controller
+            name="categoryId"
+            control={control}
+            render={({ field }) => (
+              <CustomSelect
+                id="categoryId"
+                placeholder="Select Category"
+                options={categoriesList}
+                value={field.value}
+                onChange={field.onChange} // send value to hook form
+              />
+            )}
+          />
+        </LabelInput>
 
-      {/* Skill Logo URL */}
-      <LabelInput
-        id="logoUrl"
-        label="Logo URL"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.logoUrl?.message}
-      >
-        <CustomInput
+        {/* Skill Logo URL */}
+        <LabelInput
           id="logoUrl"
-          type="text"
-          placeholder="/images/react_light.svg"
-          {...register("logoUrl")}
-        />
-      </LabelInput>
+          label="Logo URL"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.logoUrl?.message}
+        >
+          <CustomInput
+            id="logoUrl"
+            type="text"
+            placeholder="/images/react_light.svg"
+            {...register("logoUrl")}
+          />
+        </LabelInput>
 
-      {/* Skill Level */}
-      <LabelInput
-        id="level"
-        label="Level"
-        colSpan="col-span-12 sm:col-span-6"
-        className="w-full"
-        required
-        error={errors?.level?.message}
-      >
-        <Controller
-          name="level"
-          control={control}
-          rules={{ required: "Skill Level is required!" }}
-          render={({ field }) => (
-            <CustomSelect
-              id="level"
-              placeholder="Select"
-              options={skillLevels}
-              value={field.value}
-              onChange={field.onChange}
-            />
-          )}
-        />
-      </LabelInput>
+        {/* Skill Level */}
+        <LabelInput
+          id="level"
+          label="Level"
+          colSpan="col-span-12 sm:col-span-6"
+          className="w-full"
+          required
+          error={errors?.level?.message}
+        >
+          <Controller
+            name="level"
+            control={control}
+            rules={{ required: "Skill Level is required!" }}
+            render={({ field }) => (
+              <CustomSelect
+                id="level"
+                placeholder="Select"
+                options={skillLevels}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </LabelInput>
 
-      {/* Sort Order */}
-      <LabelInput
-        id="sortOrder"
-        label="Display Order"
-        colSpan="col-span-12 sm:col-span-6"
-        error={errors?.sortOrder?.message}
-      >
-        <CustomInput
+        {/* Sort Order */}
+        <LabelInput
           id="sortOrder"
-          type="number"
-          min={0}
-          placeholder="0 (appears first)"
-          {...register("sortOrder", { valueAsNumber: true })}
-        />
-      </LabelInput>
+          label="Display Order"
+          colSpan="col-span-12 sm:col-span-6"
+          error={errors?.sortOrder?.message}
+        >
+          <CustomInput
+            id="sortOrder"
+            type="number"
+            min={0}
+            placeholder="0 (appears first)"
+            {...register("sortOrder", { valueAsNumber: true })}
+          />
+        </LabelInput>
 
-      {/* Visibility  */}
-      <LabelInput
-        id="visibility"
-        label="Visibility"
-        colSpan="col-span-12 sm:col-span-6"
-        required
-        error={errors?.visibility?.message}
-      >
-        <CustomRadioButtons
+        {/* Visibility  */}
+        <LabelInput
           id="visibility"
-          name="visibility"
-          options={visibilities}
-          {...register("visibility", {
-            required: "Visibility is required!",
-          })}
-        />
-      </LabelInput>
+          label="Visibility"
+          colSpan="col-span-12 sm:col-span-6"
+          required
+          error={errors?.visibility?.message}
+        >
+          <CustomRadioButtons
+            id="visibility"
+            name="visibility"
+            options={visibilities}
+            {...register("visibility", {
+              required: "Visibility is required!",
+            })}
+          />
+        </LabelInput>
 
-      <CustomButton
-        type="submit"
-        className="col-span-12 place-self-end"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Saving..." : "Save"}
-      </CustomButton>
+        <CustomButton
+          type="submit"
+          className="col-span-12 place-self-end"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : "Save"}
+        </CustomButton>
       </form>
     </div>
   );

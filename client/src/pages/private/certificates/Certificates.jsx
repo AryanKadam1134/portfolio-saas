@@ -133,7 +133,10 @@ export default function Certificates() {
 
   return (
     <div className="flex flex-col gap-6 text-sm">
-      <PageHeader heading="Certificates" subHeading="Showcase your professional certifications">
+      <PageHeader
+        heading="Certificates"
+        subHeading="Showcase your professional certifications"
+      >
         <CustomButton
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"

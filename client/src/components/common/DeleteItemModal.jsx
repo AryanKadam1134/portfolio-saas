@@ -8,7 +8,11 @@ export default function DeleteItemModal({ func }) {
         Are you sure you want to delete this Item?
       </div>
 
-      <CustomButton onClick={func} variant="red" className="w-fit self-end text-sm">
+      <CustomButton
+        onClick={func}
+        variant="red"
+        className="w-fit self-end text-sm"
+      >
         Delete
       </CustomButton>
     </div>
