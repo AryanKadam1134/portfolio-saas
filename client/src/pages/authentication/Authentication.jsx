@@ -66,13 +66,8 @@ export default function Authentication() {
 
       <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
         <PageHeader
-          heading={isLogin ? "Welcome to Profilo" : "Create your Profilo account"}
-          subHeading={
-            isLogin
-              ? "Sign in to manage your professional portfolio"
-              : "Build and share your professional portfolio"
-          }
-          className="mb-6 justify-center text-center"
+          heading={isLogin ? "Welcome to Profilo" : "Create your account"}
+          className="mb-8 justify-center text-center"
         />
 
         <form

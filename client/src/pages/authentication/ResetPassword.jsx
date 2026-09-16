@@ -55,7 +55,7 @@ export default function ResetPassword() {
         <PageHeader
           heading="Reset Password"
           subHeading="Choose a new password for your Profilo account"
-          className="mb-6 justify-center text-center"
+          className="mb-8 justify-center text-center"
         />
 
         <form

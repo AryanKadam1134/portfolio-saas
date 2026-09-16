@@ -59,7 +59,7 @@ export default function ForogtPassword() {
               ? "Enter the verification code sent to your email"
               : "Recover access to your Profilo account"
           }
-          className="mb-6 justify-center text-center"
+          className="mb-8 justify-center text-center"
         />
 
         <form
