@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 
-import { Trash2, Loader, FileText } from "lucide-react";
+import { Loader, FileText } from "lucide-react";
 
 export default function DragDropUpload({
   onChange,
@@ -39,7 +39,7 @@ export default function DragDropUpload({
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
         onClick={() => !loading && fileInputRef.current.click()}
-        className={`h-full w-full px-4 py-6 flex flex-col items-center justify-center gap-3
+        className={`max-h-35 w-full px-4 py-6 flex flex-col items-center justify-center gap-3
         text-center border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary
         ${isDragging && "bg-blue-500/10 dark:bg-blue-950/20 border-blue-400 dark:border-blue-500"}
         ${!loading && "hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-hover"}

@@ -8,7 +8,7 @@ export default function CoverImage({ image = {}, imageDeleting, deleteImage }) {
   const { url } = image;
 
   return (
-    <div className="relative group h-35 sm:h-full rounded-md overflow-hidden border border-light-border-secondary dark:border-dark-border-secondary">
+    <div className="relative group h-35 rounded-md overflow-hidden border border-light-border-secondary dark:border-dark-border-secondary">
       {/* Loader */}
       {imageDeleting && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
-import { authEndpoints } from "../../services/authService";
+import { authEndpoints } from "../../services/auth.service";
 
 import { AuthContext } from "./useAuth";
 

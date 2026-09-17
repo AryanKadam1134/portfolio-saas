@@ -14,7 +14,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import { getOptionLabel } from "../../../utils/getOptionLabel";
 import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
-import { socialPlatformEndpoints } from "../../../services/socialPlatformService";
+import { socialPlatformEndpoints } from "../../../services/socialPlatform.service";
 
 import useVisibilities from "../../../hooks/useVisibilities";
 

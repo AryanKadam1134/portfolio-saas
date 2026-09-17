@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { socialPlatformEndpoints } from "../services/socialPlatformService";
+import { socialPlatformEndpoints } from "../services/socialPlatform.service";
 
 export default function useSocailPlatforms() {
   const [platformsLoading, setLoading] = useState(true);

@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+import { requestLogger } from "./middlewares/requestLogger.middleware.js";
+
 const app = express();
 
 // CORS Configs
@@ -13,6 +15,8 @@ const privateCors = cors({
 const publicCors = cors({
   origin: "*",
 });
+
+app.use(requestLogger);
 
 app.use(express.json());
 app.use(cookieParser());
