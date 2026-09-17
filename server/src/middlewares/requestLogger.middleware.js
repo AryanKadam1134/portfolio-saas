@@ -6,15 +6,19 @@ export const requestLogger = (req, res, next) => {
 
     const userId = req.user?._id ?? "anonymous";
 
-    const isError = res.statusCode >= 400;
-
-    const color = isError ? "\x1b[31m" : "\x1b[32m";
+    const green = "\x1b[32m";
+    const red = "\x1b[31m";
+    const yellow = "\x1b[33m";
     const reset = "\x1b[0m";
 
+    const statusColor =
+      res.statusCode >= 500 ? red : res.statusCode >= 400 ? yellow : green;
+
     console.log(
-      `${color}[${new Date().toISOString()}] ` +
-        `${req.method} ${req.originalUrl} → ${res.statusCode} ` +
-        `| ${duration}ms | User: ${userId}${reset}`,
+      `[${new Date().toISOString()}] ` +
+        `${req.method} ${req.originalUrl} → ` +
+        `${statusColor}${res.statusCode}${reset} ` +
+        `| ${duration}ms | User: ${userId}`,
     );
   });
 

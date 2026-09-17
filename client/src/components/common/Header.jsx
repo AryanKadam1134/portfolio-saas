@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Switch } from "antd";
 import { Menu } from "lucide-react";
 
 import ThemeToggleButton from "./ThemeToggleButton";
