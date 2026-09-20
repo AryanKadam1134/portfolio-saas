@@ -5,7 +5,7 @@ import { LockKeyholeOpen, Mail } from "lucide-react";
 
 import Authentication from "../../components/authentication/Authentication";
 
-import LabelInput from "../../components/ui/LabelInput";
+import FormField from "../../components/ui/FormField";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
@@ -51,7 +51,7 @@ export default function SignUp() {
       formContent={
         <>
           {/* First Name */}
-          <LabelInput
+          <FormField
             id="firstName"
             label="First Name"
             required
@@ -65,10 +65,10 @@ export default function SignUp() {
                 required: "First Name is required!",
               })}
             />
-          </LabelInput>
+          </FormField>
 
           {/* Last Name */}
-          <LabelInput
+          <FormField
             id="lastName"
             label="Last Name"
             error={errors?.lastName?.message}
@@ -79,10 +79,10 @@ export default function SignUp() {
               placeholder="Doe"
               {...register("lastName")}
             />
-          </LabelInput>
+          </FormField>
 
           {/* Username */}
-          <LabelInput
+          <FormField
             id="username"
             label="Username"
             required
@@ -96,10 +96,10 @@ export default function SignUp() {
                 required: "username is required!",
               })}
             />
-          </LabelInput>
+          </FormField>
 
           {/* Email */}
-          <LabelInput
+          <FormField
             id="email"
             label="Email"
             required
@@ -118,10 +118,10 @@ export default function SignUp() {
                 },
               })}
             />
-          </LabelInput>
+          </FormField>
 
           {/* Password */}
-          <LabelInput
+          <FormField
             id="password"
             label="Password"
             required
@@ -143,7 +143,7 @@ export default function SignUp() {
                 },
               })}
             />
-          </LabelInput>
+          </FormField>
 
           {error && <p className="text-center text-sm text-red-400">{error}</p>}
 

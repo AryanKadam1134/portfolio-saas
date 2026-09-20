@@ -10,7 +10,7 @@ import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import LabelInput from "../../../components/ui/LabelInput";
+import FormField from "../../../components/ui/FormField";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
@@ -185,7 +185,7 @@ export default function AddEditCertificate() {
         {id && (
           <>
             {/* Upload Certificate Image  */}
-            <LabelInput
+            <FormField
               id="upload"
               label="Upload Certificate Image"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -196,10 +196,10 @@ export default function AddEditCertificate() {
                 loading={imagesUploading}
                 onChange={(files) => updateCertificateImage(files)}
               />
-            </LabelInput>
+            </FormField>
 
             {/* Certificate Image */}
-            <LabelInput
+            <FormField
               label="Certificate Image"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
             >
@@ -208,14 +208,14 @@ export default function AddEditCertificate() {
                 imageDeleting={imageDeleting}
                 deleteImage={deleteCertificateImage}
               />
-            </LabelInput>
+            </FormField>
 
             <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
           </>
         )}
 
         {/* Certificate Name */}
-        <LabelInput
+        <FormField
           id="title"
           label="Certificate Name"
           colSpan="col-span-12 sm:col-span-6"
@@ -238,10 +238,10 @@ export default function AddEditCertificate() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Issued By */}
-        <LabelInput
+        <FormField
           id="issuer"
           label="Issued By"
           colSpan="col-span-12 sm:col-span-6"
@@ -264,10 +264,10 @@ export default function AddEditCertificate() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Credential Id */}
-        <LabelInput
+        <FormField
           id="credentialId"
           label="Credential ID"
           colSpan="col-span-12 sm:col-span-6"
@@ -284,10 +284,10 @@ export default function AddEditCertificate() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Credential URL */}
-        <LabelInput
+        <FormField
           id="credentialUrl"
           label="Credential URL"
           colSpan="col-span-12 sm:col-span-6"
@@ -316,10 +316,10 @@ export default function AddEditCertificate() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Description */}
-        <LabelInput
+        <FormField
           id="description"
           label="Description"
           colSpan="col-span-12 sm:col-span-6"
@@ -336,10 +336,10 @@ export default function AddEditCertificate() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Skills */}
-        <LabelInput
+        <FormField
           id="skills"
           label="Skills"
           colSpan="col-span-12 sm:col-span-6"
@@ -358,10 +358,10 @@ export default function AddEditCertificate() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Issue Date */}
-        <LabelInput
+        <FormField
           id="issueDate"
           label="Issue Date"
           colSpan="col-span-12 sm:col-span-6"
@@ -386,10 +386,10 @@ export default function AddEditCertificate() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Expiry Date */}
-        <LabelInput
+        <FormField
           id="expiryDate"
           label="Expiry Date"
           colSpan="col-span-12 sm:col-span-6"
@@ -412,10 +412,10 @@ export default function AddEditCertificate() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Featured */}
-        <LabelInput
+        <FormField
           id="featured"
           label="Featured"
           colSpan="col-span-12 sm:col-span-6"
@@ -428,10 +428,10 @@ export default function AddEditCertificate() {
           }
         >
           <CustomCheckbox id="featured" {...register("featured")} />
-        </LabelInput>
+        </FormField>
 
         {/* Sort Order */}
-        <LabelInput
+        <FormField
           id="sortOrder"
           label="Display Order"
           colSpan="col-span-12 sm:col-span-6"
@@ -444,10 +444,10 @@ export default function AddEditCertificate() {
             placeholder="0 (appears first)"
             {...register("sortOrder", { valueAsNumber: true })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Visibility  */}
-        <LabelInput
+        <FormField
           id="visibility"
           label="Visibility"
           colSpan="col-span-12 sm:col-span-6"
@@ -462,7 +462,7 @@ export default function AddEditCertificate() {
               required: "Visibility is required!",
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <CustomButton
           type="submit"

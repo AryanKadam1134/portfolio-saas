@@ -7,7 +7,7 @@ import { ExternalLink, Link } from "lucide-react";
 import PageHeader from "../../../components/common/PageHeader";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
-import LabelInput from "../../../components/ui/LabelInput";
+import FormField from "../../../components/ui/FormField";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
@@ -368,7 +368,7 @@ export default function AddEditSocialPlatform() {
       >
         {!id && (
           <>
-            <LabelInput
+            <FormField
               id="popular"
               label="Popular Platforms"
               colSpan="col-span-12 sm:col-span-6"
@@ -380,14 +380,14 @@ export default function AddEditSocialPlatform() {
                 value={null}
                 onChange={(value) => reset({ name: value })} // send value to hook form
               />
-            </LabelInput>
+            </FormField>
 
             <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
           </>
         )}
 
         {/* Platform Name */}
-        <LabelInput
+        <FormField
           id="name"
           label="Platform Name"
           colSpan="col-span-12 sm:col-span-6"
@@ -410,10 +410,10 @@ export default function AddEditSocialPlatform() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Logo URL */}
-        <LabelInput
+        <FormField
           id="logoUrl"
           label="Logo URL"
           colSpan="col-span-12 sm:col-span-6"
@@ -425,10 +425,10 @@ export default function AddEditSocialPlatform() {
             placeholder="e.g., /images/github.svg"
             {...register("logoUrl")}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Platform Link */}
-        <LabelInput
+        <FormField
           id="link"
           label="Link"
           colSpan="col-span-12 sm:col-span-6"
@@ -459,10 +459,10 @@ export default function AddEditSocialPlatform() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Sort Order */}
-        <LabelInput
+        <FormField
           id="sortOrder"
           label="Display Order"
           colSpan="col-span-12 sm:col-span-6"
@@ -475,10 +475,10 @@ export default function AddEditSocialPlatform() {
             placeholder="0 (appears first)"
             {...register("sortOrder", { valueAsNumber: true })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Visibility  */}
-        <LabelInput
+        <FormField
           id="visibility"
           label="Visibility"
           colSpan="col-span-12 sm:col-span-6"
@@ -493,7 +493,7 @@ export default function AddEditSocialPlatform() {
               required: "Visibility is required!",
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <CustomButton
           type="submit"

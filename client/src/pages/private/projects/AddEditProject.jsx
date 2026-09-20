@@ -10,7 +10,7 @@ import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import LabelInput from "../../../components/ui/LabelInput";
+import FormField from "../../../components/ui/FormField";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
@@ -211,7 +211,7 @@ export default function AddEditProject() {
         {id && (
           <>
             {/* Upload Project Images */}
-            <LabelInput
+            <FormField
               id="upload"
               label="Upload Project Images (5 max)"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -223,7 +223,7 @@ export default function AddEditProject() {
                 loading={imagesUploading}
                 onChange={(files) => updateProjectImage(files)}
               />
-            </LabelInput>
+            </FormField>
 
             <ImageGallery
               className="col-span-12 sm:col-span-9"
@@ -239,7 +239,7 @@ export default function AddEditProject() {
         )}
 
         {/* Project Name */}
-        <LabelInput
+        <FormField
           id="title"
           label="Project Name"
           colSpan="col-span-12 sm:col-span-6"
@@ -262,10 +262,10 @@ export default function AddEditProject() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Organization */}
-        <LabelInput
+        <FormField
           id="organizationId"
           label="Organization (Link Company you worked in)"
           colSpan="col-span-12 sm:col-span-6"
@@ -284,10 +284,10 @@ export default function AddEditProject() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Live Link */}
-        <LabelInput
+        <FormField
           id="liveLink"
           label="Live Link"
           colSpan="col-span-12 sm:col-span-6"
@@ -316,10 +316,10 @@ export default function AddEditProject() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Github Link */}
-        <LabelInput
+        <FormField
           id="githubLink"
           label="GitHub Link"
           colSpan="col-span-12 sm:col-span-6"
@@ -348,10 +348,10 @@ export default function AddEditProject() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Description */}
-        <LabelInput
+        <FormField
           id="description"
           label="Description"
           colSpan="col-span-12 sm:col-span-6"
@@ -368,10 +368,10 @@ export default function AddEditProject() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Tech Stack */}
-        <LabelInput
+        <FormField
           id="techStack"
           label="Tech Stack"
           colSpan="col-span-12 sm:col-span-6"
@@ -390,10 +390,10 @@ export default function AddEditProject() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Project Category */}
-        <LabelInput
+        <FormField
           id="category"
           label="Project Category"
           colSpan="col-span-12 sm:col-span-6"
@@ -412,10 +412,10 @@ export default function AddEditProject() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Featured */}
-        <LabelInput
+        <FormField
           id="featured"
           label="Featured"
           colSpan="col-span-12 sm:col-span-6"
@@ -428,10 +428,10 @@ export default function AddEditProject() {
           }
         >
           <CustomCheckbox id="featured" {...register("featured")} />
-        </LabelInput>
+        </FormField>
 
         {/* Start Date */}
-        <LabelInput
+        <FormField
           id="startDate"
           label="Start Date"
           colSpan="col-span-12 sm:col-span-6"
@@ -452,10 +452,10 @@ export default function AddEditProject() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* End Date */}
-        <LabelInput
+        <FormField
           id="endDate"
           label="End Date"
           colSpan="col-span-12 sm:col-span-6"
@@ -478,10 +478,10 @@ export default function AddEditProject() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Present */}
-        <LabelInput
+        <FormField
           id="isCurrent"
           label="Currently working"
           colSpan="col-span-12 sm:col-span-6"
@@ -489,10 +489,10 @@ export default function AddEditProject() {
           error={errors?.isCurrent?.message}
         >
           <CustomCheckbox id="isCurrent" {...register("isCurrent")} />
-        </LabelInput>
+        </FormField>
 
         {/* Sort Order */}
-        <LabelInput
+        <FormField
           id="sortOrder"
           label="Display Order"
           colSpan="col-span-12 sm:col-span-6"
@@ -505,10 +505,10 @@ export default function AddEditProject() {
             placeholder="0 (appears first)"
             {...register("sortOrder", { valueAsNumber: true })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Visibility  */}
-        <LabelInput
+        <FormField
           id="visibility"
           label="Visibility"
           colSpan="col-span-12 sm:col-span-6"
@@ -523,7 +523,7 @@ export default function AddEditProject() {
               required: "Visibility is required!",
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <div className="hidden sm:block col-span-6" />
 

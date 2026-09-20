@@ -6,7 +6,7 @@ import { Mail } from "lucide-react";
 
 import Authentication from "../../components/authentication/Authentication";
 
-import LabelInput from "../../components/ui/LabelInput";
+import FormField from "../../components/ui/FormField";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 
@@ -63,7 +63,7 @@ export default function ForogtPassword() {
         <>
           {/* Email */}
           {!isOtp && (
-            <LabelInput
+            <FormField
               id="email"
               label="Email"
               required
@@ -82,12 +82,12 @@ export default function ForogtPassword() {
                   },
                 })}
               />
-            </LabelInput>
+            </FormField>
           )}
 
           {/* OTP */}
           {isOtp && (
-            <LabelInput
+            <FormField
               id="otp"
               label="OTP"
               required
@@ -102,7 +102,7 @@ export default function ForogtPassword() {
                   maxLength: 6,
                 })}
               />
-            </LabelInput>
+            </FormField>
           )}
 
           {error && <p className="text-center text-sm text-red-400">{error}</p>}

@@ -2,7 +2,7 @@ import React from "react";
 
 import FieldError from "./FieldError";
 
-export default function LabelInput({
+export default function FormField({
   id,
   label,
   attachment,

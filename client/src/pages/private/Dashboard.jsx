@@ -9,7 +9,7 @@ import UploadUserImage from "../../components/user/UploadUserImage";
 import UploadUserResume from "../../components/user/UploadUserResume";
 import UserDetailsSkeleton from "../../components/user/UserDetailsSkeleton";
 
-import LabelInput from "../../components/ui/LabelInput";
+import FormField from "../../components/ui/FormField";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomTextArea from "../../components/ui/CustomTextArea";
@@ -115,7 +115,7 @@ export default function Dashboard() {
         </div>
 
         {/* First Name */}
-        <LabelInput
+        <FormField
           id="firstName"
           label="First Name"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -138,10 +138,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Middle Name */}
-        <LabelInput
+        <FormField
           id="middleName"
           label="Middle Name"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -153,10 +153,10 @@ export default function Dashboard() {
             placeholder="Enter middle name (optional)"
             {...register("middleName", {})}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Last Name */}
-        <LabelInput
+        <FormField
           id="lastName"
           label="Last Name"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -173,10 +173,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Username */}
-        <LabelInput
+        <FormField
           id="username"
           label="Username"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -204,10 +204,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Email */}
-        <LabelInput
+        <FormField
           id="email"
           label="Email"
           // attachment={
@@ -233,10 +233,10 @@ export default function Dashboard() {
             })}
             disabled
           />
-        </LabelInput>
+        </FormField>
 
         {/* Mobile No. */}
-        <LabelInput
+        <FormField
           id="mobileNo"
           label="Mobile No."
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -256,10 +256,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Gender */}
-        <LabelInput
+        <FormField
           id="gender"
           label="Gender"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -273,12 +273,12 @@ export default function Dashboard() {
               required: "Gender is required!",
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <div className="hidden lg:block col-span-6"></div>
 
         {/* Resume PDF - Drag & Drop */}
-        <LabelInput
+        <FormField
           id="resumeOrCv"
           label="Resume PDF"
           colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
@@ -286,10 +286,10 @@ export default function Dashboard() {
           required
         >
           <UploadUserResume />
-        </LabelInput>
+        </FormField>
 
         {/* Headline */}
-        <LabelInput
+        <FormField
           id="headline"
           label="Professional Headline"
           colSpan="row-span-3 col-span-12 lg:col-span-3"
@@ -306,10 +306,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* About */}
-        <LabelInput
+        <FormField
           id="about"
           label="About You"
           colSpan="row-span-3 col-span-12 lg:col-span-6"
@@ -326,10 +326,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Resume Link */}
-        <LabelInput
+        <FormField
           id="documentUrl"
           label="Resume Link"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -348,10 +348,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* City */}
-        <LabelInput
+        <FormField
           id="city"
           label="City"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -368,10 +368,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* State */}
-        <LabelInput
+        <FormField
           id="state"
           label="State / Province"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -388,10 +388,10 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Country */}
-        <LabelInput
+        <FormField
           id="country"
           label="Country"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -408,7 +408,7 @@ export default function Dashboard() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <CustomButton
           type="submit"

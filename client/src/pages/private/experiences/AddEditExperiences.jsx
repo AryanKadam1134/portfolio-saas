@@ -9,7 +9,7 @@ import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import LabelInput from "../../../components/ui/LabelInput";
+import FormField from "../../../components/ui/FormField";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import ActionButton from "../../../components/ui/ActionButton";
@@ -227,7 +227,7 @@ export default function AddEditExperiences() {
         {id && (
           <>
             {/* Upload Image  */}
-            <LabelInput
+            <FormField
               id="upload"
               label="Upload Image"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -238,10 +238,10 @@ export default function AddEditExperiences() {
                 loading={imagesUploading}
                 onChange={(files) => updateOrganizationImage(files)}
               />
-            </LabelInput>
+            </FormField>
 
             {/* Cover Image */}
-            <LabelInput
+            <FormField
               label="Cover Image"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
             >
@@ -250,14 +250,14 @@ export default function AddEditExperiences() {
                 imageDeleting={imageDeleting}
                 deleteImage={deleteOrganizationImage}
               />
-            </LabelInput>
+            </FormField>
 
             <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
           </>
         )}
 
         {/* Organization Name */}
-        <LabelInput
+        <FormField
           id="organization"
           label="Organization Name"
           colSpan="col-span-12 sm:col-span-6"
@@ -280,10 +280,10 @@ export default function AddEditExperiences() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Employment Type */}
-        <LabelInput
+        <FormField
           id="employmentType"
           label="Employment Type"
           colSpan="col-span-12 sm:col-span-6"
@@ -304,10 +304,10 @@ export default function AddEditExperiences() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Organization Size */}
-        <LabelInput
+        <FormField
           id="organizationSize"
           label="Organization Size"
           colSpan="col-span-12 sm:col-span-6"
@@ -324,10 +324,10 @@ export default function AddEditExperiences() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Website */}
-        <LabelInput
+        <FormField
           id="organizationWebsite"
           label="Company Website"
           colSpan="col-span-12 sm:col-span-6"
@@ -356,10 +356,10 @@ export default function AddEditExperiences() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Description */}
-        <LabelInput
+        <FormField
           id="description"
           label="Description"
           colSpan="col-span-12 sm:col-span-6"
@@ -376,10 +376,10 @@ export default function AddEditExperiences() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Tech Stack */}
-        <LabelInput
+        <FormField
           id="techStack"
           label="Tech Stack"
           colSpan="col-span-12 sm:col-span-6"
@@ -398,10 +398,10 @@ export default function AddEditExperiences() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Location */}
-        <LabelInput
+        <FormField
           id="location"
           label="Location"
           colSpan="col-span-12 sm:col-span-6"
@@ -418,10 +418,10 @@ export default function AddEditExperiences() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Location Type */}
-        <LabelInput
+        <FormField
           id="locationType"
           label="Location Type"
           colSpan="col-span-12 sm:col-span-6"
@@ -442,10 +442,10 @@ export default function AddEditExperiences() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Visibility  */}
-        <LabelInput
+        <FormField
           id="visibility"
           label="Visibility"
           colSpan="col-span-12 sm:col-span-6"
@@ -460,7 +460,7 @@ export default function AddEditExperiences() {
               required: "Visibility is required!",
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Highlights */}
         <div className="col-span-12 flex flex-col gap-4 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary divide-y divide-light-border-primary dark:divide-dark-border-primary rounded-md shadow-sm">
@@ -496,7 +496,7 @@ export default function AddEditExperiences() {
               className="pb-4 flex items-center justify-between gap-6"
             >
               <div className="w-full">
-                <LabelInput
+                <FormField
                   id={`highlights-${idx}`}
                   label={`Highlight ${idx + 1}`}
                   error={errors?.highlights?.[idx]?.message}
@@ -507,7 +507,7 @@ export default function AddEditExperiences() {
                       required: "Highlight is required",
                     })}
                   />
-                </LabelInput>
+                </FormField>
               </div>
 
               <ActionButton
@@ -551,7 +551,7 @@ export default function AddEditExperiences() {
               className="pb-4 grid grid-cols-12 gap-6"
             >
               {/* Role */}
-              <LabelInput
+              <FormField
                 id={`positions-${idx}.role`}
                 label="Role"
                 colSpan="col-span-12 sm:col-span-6"
@@ -565,10 +565,10 @@ export default function AddEditExperiences() {
                     required: "Role is required!",
                   })}
                 />
-              </LabelInput>
+              </FormField>
 
               {/* Start Date */}
-              <LabelInput
+              <FormField
                 id={`positions-${idx}.startDate`}
                 label="Start Date"
                 colSpan="col-span-12 sm:col-span-6"
@@ -583,10 +583,10 @@ export default function AddEditExperiences() {
                     required: "Start Date is required!",
                   })}
                 />
-              </LabelInput>
+              </FormField>
 
               {/* End Date */}
-              <LabelInput
+              <FormField
                 id={`positions-${idx}.endDate`}
                 icon={Calendar}
                 label="End Date"
@@ -598,10 +598,10 @@ export default function AddEditExperiences() {
                   placeholder="Select Date"
                   {...register(`positions.${idx}.endDate`)}
                 />
-              </LabelInput>
+              </FormField>
 
               {/* Present */}
-              <LabelInput
+              <FormField
                 id={`positions-${idx}.isCurrent`}
                 label="Currently working on this position"
                 colSpan="col-span-9 sm:col-span-4 lg:col-span-5"
@@ -612,7 +612,7 @@ export default function AddEditExperiences() {
                   id={`positions-${idx}.isCurrent`}
                   {...register(`positions.${idx}.isCurrent`)}
                 />
-              </LabelInput>
+              </FormField>
 
               <ActionButton
                 type="button"

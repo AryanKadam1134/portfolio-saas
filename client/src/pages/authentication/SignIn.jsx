@@ -5,7 +5,7 @@ import { LockKeyholeOpen } from "lucide-react";
 
 import Authentication from "../../components/authentication/Authentication";
 
-import LabelInput from "../../components/ui/LabelInput";
+import FormField from "../../components/ui/FormField";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomCheckbox from "../../components/ui/CustomCheckbox";
@@ -41,7 +41,7 @@ export default function SignIn() {
       formContent={
         <>
           {/* User Credential */}
-          <LabelInput
+          <FormField
             id="userCredential"
             label="Username or Email"
             required
@@ -55,10 +55,10 @@ export default function SignIn() {
                 required: "username or email is required!",
               })}
             />
-          </LabelInput>
+          </FormField>
 
           {/* Password */}
-          <LabelInput
+          <FormField
             id="password"
             label="Password"
             attachment={
@@ -88,17 +88,17 @@ export default function SignIn() {
                 },
               })}
             />
-          </LabelInput>
+          </FormField>
 
           {/* Remember Me */}
-          <LabelInput
+          <FormField
             id="rememberMe"
             label="Remember Me?"
             type="checkbox"
             error={errors?.rememberMe?.message}
           >
             <CustomCheckbox id="rememberMe" {...register("rememberMe")} />
-          </LabelInput>
+          </FormField>
 
           {error && <p className="text-center text-sm text-red-400">{error}</p>}
 

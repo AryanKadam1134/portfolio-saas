@@ -9,7 +9,7 @@ import ImageGallery from "../../../components/common/ImageGallery";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import LabelInput from "../../../components/ui/LabelInput";
+import FormField from "../../../components/ui/FormField";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
@@ -194,7 +194,7 @@ export default function AddEditAchievement() {
         {id && (
           <>
             {/* Upload Achievement Images  */}
-            <LabelInput
+            <FormField
               id="upload"
               label="Upload Achievement Images (5 max)"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -206,7 +206,7 @@ export default function AddEditAchievement() {
                 loading={imagesUploading}
                 onChange={(files) => updateAchievementImage(files)}
               />
-            </LabelInput>
+            </FormField>
 
             <ImageGallery
               className="col-span-12 sm:col-span-9"
@@ -222,7 +222,7 @@ export default function AddEditAchievement() {
         )}
 
         {/* Achievement Name */}
-        <LabelInput
+        <FormField
           id="title"
           label="Achievement Name"
           colSpan="col-span-12 sm:col-span-6"
@@ -245,10 +245,10 @@ export default function AddEditAchievement() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Issuer */}
-        <LabelInput
+        <FormField
           id="issuer"
           label="Issued By"
           colSpan="col-span-12 sm:col-span-6"
@@ -271,10 +271,10 @@ export default function AddEditAchievement() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Attached Certificate */}
-        <LabelInput
+        <FormField
           id="certificateId"
           label="Attach Existing Certificate"
           colSpan="col-span-12 sm:col-span-6"
@@ -293,10 +293,10 @@ export default function AddEditAchievement() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Reffered Link */}
-        <LabelInput
+        <FormField
           id="link"
           label="Reffered Link"
           colSpan="col-span-12 sm:col-span-6"
@@ -325,10 +325,10 @@ export default function AddEditAchievement() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Description */}
-        <LabelInput
+        <FormField
           id="description"
           label="Description"
           colSpan="col-span-12 sm:col-span-6"
@@ -345,10 +345,10 @@ export default function AddEditAchievement() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Date */}
-        <LabelInput
+        <FormField
           id="date"
           label="Date"
           colSpan="col-span-12 sm:col-span-6"
@@ -363,10 +363,10 @@ export default function AddEditAchievement() {
               required: "Date is required!",
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Featured */}
-        <LabelInput
+        <FormField
           id="featured"
           label="Featured"
           colSpan="col-span-12 sm:col-span-6"
@@ -382,10 +382,10 @@ export default function AddEditAchievement() {
             {...register("featured")}
             error={errors?.featured?.message}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Sort Order */}
-        <LabelInput
+        <FormField
           id="sortOrder"
           label="Sort Order"
           colSpan="col-span-12 sm:col-span-6"
@@ -398,10 +398,10 @@ export default function AddEditAchievement() {
             {...register("sortOrder", { valueAsNumber: true })}
             error={errors?.sortOrder?.message}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Visibility  */}
-        <LabelInput
+        <FormField
           id="visibility"
           label="Visibility"
           colSpan="col-span-12 sm:col-span-6"
@@ -416,7 +416,7 @@ export default function AddEditAchievement() {
             })}
             error={errors?.visibility?.message}
           />
-        </LabelInput>
+        </FormField>
 
         <CustomButton
           type="submit"

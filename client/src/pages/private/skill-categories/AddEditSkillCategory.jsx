@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import PageHeader from "../../../components/common/PageHeader";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
-import LabelInput from "../../../components/ui/LabelInput";
+import FormField from "../../../components/ui/FormField";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
@@ -118,7 +118,7 @@ export default function AddEditSkillCategory() {
         className="grid grid-cols-12 gap-6 text-sm"
       >
         {/* Category Name */}
-        <LabelInput
+        <FormField
           id="name"
           label="Category Name"
           colSpan="col-span-12 sm:col-span-6"
@@ -141,10 +141,10 @@ export default function AddEditSkillCategory() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Category Logo URL */}
-        <LabelInput
+        <FormField
           id="logoUrl"
           label="Logo URL"
           colSpan="col-span-12 sm:col-span-6"
@@ -156,10 +156,10 @@ export default function AddEditSkillCategory() {
             placeholder="e.g. /images/frontend.svg"
             {...register("logoUrl")}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Sort Order */}
-        <LabelInput
+        <FormField
           id="sortOrder"
           label="Display Order"
           colSpan="col-span-12 sm:col-span-6"
@@ -172,10 +172,10 @@ export default function AddEditSkillCategory() {
             placeholder="0 (appears first)"
             {...register("sortOrder", { valueAsNumber: true })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Visibility  */}
-        <LabelInput
+        <FormField
           id="visibility"
           label="Visibility"
           colSpan="col-span-12 sm:col-span-6"
@@ -190,7 +190,7 @@ export default function AddEditSkillCategory() {
               required: "Visibility is required!",
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <CustomButton
           type="submit"

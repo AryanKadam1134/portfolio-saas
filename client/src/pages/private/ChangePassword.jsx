@@ -6,7 +6,7 @@ import { LockKeyholeOpen } from "lucide-react";
 import PageHeader from "../../components/common/PageHeader";
 import CommonSkeleton from "../../components/common/CommonSkeleton";
 
-import LabelInput from "../../components/ui/LabelInput";
+import FormField from "../../components/ui/FormField";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
@@ -80,7 +80,7 @@ export default function ChangePassword() {
       >
         {/* Old Password */}
         {hasPassword && (
-          <LabelInput
+          <FormField
             id="old_password"
             label="Current Password"
             colSpan="col-span-12 sm:col-span-6"
@@ -103,11 +103,11 @@ export default function ChangePassword() {
                 },
               })}
             />
-          </LabelInput>
+          </FormField>
         )}
 
         {/* New Password */}
-        <LabelInput
+        <FormField
           id="new_password"
           label="New Password"
           colSpan="col-span-12 sm:col-span-6"
@@ -130,10 +130,10 @@ export default function ChangePassword() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Confirm Password */}
-        <LabelInput
+        <FormField
           id="confirm_password"
           label="Confirm New Password"
           colSpan="col-span-12 sm:col-span-6"
@@ -162,7 +162,7 @@ export default function ChangePassword() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <CustomButton
           type="submit"

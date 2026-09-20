@@ -8,7 +8,7 @@ import CoverImage from "../../../components/common/CoverImage";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 import DragDropUpload from "../../../components/common/DragDropUpload";
 
-import LabelInput from "../../../components/ui/LabelInput";
+import FormField from "../../../components/ui/FormField";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomCheckbox from "../../../components/ui/CustomCheckbox";
@@ -159,7 +159,7 @@ export default function AddEditEducation() {
         {id && (
           <>
             {/* Upload Institute Image  */}
-            <LabelInput
+            <FormField
               id="upload"
               label="Upload Institute Image"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
@@ -170,10 +170,10 @@ export default function AddEditEducation() {
                 loading={imagesUploading}
                 onChange={(files) => updateInstituteImage(files)}
               />
-            </LabelInput>
+            </FormField>
 
             {/* Institute Image */}
-            <LabelInput
+            <FormField
               label="Institute Image"
               colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
             >
@@ -182,14 +182,14 @@ export default function AddEditEducation() {
                 imageDeleting={imageDeleting}
                 deleteImage={deleteInstituteImage}
               />
-            </LabelInput>
+            </FormField>
 
             <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
           </>
         )}
 
         {/* Institute Name */}
-        <LabelInput
+        <FormField
           id="instituteName"
           label="Institute Name"
           colSpan="col-span-12 sm:col-span-6"
@@ -212,10 +212,10 @@ export default function AddEditEducation() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Qualification */}
-        <LabelInput
+        <FormField
           id="qualification"
           label="Degree / Field of Study"
           colSpan="col-span-12 sm:col-span-6"
@@ -238,10 +238,10 @@ export default function AddEditEducation() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Description */}
-        <LabelInput
+        <FormField
           id="description"
           label="Description"
           colSpan="col-span-12 sm:col-span-6"
@@ -258,10 +258,10 @@ export default function AddEditEducation() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Location */}
-        <LabelInput
+        <FormField
           id="location"
           label="Location"
           colSpan="col-span-12 sm:col-span-6"
@@ -278,10 +278,10 @@ export default function AddEditEducation() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Start Year */}
-        <LabelInput
+        <FormField
           id="startYear"
           label="Start Year"
           colSpan="col-span-12 sm:col-span-6"
@@ -304,10 +304,10 @@ export default function AddEditEducation() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* End Year */}
-        <LabelInput
+        <FormField
           id="endYear"
           label="End Year"
           colSpan="col-span-12 sm:col-span-6"
@@ -334,10 +334,10 @@ export default function AddEditEducation() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Present */}
-        <LabelInput
+        <FormField
           id="isCurrent"
           label="Currently studying here"
           colSpan="col-span-12 sm:col-span-6"
@@ -345,10 +345,10 @@ export default function AddEditEducation() {
           error={errors?.isCurrent?.message}
         >
           <CustomCheckbox id="isCurrent" {...register("isCurrent")} />
-        </LabelInput>
+        </FormField>
 
         {/* Percentage */}
-        <LabelInput
+        <FormField
           id="percentage"
           label="Percentage / Grade"
           colSpan="col-span-12 sm:col-span-6"
@@ -372,10 +372,10 @@ export default function AddEditEducation() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* CGPA */}
-        <LabelInput
+        <FormField
           id="cgpa"
           label="CGPA"
           colSpan="col-span-12 sm:col-span-6"
@@ -399,7 +399,7 @@ export default function AddEditEducation() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <CustomButton
           type="submit"

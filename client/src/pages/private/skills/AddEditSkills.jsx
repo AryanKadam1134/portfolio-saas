@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import PageHeader from "../../../components/common/PageHeader";
 import CommonSkeleton from "../../../components/common/CommonSkeleton";
 
-import LabelInput from "../../../components/ui/LabelInput";
+import FormField from "../../../components/ui/FormField";
 import CustomInput from "../../../components/ui/CustomInput";
 import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
@@ -170,7 +170,7 @@ export default function AddEditSkills() {
       >
         {!id && (
           <>
-            <LabelInput
+            <FormField
               id="popular"
               label="Popular Skills"
               colSpan="col-span-12 sm:col-span-6"
@@ -182,7 +182,7 @@ export default function AddEditSkills() {
                 value={null}
                 onChange={(value) => reset({ name: value })} // send value to hook form
               />
-            </LabelInput>
+            </FormField>
 
             <div className="hidden sm:block col-span-6" />
 
@@ -191,7 +191,7 @@ export default function AddEditSkills() {
         )}
 
         {/* Skill Name */}
-        <LabelInput
+        <FormField
           id="name"
           label="Skill Name"
           colSpan="col-span-12 sm:col-span-6"
@@ -214,10 +214,10 @@ export default function AddEditSkills() {
               },
             })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Skill Category */}
-        <LabelInput
+        <FormField
           id="categoryId"
           label="Skill Category"
           colSpan="col-span-12 sm:col-span-6"
@@ -237,10 +237,10 @@ export default function AddEditSkills() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Skill Logo URL */}
-        <LabelInput
+        <FormField
           id="logoUrl"
           label="Logo URL"
           colSpan="col-span-12 sm:col-span-6"
@@ -252,10 +252,10 @@ export default function AddEditSkills() {
             placeholder="/images/react_light.svg"
             {...register("logoUrl")}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Skill Level */}
-        <LabelInput
+        <FormField
           id="level"
           label="Level"
           colSpan="col-span-12 sm:col-span-6"
@@ -277,10 +277,10 @@ export default function AddEditSkills() {
               />
             )}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Sort Order */}
-        <LabelInput
+        <FormField
           id="sortOrder"
           label="Display Order"
           colSpan="col-span-12 sm:col-span-6"
@@ -293,10 +293,10 @@ export default function AddEditSkills() {
             placeholder="0 (appears first)"
             {...register("sortOrder", { valueAsNumber: true })}
           />
-        </LabelInput>
+        </FormField>
 
         {/* Visibility  */}
-        <LabelInput
+        <FormField
           id="visibility"
           label="Visibility"
           colSpan="col-span-12 sm:col-span-6"
@@ -311,7 +311,7 @@ export default function AddEditSkills() {
               required: "Visibility is required!",
             })}
           />
-        </LabelInput>
+        </FormField>
 
         <CustomButton
           type="submit"
