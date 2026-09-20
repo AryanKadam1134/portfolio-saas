@@ -2,9 +2,9 @@ import React, { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
-import { LockKeyholeOpen, Mail } from "lucide-react";
+import { LockKeyholeOpen } from "lucide-react";
 
-import PageHeader from "../../components/common/PageHeader";
+import Authentication from "../../components/authentication/Authentication";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomButton from "../../components/ui/CustomButton";
@@ -50,18 +50,12 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen p-6 flex items-center justify-center bg-light-bg-secondary dark:bg-dark-bg-secondary">
-      <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-2xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
-        <PageHeader
-          heading="Reset Password"
-          subHeading="Choose a new password for your Profilo account"
-          className="mb-8 justify-center text-center"
-        />
-
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 text-sm"
-        >
+    <Authentication
+      heading="Reset Password"
+      subHeading="Choose a new password for your Profilo account"
+      onSubmit={handleSubmit(onSubmit)}
+      formContent={
+        <>
           {/* New Password */}
           <LabelInput
             id="new_password"
@@ -130,8 +124,8 @@ export default function ResetPassword() {
           >
             {isSubmitting ? "Saving..." : "Save"}
           </CustomButton>
-        </form>
-      </div>
-    </div>
+        </>
+      }
+    />
   );
 }

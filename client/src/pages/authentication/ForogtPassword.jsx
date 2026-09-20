@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Mail } from "lucide-react";
 
-import PageHeader from "../../components/common/PageHeader";
+import Authentication from "../../components/authentication/Authentication";
 
 import LabelInput from "../../components/ui/LabelInput";
 import CustomInput from "../../components/ui/CustomInput";
@@ -51,22 +51,16 @@ export default function ForogtPassword() {
   };
 
   return (
-    <div className="min-h-screen p-6 flex items-center justify-center bg-light-bg-secondary dark:bg-dark-bg-secondary">
-      <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-tertiary p-8 rounded-2xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
-        <PageHeader
-          heading="Forgot Password"
-          subHeading={
-            isOtp
-              ? "Enter the verification code sent to your email"
-              : "Recover access to your Profilo account"
-          }
-          className="mb-8 justify-center text-center"
-        />
-
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 text-sm"
-        >
+    <Authentication
+      heading="Forgot Password"
+      subHeading={
+        isOtp
+          ? "Enter the verification code sent to your email"
+          : "Recover access to your Profilo account"
+      }
+      onSubmit={handleSubmit(onSubmit)}
+      formContent={
+        <>
           {/* Email */}
           {!isOtp && (
             <LabelInput
@@ -127,8 +121,8 @@ export default function ForogtPassword() {
                 ? "Sending..."
                 : "Send OTP"}
           </CustomButton>
-        </form>
-      </div>
-    </div>
+        </>
+      }
+    />
   );
 }

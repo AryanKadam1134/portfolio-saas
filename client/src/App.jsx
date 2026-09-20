@@ -10,7 +10,8 @@ import {
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ConfigProvider, theme as antdTheme } from "antd";
 
-import Authentication from "./pages/authentication/Authentication";
+import SignIn from "./pages/authentication/SignIn.jsx";
+import SignUp from "./pages/authentication/SignUp.jsx";
 import ResetPassword from "./pages/authentication/ResetPassword";
 import ForogtPassword from "./pages/authentication/ForogtPassword";
 
@@ -83,7 +84,7 @@ function ProtectedRoute() {
       <Outlet />
     </DashboardLayout>
   ) : (
-    <Navigate to="/auth" replace />
+    <Navigate to="/signin" replace />
   );
 }
 
@@ -140,7 +141,8 @@ function App() {
 
                   {/* 🔓 Public Route (only if NOT logged in) */}
                   <Route element={<PublicRoute />}>
-                    <Route path="/auth" element={<Authentication />} />
+                    <Route path="/signin" element={<SignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
                     <Route
                       path="/forgot-password"
                       element={<ForogtPassword />}
@@ -230,6 +232,8 @@ function App() {
                       <Route path="user-sessions" element={<UserSessions />} />
                     </Route>
                   </Route>
+
+                  <Route path="*" element={<Navigate to="/signin" />} />
                 </Routes>
               </Router>
             </GoogleOAuthProvider>
