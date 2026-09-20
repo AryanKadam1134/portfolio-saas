@@ -5,11 +5,13 @@ import { User } from "../../models/user.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
-import asynchandler from "../../utils/asynchandler.js";
+import { asynchandler } from "../../utils/asynchandler.js";
 import { shootEmail } from "../../utils/resendMailShooter.js";
-import { welcomeUser } from "../../utils/emailTemplates/welcomeUser.js";
-import { passwordChangedTemplate } from "../../utils/emailTemplates/passwordChanged.js";
-import { resetPasswordOTPTemplate } from "../../utils/emailTemplates/otpSentTemplate.js";
+import {
+  welcomeUserTemplate,
+  resetPasswordOTPTemplate,
+  passwordChangedTemplate,
+} from "../../utils/emailTemplates.js";
 
 import {
   COOKIE_OPTIONS,
@@ -139,7 +141,7 @@ const googleAuth = asynchandler(async (req, res) => {
     shootEmail({
       to: user.email,
       subject: "Welcome to Portfolio SaaS",
-      html: welcomeUser(user),
+      html: welcomeUserTemplate(user),
     }).catch((error) => {
       console.error(
         "Background: Error sending mail in googleAuth:",
@@ -248,7 +250,7 @@ const registerUser = asynchandler(async (req, res) => {
   const { firstName, lastName, username, email, password } = req.body;
 
   if (
-    [firstName, lastName, username, email, password].some(
+    [firstName, username, email, password].some(
       (field) => typeof field == "string" && field?.trim() == "",
     )
   ) {
@@ -278,7 +280,7 @@ const registerUser = asynchandler(async (req, res) => {
   shootEmail({
     to: newUser.email,
     subject: "Welcome to Portfolio SaaS",
-    html: welcomeUser(newUser),
+    html: welcomeUserTemplate(newUser),
   }).catch((error) => {
     console.error(
       "Background: Error sending mail in registerUser:",

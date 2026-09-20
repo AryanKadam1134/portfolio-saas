@@ -5,15 +5,21 @@ import { SkillCategory } from "../../models/skillCategory.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
-import asynchandler from "../../utils/asynchandler.js";
-import { parseBoolean } from "../../utils/parseBoolean.js";
-import { paginateAggregate } from "../../utils/paginatedAggregate.js";
+import { asynchandler } from "../../utils/asynchandler.js";
+import { paginateAggregate } from "../../utils/pagination.js";
 
 const addSkill = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
 
-  const { name, description, categoryId, level, logoUrl, visibility, sortOrder } =
-    req.body;
+  const {
+    name,
+    description,
+    categoryId,
+    level,
+    logoUrl,
+    visibility,
+    sortOrder,
+  } = req.body;
 
   if (!name) {
     throw new ApiError(400, "Name is required!");
@@ -64,8 +70,15 @@ const addSkill = asynchandler(async (req, res) => {
 const updateSkill = asynchandler(async (req, res) => {
   const skill = req.skill;
 
-  const { name, description, categoryId, level, logoUrl, visibility, sortOrder } =
-    req.body;
+  const {
+    name,
+    description,
+    categoryId,
+    level,
+    logoUrl,
+    visibility,
+    sortOrder,
+  } = req.body;
 
   if (name) {
     const sameSkillName = await Skill.findOne({

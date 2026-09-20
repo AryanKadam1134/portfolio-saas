@@ -1,7 +1,7 @@
 import { User } from "../models/user.model.js";
 
 import ApiError from "../utils/ApiError.js";
-import asynchandler from "../utils/asynchandler.js";
+import { asynchandler } from "../utils/asynchandler.js";
 
 export const findUserByUsername = asynchandler(async (req, res, next) => {
   const user = await User.findOne({

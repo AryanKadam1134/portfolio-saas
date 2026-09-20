@@ -12,7 +12,7 @@ import { SocialPlatform } from "../../models/socialPlatform.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
-import asynchandler from "../../utils/asynchandler.js";
+import { asynchandler } from "../../utils/asynchandler.js";
 import {
   uploadToCloudinary,
   deleteFromCloudinary,
@@ -48,10 +48,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
 
   if (username) fields.username = username;
   if (firstName) fields.firstName = firstName;
-  if (middleName) fields.middleName = middleName;
-  if (lastName) fields.lastName = lastName;
-  if (headline) fields.headline = headline;
-  if (about) fields.about = about;
+  if (mobileNo) fields.mobileNo = mobileNo;
   if (gender) fields.gender = gender;
   if (location) {
     for (const key in location) {
@@ -60,7 +57,10 @@ const updateUserDetails = asynchandler(async (req, res) => {
   }
 
   // Can be null values
-  if (mobileNo !== undefined) fields.mobileNo = mobileNo;
+  if (headline !== undefined) fields.headline = headline;
+  if (about !== undefined) fields.about = about;
+  if (middleName !== undefined) fields.middleName = middleName;
+  if (lastName !== undefined) fields.lastName = lastName;
   if (documentUrl !== undefined) fields.documentUrl = documentUrl;
 
   if (Object.keys(fields).length === 0) {

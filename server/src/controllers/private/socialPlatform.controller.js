@@ -2,8 +2,8 @@ import { SocialPlatform } from "../../models/socialPlatform.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
-import asynchandler from "../../utils/asynchandler.js";
-import { paginateQuery } from "../../utils/paginatedQuery.js";
+import { paginateQuery } from "../../utils/pagination.js";
+import { asynchandler } from "../../utils/asynchandler.js";
 
 const manageSocialPlatforms = asynchandler(async (req, res) => {
   const { platforms } = req.body;

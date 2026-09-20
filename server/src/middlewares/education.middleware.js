@@ -1,7 +1,7 @@
 import { Education } from "../models/education.model.js";
 
 import ApiError from "../utils/ApiError.js";
-import asynchandler from "../utils/asynchandler.js";
+import { asynchandler } from "../utils/asynchandler.js";
 
 export const getEducationById = asynchandler(async (req, res, next) => {
   const { educationId } = req.params;

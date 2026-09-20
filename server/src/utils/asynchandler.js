@@ -1,6 +1,6 @@
 import ApiRes from "./ApiRes.js";
 
-const asynchandler = (func) => {
+export const asynchandler = (func) => {
   return (req, res, next) => {
     Promise.resolve(func(req, res, next)).catch((error) => {
       res
@@ -9,5 +9,3 @@ const asynchandler = (func) => {
     });
   };
 };
-
-export default asynchandler;

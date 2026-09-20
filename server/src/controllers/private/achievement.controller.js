@@ -3,13 +3,13 @@ import { Achievement } from "../../models/achievement.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
-import asynchandler from "../../utils/asynchandler.js";
+import { paginateQuery } from "../../utils/pagination.js";
+import { asynchandler } from "../../utils/asynchandler.js";
 import { parseBoolean } from "../../utils/parseBoolean.js";
 import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
-import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const addAchievement = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;

@@ -1,7 +1,7 @@
 import { SkillCategory } from "../models/skillCategory.model.js";
 
 import ApiError from "../utils/ApiError.js";
-import asynchandler from "../utils/asynchandler.js";
+import { asynchandler } from "../utils/asynchandler.js";
 
 export const getCategoryById = asynchandler(async (req, res, next) => {
   const { categoryId } = req.params;

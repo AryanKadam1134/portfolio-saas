@@ -2,13 +2,13 @@ import { Education } from "../../models/education.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
 import ApiError from "../../utils/ApiError.js";
-import asynchandler from "../../utils/asynchandler.js";
+import { paginateQuery } from "../../utils/pagination.js";
+import { asynchandler } from "../../utils/asynchandler.js";
 import { parseBoolean } from "../../utils/parseBoolean.js";
 import {
   uploadToCloudinary,
   deleteFromCloudinary,
 } from "../../utils/cloudinary.js";
-import { paginateQuery } from "../../utils/paginatedQuery.js";
 
 const addEducation = asynchandler(async (req, res) => {
   const loggedUserId = req.user?._id;
@@ -252,12 +252,16 @@ const getAllEducations = asynchandler(async (req, res) => {
   });
 
   if (paginatedEducations?.data?.length === 0) {
-    return res.status(200).json(new ApiRes(200, paginatedEducations, "no educations found!"));
+    return res
+      .status(200)
+      .json(new ApiRes(200, paginatedEducations, "no educations found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedEducations, "educations fetched successfully!"));
+    .json(
+      new ApiRes(200, paginatedEducations, "educations fetched successfully!"),
+    );
 });
 
 export {

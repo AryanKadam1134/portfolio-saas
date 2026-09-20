@@ -15,7 +15,7 @@ const sendEmailWithTimeout = (promise, timeoutMs = 20000) => {
   return Promise.race([
     promise,
     new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("Email sending timeout")), timeoutMs)
+      setTimeout(() => reject(new Error("Email sending timeout")), timeoutMs),
     ),
   ]);
 };
@@ -32,7 +32,7 @@ const sendEmail = async ({ to, subject, text, html }) => {
   try {
     const info = await sendEmailWithTimeout(
       transporter.sendMail(mailOptions),
-      20000 // 20 second timeout
+      20000, // 20 second timeout
     );
     console.log("Email sent:", info.messageId);
   } catch (error) {
@@ -41,4 +41,4 @@ const sendEmail = async ({ to, subject, text, html }) => {
   }
 };
 
-export default sendEmail;
+export { sendEmail };

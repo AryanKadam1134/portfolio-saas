@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 
-import ApiRes from "../../utils/ApiRes.js";
-import asynchandler from "../../utils/asynchandler.js";
-import { paginateAggregate } from "../../utils/paginatedAggregate.js";
-import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
-
 import { Skill } from "../../models/skill.model.js";
 import { Project } from "../../models/project.model.js";
 import { Education } from "../../models/education.model.js";
@@ -13,6 +8,11 @@ import { Certificate } from "../../models/certificate.model.js";
 import { Achievement } from "../../models/achievement.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 import { SocialPlatform } from "../../models/socialPlatform.model.js";
+
+import ApiRes from "../../utils/ApiRes.js";
+import { asynchandler } from "../../utils/asynchandler.js";
+import { paginateAggregate } from "../../utils/pagination.js";
+import { sortPositionsByDate } from "../../utils/sortPositionsByDate.js";
 
 const healthCheck = async (req, res) => {
   return res.status(200).json(new ApiRes(200, {}, "OK"));

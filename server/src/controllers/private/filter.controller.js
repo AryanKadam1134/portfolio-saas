@@ -4,7 +4,7 @@ import { Certificate } from "../../models/certificate.model.js";
 import { SkillCategory } from "../../models/skillCategory.model.js";
 
 import ApiRes from "../../utils/ApiRes.js";
-import asynchandler from "../../utils/asynchandler.js";
+import { asynchandler } from "../../utils/asynchandler.js";
 
 import {
   SKILL_LEVEL,

@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 
-import { SOCIAL_PLATFORMS, VISIBILITY } from "../constants.js";
+import { VISIBILITY } from "../constants.js";
 
 const socialPlatformSchema = new Schema(
   {
