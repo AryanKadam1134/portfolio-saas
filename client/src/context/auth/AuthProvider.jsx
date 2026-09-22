@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
       // console.log("Login succesfull:", data);
     } catch (error) {
       console.error("Error while login: ", error);
-      notify.msgError(error?.message || "Login failed!");
+      notify.error({ title: error?.message || "Login failed!" });
       setError(error?.message);
     } finally {
       setAuthLoading(false);

@@ -42,10 +42,10 @@ export default function ForogtPassword() {
       }
 
       setError(null);
-      notify.msgSuccess(res?.message);
+      notify.success({ title: res?.message });
     } catch (error) {
       console.error("Forgot Password failed: ", error);
-      notify.msgError(error?.message);
+      notify.error({ title: error?.message });
       setError(error?.message);
     }
   };

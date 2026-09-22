@@ -91,7 +91,7 @@ export default function AddEditAchievement() {
       });
       console.log("Achievement: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch achievement");
+      notify.error({ title: error?.message || "Failed to fetch achievement" });
     } finally {
       setLoading(false);
     }
@@ -103,10 +103,10 @@ export default function AddEditAchievement() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await achievementEndpoints.updateAchievement(id, updatedData);
-        notify.msgSuccess("Achievement Updated!");
+        notify.success({ title: "Achievement Updated!" });
       } else {
         res = await achievementEndpoints.addAchievement(payload);
-        notify.msgSuccess("Achievement Saved!");
+        notify.success({ title: "Achievement Saved!" });
       }
 
       const data = res.data;
@@ -114,7 +114,7 @@ export default function AddEditAchievement() {
       setId(data?._id);
       // console.log("Achievement Saved: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to save achievement");
+      notify.error({ title: error?.message || "Failed to save achievement" });
     }
   };
 
@@ -125,9 +125,9 @@ export default function AddEditAchievement() {
       });
 
       setValue("coverImageIndex", idx, { shouldDirty: true });
-      notify.msgSuccess("Cover Image Changed!");
+      notify.success({ title: "Cover Image Changed!" });
     } catch (err) {
-      notify.msgError(err?.message || "Failed to update cover image");
+      notify.error({ title: err?.message || "Failed to update cover image" });
     }
   };
 
@@ -144,9 +144,9 @@ export default function AddEditAchievement() {
       await achievementEndpoints.updateAchievementImage(id, formData);
 
       fetchAchievement();
-      notify.msgSuccess("Achievement Images Updated!");
+      notify.success({ title: "Achievement Images Updated!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to update achievement images");
+      notify.error({ title: error?.message || "Failed to update achievement images" });
     } finally {
       setImagesUploading(false);
     }
@@ -159,9 +159,9 @@ export default function AddEditAchievement() {
       await achievementEndpoints.deleteAchievementImage(id, imagePublicId);
 
       fetchAchievement();
-      notify.msgSuccess("Achievement Image Deleted!");
+      notify.success({ title: "Achievement Image Deleted!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete achievement image");
+      notify.error({ title: error?.message || "Failed to delete achievement image" });
     } finally {
       setImageDeleting(null);
     }

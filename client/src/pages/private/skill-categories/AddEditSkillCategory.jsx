@@ -66,7 +66,7 @@ export default function AddEditSkillCategory() {
       reset(data);
       console.log("Skill Category: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch skill category");
+      notify.error({ title: error?.message || "Failed to fetch skill category" });
     } finally {
       setLoading(false);
     }
@@ -78,10 +78,10 @@ export default function AddEditSkillCategory() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await skillCategoryEndpoints.updateSkillCategory(id, updatedData);
-        notify.msgSuccess("Category Updated!");
+        notify.success({ title: "Category Updated!" });
       } else {
         res = await skillCategoryEndpoints.addSkillCategory(payload);
-        notify.msgSuccess("Category Saved!");
+        notify.success({ title: "Category Saved!" });
       }
 
       const data = res.data;
@@ -89,7 +89,7 @@ export default function AddEditSkillCategory() {
       setId(data?._id);
       // console.log("Skill Category Saved: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to save skill category");
+      notify.error({ title: error?.message || "Failed to save skill category" });
     }
   };
 

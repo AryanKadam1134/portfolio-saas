@@ -43,7 +43,7 @@ export default function Educations() {
       setPagination(data?.pagination);
       console.log("User Educations: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch educations");
+      notify.error({ title: error?.message || "Failed to fetch educations" });
     } finally {
       setLoading(false);
     }
@@ -57,9 +57,9 @@ export default function Educations() {
 
       fetchEducations();
       closeModal();
-      notify.msgSuccess("Education Deleted!");
+      notify.success({ title: "Education Deleted!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete education");
+      notify.error({ title: error?.message || "Failed to delete education" });
     } finally {
       setDeleting(false);
     }

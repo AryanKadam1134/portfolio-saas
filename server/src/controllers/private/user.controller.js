@@ -68,16 +68,16 @@ const updateUserDetails = asynchandler(async (req, res) => {
   }
 
   // Check if user exists if username or email is provided
-  if (username) {
+  if (username || mobileNo) {
     const userExists = await User.findOne({
-      username,
+      $or: [{ username }, { mobileNo }],
       _id: { $ne: loggedUserId },
     });
 
     if (userExists) {
       throw new ApiError(
         409,
-        "User already exists with similar username or email",
+        "User already exists with similar username or mobile no",
       );
     }
   }

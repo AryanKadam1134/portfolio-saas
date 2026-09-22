@@ -50,7 +50,7 @@ export default function Dashboard() {
       // console.log("User Details: ", data);
     } catch (error) {
       console.error("Error fetching User Details: ", error);
-      notify.msgError(error?.message || "Failed to load user details");
+      notify.error({ title: error?.message || "Failed to load user details" });
     } finally {
       setDetailsLoading(false);
     }
@@ -76,16 +76,18 @@ export default function Dashboard() {
   const onSubmit = async (data) => {
     const updatedData = getUpdatedFields(data, dirtyFields);
 
-    console.log("Only Updated Fields:", updatedData);
+    // console.log("Only Updated Fields:", updatedData);
 
     try {
       await userEndpoints.updateUser(updatedData);
 
       fetchUserDetails();
-      notify.msgSuccess("Details Updated!");
+      notify.success({ title: "Details Updated!" });
     } catch (error) {
       console.error("Error updating User Details: ", error);
-      notify.msgError(error?.message || "Failed to update user details");
+      notify.error({
+        title: error?.message || "Failed to update user details",
+      });
     }
   };
 

@@ -38,9 +38,9 @@ export default function ChangePassword() {
       await authEndpoints.changePassword(payload);
 
       reset();
-      notify.msgSuccess("Password changed successfully!");
+      notify.success({ title: "Password changed successfully!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to change password");
+      notify.error({ title: error?.message || "Failed to change password" });
     }
   };
 
@@ -54,7 +54,7 @@ export default function ChangePassword() {
         reset({ isInitializing: !data });
         setHasPassword(data);
       } catch (error) {
-        notify.msgError(error?.message || "Failed to check password");
+        notify.error({ title: error?.message || "Failed to check password" });
       } finally {
         setLoading(false);
       }

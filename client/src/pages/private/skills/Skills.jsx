@@ -51,7 +51,7 @@ export default function Skills() {
       console.log("User Skills: ", data);
     } catch (error) {
       console.error("Error fetching User Skills: ", error);
-      notify.msgError(error?.message || "Failed to load skills");
+      notify.error({ title: error?.message || "Failed to load skills" });
     } finally {
       setLoading(false);
     }
@@ -64,10 +64,10 @@ export default function Skills() {
 
       fetchSkills();
       closeModal();
-      notify.msgSuccess("Skill Deleted!");
+      notify.success({ title: "Skill Deleted!" });
     } catch (error) {
       console.error("Error deleting Skill: ", error);
-      notify.msgError(error?.message || "Failed to delete skill");
+      notify.error({ title: error?.message || "Failed to delete skill" });
     } finally {
       setDeleting(false);
     }

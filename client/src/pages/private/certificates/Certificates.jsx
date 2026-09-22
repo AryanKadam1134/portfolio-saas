@@ -48,7 +48,7 @@ export default function Certificates() {
       setPagination(data?.pagination);
       console.log("User Certificates: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch certificates");
+      notify.error({ title: error?.message || "Failed to fetch certificates" });
     } finally {
       setLoading(false);
     }
@@ -62,9 +62,9 @@ export default function Certificates() {
 
       fetchCertificate();
       closeModal();
-      notify.msgSuccess("Certificate Deleted!");
+      notify.success({ title: "Certificate Deleted!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete certificate");
+      notify.error({ title: error?.message || "Failed to delete certificate" });
     } finally {
       setDeleting(false);
     }

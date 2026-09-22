@@ -48,7 +48,7 @@ export default function Achievements() {
       setPagination(data?.pagination);
       console.log("User Achievements: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch achievements");
+      notify.error({ title: error?.message || "Failed to fetch achievements" });
     } finally {
       setLoading(false);
     }
@@ -62,9 +62,9 @@ export default function Achievements() {
 
       fetchAchievements();
       closeModal();
-      notify.msgSuccess("Achievement Deleted!");
+      notify.success({ title: "Achievement Deleted!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete achievement");
+      notify.error({ title: error?.message || "Failed to delete achievement" });
     } finally {
       setDeleting(false);
     }

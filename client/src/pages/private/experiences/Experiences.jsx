@@ -52,7 +52,7 @@ export default function Experiences() {
       setPagination(data?.pagination);
       // console.log("User Experiences: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch experiences");
+      notify.error({ title: error?.message || "Failed to fetch experiences" });
     } finally {
       setLoading(false);
     }
@@ -66,9 +66,9 @@ export default function Experiences() {
 
       fetchExperiences();
       closeModal();
-      notify.msgSuccess("Experience Deleted!");
+      notify.success({ title: "Experience Deleted!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete experience");
+      notify.error({ title: error?.message || "Failed to delete experience" });
     } finally {
       setDeleting(false);
     }

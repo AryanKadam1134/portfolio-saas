@@ -48,7 +48,7 @@ import UserSessions from "./pages/private/UserSessions.jsx";
 
 import { AuthProvider } from "./context/auth/AuthProvider.jsx";
 import { ModalProvider } from "./context/modal/ModalProvider.jsx";
-import { NotificationsProvider } from "./context/notification/NotificationsProvider.jsx";
+import { NotificationProvider } from "./context/notification/NotificationProvider.jsx";
 
 import { useAuth } from "./context/auth/useAuth";
 import { useTheme } from "./context/theme/useTheme.js";
@@ -129,7 +129,7 @@ function App() {
         algorithm: isDark ? darkAlgorithm : defaultAlgorithm,
       }}
     >
-      <NotificationsProvider>
+      <NotificationProvider>
         <ModalProvider>
           <AuthProvider>
             <GoogleOAuthProvider
@@ -239,7 +239,7 @@ function App() {
             </GoogleOAuthProvider>
           </AuthProvider>
         </ModalProvider>
-      </NotificationsProvider>
+      </NotificationProvider>
     </ConfigProvider>
   );
 }

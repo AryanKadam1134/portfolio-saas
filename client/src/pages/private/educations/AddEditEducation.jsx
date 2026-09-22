@@ -68,7 +68,7 @@ export default function AddEditEducation() {
       reset(data);
       console.log("Education: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch education");
+      notify.error({ title: error?.message || "Failed to fetch education" });
     } finally {
       setLoading(false);
     }
@@ -81,10 +81,10 @@ export default function AddEditEducation() {
         const updatedData = getUpdatedFields(payload, dirtyFields);
 
         res = await educationEndpoints.updateEducation(id, updatedData);
-        notify.msgSuccess("Education Updated!");
+        notify.success({ title: "Education Updated!" });
       } else {
         res = await educationEndpoints.addEducation(payload);
-        notify.msgSuccess("Education Saved!");
+        notify.success({ title: "Education Saved!" });
       }
 
       const data = res.data;
@@ -92,7 +92,7 @@ export default function AddEditEducation() {
       setId(data?._id);
       // console.log("Education Saved: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to save education");
+      notify.error({ title: error?.message || "Failed to save education" });
     }
   };
 
@@ -110,9 +110,9 @@ export default function AddEditEducation() {
       await educationEndpoints.updateInstituteImage(id, formData);
 
       fetchEducation();
-      notify.msgSuccess("Institute Image Updated!");
+      notify.success({ title: "Institute Image Updated!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to update institute image");
+      notify.error({ title: error?.message || "Failed to update institute image" });
     } finally {
       setImagesUploading(false);
     }
@@ -124,9 +124,9 @@ export default function AddEditEducation() {
       await educationEndpoints.deleteInstituteImage(id);
 
       fetchEducation();
-      notify.msgSuccess("Institute Image Deleted!");
+      notify.success({ title: "Institute Image Deleted!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete institute image");
+      notify.error({ title: error?.message || "Failed to delete institute image" });
     } finally {
       setImageDeleting(false);
     }

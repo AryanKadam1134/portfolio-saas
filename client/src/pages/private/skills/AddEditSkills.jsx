@@ -116,7 +116,7 @@ export default function AddEditSkills() {
       console.log("Skill: ", data);
     } catch (error) {
       console.error("Error fetching Skill: ", error);
-      notify.msgError(error?.message || "Failed to load skill details");
+      notify.error({ title: error?.message || "Failed to load skill details" });
     } finally {
       setLoading(false);
     }
@@ -128,10 +128,10 @@ export default function AddEditSkills() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await skillEndpoints.updateSkill(id, updatedData);
-        notify.msgSuccess("Skill Updated!");
+        notify.success({ title: "Skill Updated!" });
       } else {
         res = await skillEndpoints.addSkill(payload);
-        notify.msgSuccess("Skill Saved!");
+        notify.success({ title: "Skill Saved!" });
       }
 
       const data = res.data;
@@ -140,7 +140,7 @@ export default function AddEditSkills() {
       // console.log("Skill Saved: ", data);
     } catch (error) {
       console.error("Error saving Skill: ", error);
-      notify.msgError(error?.message || "Failed to save skill");
+      notify.error({ title: error?.message || "Failed to save skill" });
     }
   };
 

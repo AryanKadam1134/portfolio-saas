@@ -48,7 +48,7 @@ export default function SocialPlatforms() {
       setPagination(data?.pagination);
       console.log("User Social Platforms: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch social platforms");
+      notify.error({ title: error?.message || "Failed to fetch social platforms" });
     } finally {
       setLoading(false);
     }
@@ -62,9 +62,9 @@ export default function SocialPlatforms() {
 
       fetchSocialPlatforms();
       closeModal();
-      notify.msgSuccess("Platform Deleted!");
+      notify.success({ title: "Platform Deleted!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete social platform");
+      notify.error({ title: error?.message || "Failed to delete social platform" });
     } finally {
       setDeleting(false);
     }

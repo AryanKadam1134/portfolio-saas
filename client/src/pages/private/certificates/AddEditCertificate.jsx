@@ -94,7 +94,7 @@ export default function AddEditCertificate() {
       });
       console.log("Certificate: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch certificate");
+      notify.error({ title: error?.message || "Failed to fetch certificate" });
     } finally {
       setLoading(false);
     }
@@ -107,10 +107,10 @@ export default function AddEditCertificate() {
         const updatedData = getUpdatedFields(payload, dirtyFields);
 
         res = await certificateEndpoints.updateCertificate(id, updatedData);
-        notify.msgSuccess("Certificate Updated!");
+        notify.success({ title: "Certificate Updated!" });
       } else {
         res = await certificateEndpoints.addCertificate(payload);
-        notify.msgSuccess("Certificate Saved!");
+        notify.success({ title: "Certificate Saved!" });
       }
 
       const data = res.data;
@@ -118,7 +118,7 @@ export default function AddEditCertificate() {
       setId(data?._id);
       // console.log("Certificate Saved: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to save certificate");
+      notify.error({ title: error?.message || "Failed to save certificate" });
     }
   };
 
@@ -136,9 +136,9 @@ export default function AddEditCertificate() {
       await certificateEndpoints.updateCertificateImage(id, formData);
 
       fetchCertificate();
-      notify.msgSuccess("Certificate Image Updated!");
+      notify.success({ title: "Certificate Image Updated!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to update certificate image");
+      notify.error({ title: error?.message || "Failed to update certificate image" });
     } finally {
       setImagesUploading(false);
     }
@@ -150,9 +150,9 @@ export default function AddEditCertificate() {
       await certificateEndpoints.deleteCertificateImage(id);
 
       fetchCertificate();
-      notify.msgSuccess("Certificate Image Deleted!");
+      notify.success({ title: "Certificate Image Deleted!" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete certificate image");
+      notify.error({ title: error?.message || "Failed to delete certificate image" });
     } finally {
       setImageDeleting(false);
     }

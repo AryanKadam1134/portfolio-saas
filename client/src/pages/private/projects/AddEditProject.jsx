@@ -102,7 +102,7 @@ export default function AddEditProject() {
       console.log("Project: ", data);
     } catch (error) {
       console.error("Error fetching Project: ", error);
-      notify.msgError(error?.message || "Failed to load project details");
+      notify.error({ title: error?.message || "Failed to load project details" });
     } finally {
       setLoading(false);
     }
@@ -114,10 +114,10 @@ export default function AddEditProject() {
       if (id) {
         const updatedData = getUpdatedFields(payload, dirtyFields);
         res = await projectEndpoints.updateProject(id, updatedData);
-        notify.msgSuccess("Project Updated!");
+        notify.success({ title: "Project Updated!" });
       } else {
         res = await projectEndpoints.addProject(payload);
-        notify.msgSuccess("Project Saved!");
+        notify.success({ title: "Project Saved!" });
       }
 
       const data = res.data;
@@ -126,7 +126,7 @@ export default function AddEditProject() {
       // console.log("Project Saved: ", data);
     } catch (error) {
       console.error("Error saving Project: ", error);
-      notify.msgError(error?.message || "Failed to save project");
+      notify.error({ title: error?.message || "Failed to save project" });
     }
   };
 
@@ -137,10 +137,10 @@ export default function AddEditProject() {
       });
 
       setValue("coverImageIndex", idx, { shouldDirty: true });
-      notify.msgSuccess("Cover Image Changed!");
+      notify.success({ title: "Cover Image Changed!" });
     } catch (err) {
       console.error(err);
-      notify.msgError(err?.message || "Failed to change cover image");
+      notify.error({ title: err?.message || "Failed to change cover image" });
     }
   };
 
@@ -157,11 +157,11 @@ export default function AddEditProject() {
       await projectEndpoints.updateProjectImage(id, formData);
 
       fetchProject();
-      notify.msgSuccess("Project Images Updated!");
+      notify.success({ title: "Project Images Updated!" });
       // console.log("Images uploaded successfully!");
     } catch (error) {
       console.error("Error updating Project Images: ", error);
-      notify.msgError(error?.message || "Failed to upload project images");
+      notify.error({ title: error?.message || "Failed to upload project images" });
     } finally {
       setImagesUploading(false);
     }
@@ -174,11 +174,11 @@ export default function AddEditProject() {
       await projectEndpoints.deleteProjectImage(id, imagePublicId);
 
       fetchProject();
-      notify.msgSuccess("Project Image Deleted!");
+      notify.success({ title: "Project Image Deleted!" });
       // console.log("Image deleted successfully!");
     } catch (error) {
       console.error("Error deleting Project Image: ", error);
-      notify.msgError(error?.message || "Failed to delete project image");
+      notify.error({ title: error?.message || "Failed to delete project image" });
     } finally {
       setImageDeleting(null);
     }

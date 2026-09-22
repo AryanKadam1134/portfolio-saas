@@ -45,7 +45,7 @@ export default function UserSessions() {
       setUserSessions(res.data || []);
     } catch (error) {
       if (error?.statusCode !== 404) {
-        notify.msgError(error?.message || "Failed to load active sessions");
+        notify.error({ title: error?.message || "Failed to load active sessions" });
       }
     } finally {
       setIsLoading(false);
@@ -65,9 +65,9 @@ export default function UserSessions() {
       }
 
       await fetchUserSessions();
-      notify.msgSuccess("Session removed successfully");
+      notify.success({ title: "Session removed successfully" });
     } catch (error) {
-      notify.msgError(error?.message || "Failed to remove session");
+      notify.error({ title: error?.message || "Failed to remove session" });
     } finally {
       setRemovingSessionId(null);
     }

@@ -132,7 +132,7 @@ export default function AddEditExperiences() {
       });
       console.log("Experience: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch experience");
+      notify.error({ title: error?.message || "Failed to fetch experience" });
     } finally {
       setLoading(false);
     }
@@ -147,10 +147,10 @@ export default function AddEditExperiences() {
         updatedData.highlights = payload.highlights;
 
         res = await experienceEndpoints.updateExperience(id, updatedData);
-        notify.msgSuccess("Experience Updated!");
+        notify.success({ title: "Experience Updated!" });
       } else {
         res = await experienceEndpoints.addExperience(payload);
-        notify.msgSuccess("Experience Saved!");
+        notify.success({ title: "Experience Saved!" });
       }
 
       const data = res.data;
@@ -158,7 +158,7 @@ export default function AddEditExperiences() {
       setId(data?._id);
       // console.log("Experience Saved: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to save experience");
+      notify.error({ title: error?.message || "Failed to save experience" });
     }
   };
 
@@ -176,10 +176,10 @@ export default function AddEditExperiences() {
       await experienceEndpoints.updateOrganizationImage(id, formData);
 
       fetchExperience();
-      notify.msgSuccess("Organization Image Updated!");
+      notify.success({ title: "Organization Image Updated!" });
       // console.log("Images uploaded successfully!");
     } catch (error) {
-      notify.msgError(error?.message || "Failed to update organization image");
+      notify.error({ title: error?.message || "Failed to update organization image" });
     } finally {
       setImagesUploading(false);
     }
@@ -191,10 +191,10 @@ export default function AddEditExperiences() {
       await experienceEndpoints.deleteOrganizationImage(id);
 
       fetchExperience();
-      notify.msgSuccess("Organization Image Deleted!");
+      notify.success({ title: "Organization Image Deleted!" });
       // console.log("Image deleted successfully!");
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete organization image");
+      notify.error({ title: error?.message || "Failed to delete organization image" });
     } finally {
       setImageDeleting(false);
     }

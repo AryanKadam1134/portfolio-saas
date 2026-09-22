@@ -41,10 +41,10 @@ export default function UploadUserResume() {
       await userEndpoints.updateUserResume(formData);
 
       fetchUserResume();
-      notify.msgSuccess("Resume Updated!");
+      notify.success({ title: "Resume Updated!" });
     } catch (error) {
       console.error("Error updating resume:", error);
-      notify.msgError(error?.message || "Failed to update resume");
+      notify.error({ title: error?.message || "Failed to update resume" });
     } finally {
       setResumeLoading(false);
     }
@@ -58,10 +58,10 @@ export default function UploadUserResume() {
 
       setResume({});
       fetchUserResume();
-      notify.msgSuccess("Resume Updated!");
+      notify.success({ title: "Resume Updated!" });
     } catch (error) {
       console.error("Error deleting resume:", error);
-      notify.msgError(error?.message || "Failed to delete resume");
+      notify.error({ title: error?.message || "Failed to delete resume" });
     } finally {
       setResumeLoading(false);
     }

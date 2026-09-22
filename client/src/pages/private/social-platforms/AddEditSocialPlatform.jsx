@@ -311,7 +311,7 @@ export default function AddEditSocialPlatform() {
       reset(data);
       console.log("Social Platform: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to fetch social platform");
+      notify.error({ title: error?.message || "Failed to fetch social platform" });
     } finally {
       setLoading(false);
     }
@@ -326,10 +326,10 @@ export default function AddEditSocialPlatform() {
           id,
           updatedData,
         );
-        notify.msgSuccess("Platform Updated!");
+        notify.success({ title: "Platform Updated!" });
       } else {
         res = await socialPlatformEndpoints.addSocialPlatform(payload);
-        notify.msgSuccess("Platform Added!");
+        notify.success({ title: "Platform Added!" });
       }
 
       const data = res.data;
@@ -337,7 +337,7 @@ export default function AddEditSocialPlatform() {
       setId(data?._id);
       // console.log("Social Platform Saved: ", data);
     } catch (error) {
-      notify.msgError(error?.message || "Failed to save social platform");
+      notify.error({ title: error?.message || "Failed to save social platform" });
     }
   };
 

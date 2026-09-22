@@ -28,7 +28,7 @@ export default function Settings() {
       setUser(null);
       closeModal();
     } catch (error) {
-      notify.msgError(error?.message || "Failed to delete account");
+      notify.error({ title: error?.message || "Failed to delete account" });
     } finally {
       setDeleting(false);
     }

@@ -35,11 +35,11 @@ export default function SignUp() {
       await authEndpoints.register(payload);
 
       reset();
-      notify.msgSuccess("Account Created Successfully!");
+      notify.success({ title: "Account Created Successfully!" });
       // console.log("User Registered: ", data);
     } catch (error) {
       console.error("Login failed: ", error);
-      notify.msgError("Registration Failed!");
+      notify.error({ title: "Registration Failed!" });
       setError(error?.message);
     }
   };

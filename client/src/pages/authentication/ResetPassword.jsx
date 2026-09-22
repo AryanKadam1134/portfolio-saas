@@ -41,10 +41,10 @@ export default function ResetPassword() {
 
       setError(null);
       navigate("/auth");
-      notify.msgSuccess(res?.message);
+      notify.success({ title: res?.message });
     } catch (error) {
       console.error("Reset Password failed: ", error);
-      notify.msgError(error?.message);
+      notify.error({ title: error?.message });
       setError(error?.message);
     }
   };
