@@ -280,7 +280,7 @@ export default function AddEditProject() {
                 placeholder="Select Company you worked in"
                 options={organizationsList}
                 value={field.value}
-                onChange={field.onChange} // send value to hook form
+                onChange={field.onChange}
               />
             )}
           />
@@ -386,7 +386,7 @@ export default function AddEditProject() {
                 placeholder="Select Tech Stack"
                 options={skillsList}
                 value={field.value}
-                onChange={field.onChange} // send value to hook form
+                onChange={field.onChange}
               />
             )}
           />
