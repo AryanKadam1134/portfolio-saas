@@ -378,7 +378,7 @@ export default function AddEditSocialPlatform() {
                 placeholder="Select Platform"
                 options={SOCIAL_APPS}
                 value={null}
-                onChange={(value) => reset({ name: value })} // send value to hook form
+                onChange={(value) => reset({ name: value })}
               />
             </FormField>
 
