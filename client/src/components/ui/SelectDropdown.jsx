@@ -160,35 +160,33 @@ export default function SelectDropdown({
               id={listboxId}
               role="listbox"
               aria-multiselectable={multiple || undefined}
-              className="min-h-0 flex-1 overflow-y-auto p-1"
+              className="min-h-0 flex-1 flex flex-col gap-1 overflow-y-auto p-1"
             >
               {filteredOptions.length ? (
                 filteredOptions.map((option) => {
                   const selected = isSelected(option.value);
 
                   return (
-                  <button
-                    key={option.value}
-                    type="button"
-                    role="option"
-                    aria-selected={selected}
-                    disabled={option.disabled}
-                    onClick={() => handleSelect(option.value)}
-                    className={`w-full rounded px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                      selected
-                        ? "font-medium bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary"
-                        : "text-light-text-secondary hover:bg-light-bg-hover dark:text-dark-text-secondary dark:hover:bg-dark-bg-hover"
-                    }`}
-                  >
-                    {option.label} {selected && "✔"}
-                  </button>
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      disabled={option.disabled}
+                      onClick={() => handleSelect(option.value)}
+                      className={`w-full rounded px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                        selected
+                          ? "font-medium bg-light-bg-tertiary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary"
+                          : "text-light-text-secondary hover:bg-light-bg-hover dark:text-dark-text-secondary dark:hover:bg-dark-bg-hover"
+                      }`}
+                    >
+                      {option.label} {selected && "✔"}
+                    </button>
                   );
                 })
               ) : (
                 <p className="px-3 py-2 text-sm text-light-text-tertiary dark:text-dark-text-tertiary">
-                  {options.length
-                    ? "No options found"
-                    : "No options available"}
+                  {options.length ? "No options found" : "No options available"}
                 </p>
               )}
             </div>

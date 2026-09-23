@@ -20,22 +20,69 @@ body {
   justify-content: center;
 }
 
-/* Custom scrollbar styling - desktop only */
+/* Tell the browser which theme is active so native UI (scrollbars on
+   mobile/overlay, form controls, antd popups) matches the app theme */
+:root {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+/*
+  Custom scrollbar styling - desktop only.
+
+  NOTE: don't use Tailwind's `dark:` variant with @apply on ::-webkit-scrollbar*.
+  It compiles to `::-webkit-scrollbar-track:is(.dark *)`, and browsers only allow
+  a handful of pseudo-classes on scrollbar pseudo-elements, so `:is()` makes the
+  whole rule invalid. Put the `.dark` selector in FRONT of the pseudo-element.
+*/
 @media (min-width: 768px) {
   ::-webkit-scrollbar {
     width: 6px;
   }
 
+  /* Light */
   ::-webkit-scrollbar-track {
-    @apply bg-light-bg-secondary dark:bg-dark-bg-tertiary;
+    @apply bg-light-bg-secondary;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-light-border-secondary dark:bg-dark-border-secondary rounded-full;
+    @apply bg-light-border-secondary rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-light-border-primary dark:bg-dark-border-primary;
+    @apply bg-light-border-primary;
+  }
+
+  /* Dark */
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-dark-bg-tertiary;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-dark-border-secondary;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark-border-primary;
+  }
+}
+
+/* Firefox doesn't support ::-webkit-scrollbar, it uses scrollbar-color.
+   Guarded with @supports because in Chrome 121+ setting scrollbar-color
+   would disable the ::-webkit-scrollbar styles above. */
+@supports not selector(::-webkit-scrollbar) {
+  @media (min-width: 768px) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #d1d5db #f6f7f9; /* thumb track */
+    }
+
+    .dark * {
+      scrollbar-color: #404040 #242424;
+    }
   }
 }
 

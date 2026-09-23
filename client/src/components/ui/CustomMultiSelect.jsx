@@ -37,9 +37,7 @@ export default function CustomMultiSelect({
         options={options}
         selectedLabel={selectedLabel}
         placeholder={placeholder}
-        isSelected={(optionValue) =>
-          selectedValueKeys.has(String(optionValue))
-        }
+        isSelected={(optionValue) => selectedValueKeys.has(String(optionValue))}
         onSelect={toggleOption}
         multiple
         error={error}
