@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import {
   FloatingPortal,
@@ -11,9 +11,8 @@ import {
   useDismiss,
   useFloating,
   useInteractions,
-  useRole,
 } from "@floating-ui/react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 
 import { inputClass } from "../../utils/getInputClass";
 
@@ -32,13 +31,26 @@ export default function SelectDropdown({
   onBlur,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef(null);
   const generatedId = useId();
   const listboxId = id ? `${id}-listbox` : `${generatedId}-listbox`;
+
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+  const filteredOptions = normalizedSearchQuery
+    ? options.filter((option) =>
+        String(option.label).toLowerCase().includes(normalizedSearchQuery),
+      )
+    : options;
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
     onOpenChange: (open) => {
-      if (!disabled) setIsOpen(open);
+      if (disabled) return;
+
+      setIsOpen(open);
+
+      if (!open) setSearchQuery("");
     },
     placement: "bottom-start",
     strategy: "fixed",
@@ -61,19 +73,24 @@ export default function SelectDropdown({
 
   const click = useClick(context, { enabled: !disabled });
   const dismiss = useDismiss(context);
-  const role = useRole(context, { role: "listbox" });
   const { getReferenceProps, getFloatingProps } = useInteractions([
     click,
     dismiss,
-    role,
   ]);
+
+  useEffect(() => {
+    if (isOpen) searchInputRef.current?.focus();
+  }, [isOpen]);
 
   const handleSelect = (optionValue) => {
     onSelect(optionValue);
+    setSearchQuery("");
 
     if (!multiple) {
       setIsOpen(false);
       refs.domReference.current?.focus();
+    } else {
+      searchInputRef.current?.focus();
     }
   };
 
@@ -86,7 +103,10 @@ export default function SelectDropdown({
           type: "button",
           disabled,
           onBlur,
+          role: "combobox",
           "aria-controls": listboxId,
+          "aria-expanded": isOpen,
+          "aria-haspopup": "listbox",
           "aria-invalid": error ? true : undefined,
           "aria-required": required || undefined,
         })}
@@ -116,17 +136,37 @@ export default function SelectDropdown({
           <div
             ref={(node) => refs.setFloating(node)}
             style={floatingStyles}
-            {...getFloatingProps({
-              id: listboxId,
-              "aria-multiselectable": multiple || undefined,
-            })}
-            className="z-[10000] flex flex-col gap-1 overflow-y-auto rounded-md border border-light-border-secondary bg-light-bg-primary p-1 shadow-md dark:border-dark-border-secondary dark:bg-dark-bg-tertiary"
+            {...getFloatingProps()}
+            className="z-[10000] flex flex-col overflow-hidden rounded-md border border-light-border-secondary bg-light-bg-primary shadow-md dark:border-dark-border-secondary dark:bg-dark-bg-tertiary"
           >
-            {options.length ? (
-              options.map((option) => {
-                const selected = isSelected(option.value);
+            <div className="relative shrink-0 border-b border-light-border-secondary p-2 dark:border-dark-border-secondary">
+              <Search
+                aria-hidden="true"
+                size={16}
+                className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-light-text-tertiary dark:text-dark-text-tertiary"
+              />
+              <input
+                ref={searchInputRef}
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                aria-label="Search options"
+                placeholder="Search options..."
+                className="w-full rounded-md border border-light-input-border bg-light-input-bg py-2 pr-3 pl-9 text-sm text-light-input-text outline-none placeholder:text-light-input-placeholder/60 focus:border-transparent focus:ring focus:ring-light-input-ring dark:border-dark-input-border dark:bg-dark-input-bg dark:text-dark-input-text dark:placeholder:text-dark-input-placeholder/60 dark:focus:ring-dark-input-ring"
+              />
+            </div>
 
-                return (
+            <div
+              id={listboxId}
+              role="listbox"
+              aria-multiselectable={multiple || undefined}
+              className="min-h-0 flex-1 overflow-y-auto p-1"
+            >
+              {filteredOptions.length ? (
+                filteredOptions.map((option) => {
+                  const selected = isSelected(option.value);
+
+                  return (
                   <button
                     key={option.value}
                     type="button"
@@ -142,13 +182,16 @@ export default function SelectDropdown({
                   >
                     {option.label} {selected && "✔"}
                   </button>
-                );
-              })
-            ) : (
-              <p className="px-3 py-2 text-sm text-light-text-tertiary dark:text-dark-text-tertiary">
-                No options available
-              </p>
-            )}
+                  );
+                })
+              ) : (
+                <p className="px-3 py-2 text-sm text-light-text-tertiary dark:text-dark-text-tertiary">
+                  {options.length
+                    ? "No options found"
+                    : "No options available"}
+                </p>
+              )}
+            </div>
           </div>
         </FloatingPortal>
       )}
