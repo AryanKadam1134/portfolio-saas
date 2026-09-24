@@ -12,10 +12,7 @@ export default function GoogleAuthButton({ rememberMe }) {
   const authenticate = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async (codeResponse) => {
-      await googleAuth({
-        code: codeResponse,
-        rememberMe,
-      });
+      await googleAuth(codeResponse, rememberMe);
     },
     onError: () => {
       notify.error({ title: "Google Authentication failed!" });
