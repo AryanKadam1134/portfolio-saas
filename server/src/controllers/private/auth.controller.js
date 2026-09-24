@@ -115,10 +115,10 @@ const googleAuth = asynchandler(async (req, res) => {
     throw new ApiError(400, "Google authorization code missing");
   }
 
-  const { tokens } = await client.getToken(
+  const { tokens } = await client.getToken({
     code,
-    process.env.GOOGLE_REDIRECT_URI,
-  );
+    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+  });
 
   console.log("tokens: ", tokens);
 
