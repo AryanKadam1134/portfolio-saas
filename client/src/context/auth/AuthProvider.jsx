@@ -26,10 +26,10 @@ export function AuthProvider({ children }) {
     return storedDeviceId;
   });
 
-  const googleAuth = async (credentialResponse, rememberMe) => {
+  const googleAuth = async (code, rememberMe) => {
     try {
       const res = await authEndpoints.googleAuth(
-        { credential: credentialResponse.credential, rememberMe },
+        { code, rememberMe },
         {
           headers: {
             "x-device-id": deviceId,

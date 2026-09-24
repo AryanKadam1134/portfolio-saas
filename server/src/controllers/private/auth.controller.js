@@ -98,20 +98,26 @@ const generateAccessAndRefreshToken = async (userId, req) => {
 };
 
 const googleAuth = asynchandler(async (req, res) => {
-  const { credential, rememberMe } = req.body;
+  const { code, rememberMe } = req.body;
 
   const deviceId = req.headers["x-device-id"];
   if (!deviceId) {
     throw new ApiError(400, "Device ID missing");
   }
 
-  if (!credential) {
-    throw new ApiError(400, "Google credential missing");
+  if (!code) {
+    throw new ApiError(400, "Google authorization code missing");
+  }
+
+  const { tokens } = await client.getToken(code);
+
+  if (!tokens.id_token) {
+    throw new ApiError(400, "Google ID token missing");
   }
 
   // ✅ Verify token from Google
   const ticket = await client.verifyIdToken({
-    idToken: credential,
+    idToken: tokens.id_token,
     audience: process.env.GOOGLE_CLIENT_ID,
   });
 

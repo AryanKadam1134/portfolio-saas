@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LockKeyholeOpen, Mail } from "lucide-react";
 
 import Authentication from "../../components/authentication/Authentication";
+import GoogleAuthButton from "../../components/authentication/GoogleAuthButton";
 
 import FormField from "../../components/ui/FormField";
 import CustomInput from "../../components/ui/CustomInput";
@@ -17,7 +18,7 @@ import { useNotify } from "../../context/notification/useNotify";
 
 export default function SignUp() {
   const { notify } = useNotify();
-  const { error, setError, googleAuth } = useAuth();
+  const { error, setError } = useAuth();
 
   const navigate = useNavigate();
 
@@ -165,14 +166,7 @@ export default function SignUp() {
             <p className="flex-1 border-b border-light-input-border dark:border-dark-input-border"></p>
           </div>
 
-          <GoogleLogin
-            onSuccess={(credentialResponse) => googleAuth(credentialResponse)}
-            theme="outlined"
-            size="large"
-            shape="pill"
-            text="signup_with"
-            width="100%"
-          />
+          <GoogleAuthButton />
 
           <p className="mt-2 text-center text-xs text-light-text-primary dark:text-dark-text-primary">
             <span>Already have an account? </span>

@@ -1,9 +1,9 @@
-import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { LockKeyholeOpen } from "lucide-react";
 
 import Authentication from "../../components/authentication/Authentication";
+import GoogleAuthButton from "../../components/authentication/GoogleAuthButton";
 
 import FormField from "../../components/ui/FormField";
 import CustomInput from "../../components/ui/CustomInput";
@@ -14,7 +14,7 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 import { useAuth } from "../../context/auth/useAuth";
 
 export default function SignIn() {
-  const { error, login, googleAuth } = useAuth();
+  const { error, login } = useAuth();
 
   const navigate = useNavigate();
 
@@ -120,16 +120,7 @@ export default function SignIn() {
             <p className="flex-1 border-b border-light-input-border dark:border-dark-input-border"></p>
           </div>
 
-          <GoogleLogin
-            onSuccess={(credentialResponse) =>
-              googleAuth(credentialResponse, rememberMe)
-            }
-            theme="outlined"
-            size="large"
-            shape="pill"
-            text="signin_with"
-            width="100%"
-          />
+          <GoogleAuthButton rememberMe={rememberMe} />
 
           <p className="mt-2 text-center text-xs text-light-text-primary dark:text-dark-text-primary">
             <span>Don't have an account yet? </span>

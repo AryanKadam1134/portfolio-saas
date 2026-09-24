@@ -56,7 +56,7 @@ export default function SelectDropdown({
     strategy: "fixed",
     whileElementsMounted: autoUpdate,
     middleware: [
-      offset(4),
+      offset(5),
       flip({ padding: 8 }),
       shift({ padding: 8 }),
       size({
