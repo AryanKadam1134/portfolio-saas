@@ -11,8 +11,7 @@ export default function GoogleAuthButton({ rememberMe }) {
 
   const authenticate = useGoogleLogin({
     flow: "auth-code",
-    redirect_uri:
-      "https://portfolio-saas-p7ph.onrender.com/oauth/google/callback",
+    redirect_uri: "https://portfolio-saas-p7ph.onrender.com",
     onSuccess: async (codeResponse) => {
       await googleAuth({ code: codeResponse.code, rememberMe });
     },
