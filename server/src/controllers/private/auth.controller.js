@@ -19,8 +19,6 @@ import {
   REFRESH_TOKEN_COOKIE_OPTIONS,
 } from "../../constants.js";
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
 const shooterEmail = process.env.SHOOTER_EMAIL;
 
 const generateAccessAndRefreshToken = async (userId, req) => {
@@ -98,6 +96,11 @@ const generateAccessAndRefreshToken = async (userId, req) => {
 };
 
 const googleAuth = asynchandler(async (req, res) => {
+  const client = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+  );
+
   const { code, rememberMe } = req.body;
 
   const deviceId = req.headers["x-device-id"];
