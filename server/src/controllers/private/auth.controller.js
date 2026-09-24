@@ -105,11 +105,15 @@ const googleAuth = asynchandler(async (req, res) => {
     throw new ApiError(400, "Device ID missing");
   }
 
+  console.log("Auth Code: ", code);
+
   if (!code) {
     throw new ApiError(400, "Google authorization code missing");
   }
 
   const { tokens } = await client.getToken(code);
+
+  console.log("tokens: ", tokens);
 
   if (!tokens.id_token) {
     throw new ApiError(400, "Google ID token missing");
@@ -121,7 +125,11 @@ const googleAuth = asynchandler(async (req, res) => {
     audience: process.env.GOOGLE_CLIENT_ID,
   });
 
+  console.log("ticket: ", ticket);
+
   const payload = ticket.getPayload();
+
+  console.log("payload: ", payload);
 
   const { email, given_name, family_name, picture, sub } = payload;
 
