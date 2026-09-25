@@ -34,8 +34,8 @@
   --notification-toast-x: 0;
   --notification-toast-y: 0;
 
-  animation: notification-toast-in 240ms cubic-bezier(0.16, 1, 0.3, 1)
-    both;
+  animation: notification-toast-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  touch-action: pan-y;
   will-change: opacity, transform;
 }
 
@@ -62,9 +62,45 @@
   pointer-events: none;
 }
 
+/*
+ * Swipe-to-close.
+ * `.notification-toast` already owns `transform`/`opacity` through a
+ * `both`-fill animation, which keeps controlling those properties even
+ * after the entrance animation finishes. While a swipe gesture is active
+ * we disable that animation and drive transform/opacity from two CSS
+ * custom properties instead - the only values that genuinely change every
+ * pointermove frame and so still need to be set inline. Everything else
+ * (idle state, button-close, auto-timeout) is left untouched and the
+ * keyframes above behave exactly as authored.
+ */
+.notification-toast--swipe {
+  --notification-toast-drag-x: 0px;
+  --notification-toast-drag-opacity: 1;
+
+  animation: none;
+  transform: translate3d(var(--notification-toast-drag-x), 0, 0);
+  opacity: var(--notification-toast-drag-opacity);
+}
+
+.notification-toast--swipe-dragging {
+  transition: none;
+  cursor: grabbing;
+  user-select: none;
+}
+
+.notification-toast--swipe-released {
+  transition:
+    transform 220ms cubic-bezier(0.4, 0, 1, 1),
+    opacity 220ms cubic-bezier(0.4, 0, 1, 1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .notification-toast,
   .notification-toast--closing {
     animation-duration: 1ms;
+  }
+
+  .notification-toast--swipe-released {
+    transition-duration: 1ms;
   }
 }

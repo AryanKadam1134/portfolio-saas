@@ -25,7 +25,6 @@ export const ModalProvider = ({ children }) => {
     <ModalContext.Provider
       value={{
         modalContent,
-
         openModal,
         closeModal,
       }}
