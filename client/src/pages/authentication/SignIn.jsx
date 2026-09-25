@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { LockKeyholeOpen } from "lucide-react";
 
@@ -62,12 +62,12 @@ export default function SignIn() {
             id="password"
             label="Password"
             attachment={
-              <p
-                onClick={() => navigate("/forgot-password")}
+              <Link
+                to="/forgot-password"
                 className="text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
               >
                 Forgot Password?
-              </p>
+              </Link>
             }
             required
             error={errors?.password?.message}
