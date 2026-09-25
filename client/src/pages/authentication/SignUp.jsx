@@ -151,11 +151,10 @@ export default function SignUp() {
           {/* Submit */}
           <CustomButton
             type="submit"
+            name={isSubmitting ? "Signing Up..." : "Sign Up"}
             className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Signing Up..." : "Sign Up"}
-          </CustomButton>
+            loading={isSubmitting}
+          />
         </>
       }
       formSubContent={

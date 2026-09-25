@@ -66,7 +66,9 @@ export default function AddEditSkillCategory() {
       reset(data);
       console.log("Skill Category: ", data);
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch skill category" });
+      notify.error({
+        title: error?.message || "Failed to fetch skill category",
+      });
     } finally {
       setLoading(false);
     }
@@ -89,7 +91,9 @@ export default function AddEditSkillCategory() {
       setId(data?._id);
       // console.log("Skill Category Saved: ", data);
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to save skill category" });
+      notify.error({
+        title: error?.message || "Failed to save skill category",
+      });
     }
   };
 
@@ -194,11 +198,10 @@ export default function AddEditSkillCategory() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );

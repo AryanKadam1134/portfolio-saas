@@ -1,4 +1,3 @@
-import React from "react";
 import CustomButton from "../ui/CustomButton";
 
 export default function DeleteItemModal({ func }) {
@@ -11,10 +10,9 @@ export default function DeleteItemModal({ func }) {
       <CustomButton
         onClick={func}
         variant="red"
+        name="Delete"
         className="w-fit self-end text-sm"
-      >
-        Delete
-      </CustomButton>
+      />
     </div>
   );
 }

@@ -414,11 +414,10 @@ export default function Dashboard() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end order-last lg:order-0"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );

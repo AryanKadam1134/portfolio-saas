@@ -141,11 +141,11 @@ export default function Experiences() {
         subHeading="Document your professional journey"
       >
         <CustomButton
+          icon={Plus}
+          name="Add Experience"
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"
-        >
-          <Plus size={18} /> Add Experience
-        </CustomButton>
+        />
       </PageHeader>
 
       <Table

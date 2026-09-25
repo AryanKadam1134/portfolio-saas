@@ -47,22 +47,20 @@ export default function DeleteUserModal({ onConfirm, isDeleting }) {
       {/* Action Buttons */}
       <div className="flex gap-3 justify-end">
         <CustomButton
+          name="Cancel"
           variant="default"
           onClick={closeModal}
           className="text-sm"
-          disabled={isDeleting}
-        >
-          Cancel
-        </CustomButton>
+          loading={isDeleting}
+        />
 
         <CustomButton
-          onClick={onConfirm}
+          name={isDeleting ? "Deleting..." : "Delete Account"}
           variant="red"
+          onClick={onConfirm}
           className="text-sm"
-          disabled={isDeleting}
-        >
-          {isDeleting ? "Deleting..." : "Delete Account"}
-        </CustomButton>
+          loading={isDeleting}
+        />
       </div>
     </div>
   );

@@ -48,7 +48,9 @@ export default function SkillCategories() {
       setPagination(data?.pagination);
       console.log("User Skill Categories: ", data);
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch skill categories" });
+      notify.error({
+        title: error?.message || "Failed to fetch skill categories",
+      });
     } finally {
       setLoading(false);
     }
@@ -64,7 +66,9 @@ export default function SkillCategories() {
       closeModal();
       notify.success({ title: "Category Deleted!" });
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete skill category" });
+      notify.error({
+        title: error?.message || "Failed to delete skill category",
+      });
     } finally {
       setDeleting(false);
     }
@@ -126,11 +130,11 @@ export default function SkillCategories() {
         subHeading="Organize your skills into clear categories"
       >
         <CustomButton
+          icon={Plus}
+          name="Add Skill Category"
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"
-        >
-          <Plus size={18} /> Add Skill Category
-        </CustomButton>
+        />
       </PageHeader>
 
       <Table

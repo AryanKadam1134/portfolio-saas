@@ -311,7 +311,9 @@ export default function AddEditSocialPlatform() {
       reset(data);
       console.log("Social Platform: ", data);
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch social platform" });
+      notify.error({
+        title: error?.message || "Failed to fetch social platform",
+      });
     } finally {
       setLoading(false);
     }
@@ -337,7 +339,9 @@ export default function AddEditSocialPlatform() {
       setId(data?._id);
       // console.log("Social Platform Saved: ", data);
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to save social platform" });
+      notify.error({
+        title: error?.message || "Failed to save social platform",
+      });
     }
   };
 
@@ -497,11 +501,10 @@ export default function AddEditSocialPlatform() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );

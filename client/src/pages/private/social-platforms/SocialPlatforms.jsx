@@ -48,7 +48,9 @@ export default function SocialPlatforms() {
       setPagination(data?.pagination);
       console.log("User Social Platforms: ", data);
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch social platforms" });
+      notify.error({
+        title: error?.message || "Failed to fetch social platforms",
+      });
     } finally {
       setLoading(false);
     }
@@ -64,7 +66,9 @@ export default function SocialPlatforms() {
       closeModal();
       notify.success({ title: "Platform Deleted!" });
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete social platform" });
+      notify.error({
+        title: error?.message || "Failed to delete social platform",
+      });
     } finally {
       setDeleting(false);
     }
@@ -136,11 +140,11 @@ export default function SocialPlatforms() {
         subHeading="Manage your Social Platforms"
       >
         <CustomButton
+          icon={Plus}
+          name="Add Social Platfrom"
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"
-        >
-          <Plus size={18} /> Add Social Platfrom
-        </CustomButton>
+        />
       </PageHeader>
 
       <Table

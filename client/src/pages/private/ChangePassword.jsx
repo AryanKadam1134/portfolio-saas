@@ -166,11 +166,10 @@ export default function ChangePassword() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );

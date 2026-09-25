@@ -146,7 +146,9 @@ export default function AddEditAchievement() {
       fetchAchievement();
       notify.success({ title: "Achievement Images Updated!" });
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to update achievement images" });
+      notify.error({
+        title: error?.message || "Failed to update achievement images",
+      });
     } finally {
       setImagesUploading(false);
     }
@@ -161,7 +163,9 @@ export default function AddEditAchievement() {
       fetchAchievement();
       notify.success({ title: "Achievement Image Deleted!" });
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete achievement image" });
+      notify.error({
+        title: error?.message || "Failed to delete achievement image",
+      });
     } finally {
       setImageDeleting(null);
     }
@@ -420,11 +424,10 @@ export default function AddEditAchievement() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );

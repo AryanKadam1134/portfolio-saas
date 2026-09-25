@@ -138,7 +138,9 @@ export default function AddEditCertificate() {
       fetchCertificate();
       notify.success({ title: "Certificate Image Updated!" });
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to update certificate image" });
+      notify.error({
+        title: error?.message || "Failed to update certificate image",
+      });
     } finally {
       setImagesUploading(false);
     }
@@ -152,7 +154,9 @@ export default function AddEditCertificate() {
       fetchCertificate();
       notify.success({ title: "Certificate Image Deleted!" });
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete certificate image" });
+      notify.error({
+        title: error?.message || "Failed to delete certificate image",
+      });
     } finally {
       setImageDeleting(false);
     }
@@ -466,11 +470,10 @@ export default function AddEditCertificate() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );

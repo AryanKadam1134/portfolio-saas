@@ -119,11 +119,10 @@ export default function ResetPassword() {
           {/* Submit */}
           <CustomButton
             type="submit"
+            name={isSubmitting ? "Saving..." : "Save"}
             className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Saving..." : "Save"}
-          </CustomButton>
+            loading={isSubmitting}
+          />
         </>
       }
     />

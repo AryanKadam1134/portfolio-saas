@@ -105,11 +105,10 @@ export default function SignIn() {
           {/* Submit */}
           <CustomButton
             type="submit"
+            name={isSubmitting ? "Signing In..." : "Sign In"}
             className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Signing In..." : "Sign In"}
-          </CustomButton>
+            loading={isSubmitting}
+          />
         </>
       }
       formSubContent={

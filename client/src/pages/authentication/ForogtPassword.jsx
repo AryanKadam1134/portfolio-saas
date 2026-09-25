@@ -110,17 +110,18 @@ export default function ForogtPassword() {
           {/* Submit */}
           <CustomButton
             type="submit"
+            name={
+              isOtp
+                ? isSubmitting
+                  ? "Verifying..."
+                  : "Verifying OTP"
+                : isSubmitting
+                  ? "Sending..."
+                  : "Send OTP"
+            }
             className="w-full"
-            disabled={isSubmitting}
-          >
-            {isOtp
-              ? isSubmitting
-                ? "Verifying..."
-                : "Verifying OTP"
-              : isSubmitting
-                ? "Sending..."
-                : "Send OTP"}
-          </CustomButton>
+            loading={isSubmitting}
+          />
         </>
       }
     />

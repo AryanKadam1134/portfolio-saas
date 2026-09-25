@@ -179,7 +179,9 @@ export default function AddEditExperiences() {
       notify.success({ title: "Organization Image Updated!" });
       // console.log("Images uploaded successfully!");
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to update organization image" });
+      notify.error({
+        title: error?.message || "Failed to update organization image",
+      });
     } finally {
       setImagesUploading(false);
     }
@@ -194,7 +196,9 @@ export default function AddEditExperiences() {
       notify.success({ title: "Organization Image Deleted!" });
       // console.log("Image deleted successfully!");
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete organization image" });
+      notify.error({
+        title: error?.message || "Failed to delete organization image",
+      });
     } finally {
       setImageDeleting(false);
     }
@@ -474,12 +478,11 @@ export default function AddEditExperiences() {
 
             <CustomButton
               type="button"
+              name="Add Highlight"
               variant="green"
               onClick={handleAppendHighlight}
               className="hidden sm:block"
-            >
-              Add Highlight
-            </CustomButton>
+            />
 
             <ActionButton
               type="button"
@@ -529,12 +532,11 @@ export default function AddEditExperiences() {
 
             <CustomButton
               type="button"
+              name="Add Position"
               variant="green"
               onClick={handleAppendRole}
               className="hidden sm:block"
-            >
-              Add Position
-            </CustomButton>
+            />
 
             <ActionButton
               type="button"
@@ -627,11 +629,10 @@ export default function AddEditExperiences() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );

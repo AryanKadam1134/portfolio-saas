@@ -124,11 +124,11 @@ export default function Educations() {
         subHeading="Manage your academic background"
       >
         <CustomButton
+          icon={Plus}
+          name="Add Education"
           onClick={() => navigate("add")}
           className="self-end flex items-center gap-2"
-        >
-          <Plus size={18} /> Add Education
-        </CustomButton>
+        />
       </PageHeader>
 
       <Table

@@ -112,7 +112,9 @@ export default function AddEditEducation() {
       fetchEducation();
       notify.success({ title: "Institute Image Updated!" });
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to update institute image" });
+      notify.error({
+        title: error?.message || "Failed to update institute image",
+      });
     } finally {
       setImagesUploading(false);
     }
@@ -126,7 +128,9 @@ export default function AddEditEducation() {
       fetchEducation();
       notify.success({ title: "Institute Image Deleted!" });
     } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete institute image" });
+      notify.error({
+        title: error?.message || "Failed to delete institute image",
+      });
     } finally {
       setImageDeleting(false);
     }
@@ -403,11 +407,10 @@ export default function AddEditEducation() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );

@@ -102,7 +102,9 @@ export default function AddEditProject() {
       console.log("Project: ", data);
     } catch (error) {
       console.error("Error fetching Project: ", error);
-      notify.error({ title: error?.message || "Failed to load project details" });
+      notify.error({
+        title: error?.message || "Failed to load project details",
+      });
     } finally {
       setLoading(false);
     }
@@ -161,7 +163,9 @@ export default function AddEditProject() {
       // console.log("Images uploaded successfully!");
     } catch (error) {
       console.error("Error updating Project Images: ", error);
-      notify.error({ title: error?.message || "Failed to upload project images" });
+      notify.error({
+        title: error?.message || "Failed to upload project images",
+      });
     } finally {
       setImagesUploading(false);
     }
@@ -178,7 +182,9 @@ export default function AddEditProject() {
       // console.log("Image deleted successfully!");
     } catch (error) {
       console.error("Error deleting Project Image: ", error);
-      notify.error({ title: error?.message || "Failed to delete project image" });
+      notify.error({
+        title: error?.message || "Failed to delete project image",
+      });
     } finally {
       setImageDeleting(null);
     }
@@ -529,11 +535,10 @@ export default function AddEditProject() {
 
         <CustomButton
           type="submit"
+          name={isSubmitting ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Save"}
-        </CustomButton>
+          loading={isSubmitting}
+        />
       </form>
     </div>
   );
