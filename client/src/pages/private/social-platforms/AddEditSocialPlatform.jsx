@@ -307,6 +307,7 @@ export default function AddEditSocialPlatform() {
       "platformLoading",
       () => socialPlatformEndpoints.getSocialPlatform(id),
       {
+        loading: false,
         onSuccess: (res) => {
           reset(res?.data);
         },
@@ -335,7 +336,7 @@ export default function AddEditSocialPlatform() {
           fetchSocialPlatform();
           notify.success({
             title:
-              res.message ||
+              res?.message ||
               (isEditing ? "Platform Updated!" : "Platform Added!"),
           });
         },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
@@ -16,6 +16,7 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { skillEndpoints } from "../../../services/skill.service";
 
+import useApi from "../../../hooks/useApi";
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -28,6 +29,7 @@ export default function Skills() {
 
   const { skillLevels } = useSkillLevels();
   const { visibilities } = useVisibilities();
+  const { loading, callApi } = useApi({ skillsLoading: true });
 
   const navigate = useNavigate();
 
@@ -35,42 +37,38 @@ export default function Skills() {
     page: 1,
   });
 
-  const [deleting, setDeleting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [skills, setSkills] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const fetchSkills = async () => {
-    try {
-      const res = await skillEndpoints.getSkills(params);
+  const fetchSkills = useCallback(() => {
+    callApi("skillsLoading", () => skillEndpoints.getSkills(params), {
+      onSuccess: (res) => {
+        const data = res.data;
 
-      const data = res.data;
+        setSkills(data?.data);
+        setPagination(data?.pagination);
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to load skills",
+        });
+      },
+    });
+  }, [callApi, notify, params]);
 
-      setSkills(data?.data);
-      setPagination(data?.pagination);
-      console.log("User Skills: ", data);
-    } catch (error) {
-      console.error("Error fetching User Skills: ", error);
-      notify.error({ title: error?.message || "Failed to load skills" });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deleteSkill = async (id) => {
-    setDeleting(true);
-    try {
-      await skillEndpoints.deleteSkill(id);
-
-      fetchSkills();
-      closeModal();
-      notify.success({ title: "Skill Deleted!" });
-    } catch (error) {
-      console.error("Error deleting Skill: ", error);
-      notify.error({ title: error?.message || "Failed to delete skill" });
-    } finally {
-      setDeleting(false);
-    }
+  const deleteSkill = (id) => {
+    callApi("deleting", () => skillEndpoints.deleteSkill(id), {
+      onSuccess: (res) => {
+        fetchSkills();
+        closeModal();
+        notify.success({ title: res?.message || "Skill Deleted!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to delete skill",
+        });
+      },
+    });
   };
 
   const deleteSkillModal = (_id) => {
@@ -84,7 +82,7 @@ export default function Skills() {
 
   useEffect(() => {
     fetchSkills();
-  }, [params?.page]);
+  }, [fetchSkills]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -112,14 +110,14 @@ export default function Skills() {
             icon={FilePenLine}
             variant="green"
             onClick={() => navigate(`${_id}/edit`)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
 
           <ActionButton
             icon={Trash2}
             variant="red"
             onClick={() => deleteSkillModal(_id)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
         </div>,
       ],
@@ -138,7 +136,7 @@ export default function Skills() {
       </PageHeader>
 
       <Table
-        loading={loading}
+        loading={loading.skillsLoading}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />

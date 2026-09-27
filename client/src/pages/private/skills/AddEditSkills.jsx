@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { skillEndpoints } from "../../../services/skill.service";
 
+import useApi from "../../../hooks/useApi";
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCategoriesList from "../../../hooks/useCategoriesList";
@@ -69,19 +70,18 @@ export default function AddEditSkills() {
   const { skillLevels } = useSkillLevels();
   const { visibilities } = useVisibilities();
   const { categoriesList } = useCategoriesList();
+  const { loading, callApi } = useApi({ skillLoading: true });
 
   const { skillId } = useParams();
 
   const [id, setId] = useState(skillId);
-
-  const [loading, setLoading] = useState(true);
 
   const {
     register,
     handleSubmit,
     reset,
     control,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
   } = useForm({
     defaultValues: {
       visibility: "public",
@@ -106,50 +106,54 @@ export default function AddEditSkills() {
     return updated;
   };
 
-  const fetchSkill = async () => {
-    try {
-      const res = await skillEndpoints.getSkill(id);
+  const fetchSkill = useCallback(() => {
+    callApi("skillLoading", () => skillEndpoints.getSkill(id), {
+      loading: false,
+      onSuccess: (res) => {
+        reset(res?.data);
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to load skill details",
+        });
+      },
+    });
+  }, [callApi, notify, id, reset]);
 
-      const data = res.data;
+  const addUpdateSkill = (payload) => {
+    const isEditing = Boolean(id);
+    const updatedData = getUpdatedFields(payload, dirtyFields);
 
-      reset(data);
-      console.log("Skill: ", data);
-    } catch (error) {
-      console.error("Error fetching Skill: ", error);
-      notify.error({ title: error?.message || "Failed to load skill details" });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addUpdateSkill = async (payload) => {
-    try {
-      let res;
-      if (id) {
-        const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await skillEndpoints.updateSkill(id, updatedData);
-        notify.success({ title: "Skill Updated!" });
-      } else {
-        res = await skillEndpoints.addSkill(payload);
-        notify.success({ title: "Skill Saved!" });
-      }
-
-      const data = res.data;
-
-      setId(data?._id);
-      // console.log("Skill Saved: ", data);
-    } catch (error) {
-      console.error("Error saving Skill: ", error);
-      notify.error({ title: error?.message || "Failed to save skill" });
-    }
+    callApi(
+      "updatingSkill",
+      () =>
+        isEditing
+          ? skillEndpoints.updateSkill(id, updatedData)
+          : skillEndpoints.addSkill(payload),
+      {
+        onSuccess: (res) => {
+          setId(res.data?._id);
+          fetchSkill();
+          notify.success({
+            title:
+              res?.message || (isEditing ? "Skill Updated!" : "Skill Added!"),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to save skill",
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (!id) return;
     fetchSkill();
-  }, [id]);
+  }, [fetchSkill, id]);
 
-  if (id && loading) {
+  if (id && loading.skillLoading) {
     return <CommonSkeleton count={6} />;
   }
 
@@ -315,9 +319,9 @@ export default function AddEditSkills() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updatingSkill ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.updatingSkill}
         />
       </form>
     </div>

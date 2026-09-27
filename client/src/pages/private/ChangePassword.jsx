@@ -51,7 +51,7 @@ export default function ChangePassword() {
   };
 
   useEffect(() => {
-    const checkPassword = async () => {
+    const checkPassword = () => {
       callApi("checking", authEndpoints.checkPassword, {
         onSuccess: (res) => {
           const data = res.data;

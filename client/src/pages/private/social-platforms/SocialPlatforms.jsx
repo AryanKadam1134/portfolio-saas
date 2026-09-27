@@ -50,17 +50,17 @@ export default function SocialPlatforms() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to fetch social platforms",
+            title: error?.message || "Failed to load social platforms",
           });
         },
       },
     );
   }, [callApi, notify, params]);
 
-  const deletePlatform = (platformId) => {
+  const deletePlatform = (id) => {
     callApi(
       "deleting",
-      () => socialPlatformEndpoints.deleteSocialPlatform(platformId),
+      () => socialPlatformEndpoints.deleteSocialPlatform(id),
       {
         onSuccess: (res) => {
           fetchSocialPlatforms();
