@@ -36,7 +36,7 @@ const generateAccessAndRefreshToken = async (userId, req) => {
 
   try {
     const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
+    const accessToken = user.generateAccessToken(deviceId);
     const refreshToken = user.generateRefreshToken();
     // console.log("accessToken: ", accessToken);
     // console.log("refreshToken: ", refreshToken);
@@ -177,7 +177,7 @@ const googleAuth = asynchandler(async (req, res) => {
   }
 
   const loggedUser = await User.findById(user._id).select(
-    "-password -sessions",
+    "-password -sessions -googleId -otp -otpExpiryDate",
   );
 
   // ✅ SAME cookie logic as your login
@@ -338,7 +338,7 @@ const loginUser = asynchandler(async (req, res) => {
   }
 
   const loggedUser = await User.findById(userExist?._id).select(
-    "-password -refreshToken -sessions",
+    "-password -sessions -googleId -otp -otpExpiryDate",
   );
 
   if (!loggedUser) {

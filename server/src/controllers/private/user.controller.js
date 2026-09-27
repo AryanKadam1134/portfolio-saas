@@ -96,7 +96,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
       $set: fields,
     },
     { new: true },
-  ).select("-password -refreshToken");
+  ).select("-password -sessions -googleId -otp -otpExpiryDate");
 
   return res
     .status(200)

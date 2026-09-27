@@ -41,14 +41,10 @@ const userSchema = new Schema(
     headline: String,
     about: String,
 
-    mobileNo: {
-      type: Number,
-      required: true,
-    },
+    mobileNo: Number,
 
     gender: {
       type: String,
-      required: true,
       enum: GENDERS.map((g) => g.value),
     },
 
