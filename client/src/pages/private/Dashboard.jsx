@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
 import { Mail, Phone, Link } from "lucide-react";
@@ -17,6 +17,7 @@ import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
 import { userEndpoints } from "../../services/user.service";
 
+import useApi from "../../hooks/useApi";
 import useGenders from "../../hooks/useGenders";
 
 import { useAuth } from "../../context/auth/useAuth";
@@ -27,34 +28,28 @@ export default function Dashboard() {
   const { notify } = useNotify();
 
   const { genders } = useGenders();
+  const { loading, callApi } = useApi({ detailsLoading: true });
 
-  const [detailsLoading, setDetailsLoading] = useState(true);
+  const detailsLoading = loading.detailsLoading;
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
   } = useForm({
-    mode: "onChange", // 🔥 important
+    mode: "onChange",
   });
 
-  const fetchUserDetails = async () => {
-    try {
-      const res = await userEndpoints.getCurrentUser();
-
-      const data = res.data;
-
-      reset(data);
-      setUser(data);
-      // console.log("User Details: ", data);
-    } catch (error) {
-      console.error("Error fetching User Details: ", error);
-      notify.error({ title: error?.message || "Failed to load user details" });
-    } finally {
-      setDetailsLoading(false);
-    }
-  };
+  const fetchUserDetails = useCallback(() => {
+    callApi("detailsLoading", userEndpoints.getCurrentUser, {
+      loading: false,
+      onSuccess: (res) => {
+        reset(res.data);
+        setUser(res.data);
+      },
+    });
+  }, [callApi, reset, setUser]);
 
   const getUpdatedFields = (data, dirtyFields) => {
     const updated = {};
@@ -73,27 +68,25 @@ export default function Dashboard() {
     return updated;
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     const updatedData = getUpdatedFields(data, dirtyFields);
 
-    // console.log("Only Updated Fields:", updatedData);
-
-    try {
-      await userEndpoints.updateUser(updatedData);
-
-      fetchUserDetails();
-      notify.success({ title: "Details Updated!" });
-    } catch (error) {
-      console.error("Error updating User Details: ", error);
-      notify.error({
-        title: error?.message || "Failed to update user details",
-      });
-    }
+    callApi("updating", () => userEndpoints.updateUser(updatedData), {
+      onSuccess: (res) => {
+        fetchUserDetails();
+        notify.success({ title: res?.message || "Details Updated!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to update user details",
+        });
+      },
+    });
   };
 
   useEffect(() => {
     fetchUserDetails();
-  }, []);
+  }, [fetchUserDetails]);
 
   if (detailsLoading) {
     return <UserDetailsSkeleton />;
@@ -284,7 +277,7 @@ export default function Dashboard() {
           id="resumeOrCv"
           label="Resume PDF"
           colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
-          className="order-[98] lg:order-0"
+          className="order-98 lg:order-0"
           required
         >
           <UploadUserResume />
@@ -335,7 +328,7 @@ export default function Dashboard() {
           id="documentUrl"
           label="Resume Link"
           colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          className="order-[99] lg:order-0"
+          className="order-99 lg:order-0"
           error={errors?.documentUrl?.message}
         >
           <CustomInput
@@ -414,9 +407,9 @@ export default function Dashboard() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updating ? "Saving..." : "Save"}
           className="col-span-12 place-self-end order-last lg:order-0"
-          loading={isSubmitting}
+          loading={loading.updating}
         />
       </form>
     </div>

@@ -1,13 +1,35 @@
-import React from "react";
-
 import { AlertTriangle } from "lucide-react";
 
 import CustomButton from "../ui/CustomButton";
 
-import { useModal } from "../../context/modal/useModal";
+import { userEndpoints } from "../../services/user.service";
 
-export default function DeleteUserModal({ onConfirm, isDeleting }) {
+import useApi from "../../hooks/useApi";
+
+import { useAuth } from "../../context/auth/useAuth";
+import { useModal } from "../../context/modal/useModal";
+import { useNotify } from "../../context/notification/useNotify";
+
+export default function DeleteUserModal() {
+  const { setUser } = useAuth();
+  const { notify } = useNotify();
   const { closeModal } = useModal();
+
+  const { loading, callApi } = useApi();
+
+  const deleting = loading.deleting;
+
+  const deleteUser = () => {
+    callApi("deleting", userEndpoints.deleteUser, {
+      onSuccess: () => {
+        setUser(null);
+        closeModal();
+      },
+      onError: (error) => {
+        notify.error({ title: error?.message || "Failed to delete account" });
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -51,15 +73,15 @@ export default function DeleteUserModal({ onConfirm, isDeleting }) {
           variant="default"
           onClick={closeModal}
           className="text-sm"
-          loading={isDeleting}
+          loading={deleting}
         />
 
         <CustomButton
-          name={isDeleting ? "Deleting..." : "Delete Account"}
+          name={deleting ? "Deleting..." : "Delete Account"}
           variant="red"
-          onClick={onConfirm}
+          onClick={deleteUser}
           className="text-sm"
-          loading={isDeleting}
+          loading={deleting}
         />
       </div>
     </div>

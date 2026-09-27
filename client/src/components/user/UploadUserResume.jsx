@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { FileText, Loader, Trash2 } from "lucide-react";
 
 import { userEndpoints } from "../../services/user.service";
+
+import useApi from "../../hooks/useApi";
 
 import { useNotify } from "../../context/notification/useNotify";
 
@@ -11,60 +13,56 @@ import pdfLogo from "../../assets/pdf.svg";
 export default function UploadUserResume() {
   const { notify } = useNotify();
 
+  const { loading, callApi } = useApi();
+
   const fileInputRef = useRef(null);
 
   const [isDragging, setIsDragging] = useState(false);
-  const [resumeLoading, setResumeLoading] = useState(false);
   const [resume, setResume] = useState(null);
+  const resumeLoading =
+    loading.resumeLoading || loading.resumeUploading || loading.resumeDeleting;
 
-  const fetchUserResume = async () => {
-    try {
-      const res = await userEndpoints.getUserResume();
-      const data = res.data;
+  const fetchUserResume = useCallback(() => {
+    callApi("resumeLoading", userEndpoints.getUserResume, {
+      onSuccess: (res) => {
+        setResume(res.data);
+      },
+    });
+  }, [callApi, setResume]);
 
-      setResume(data);
-    } catch (error) {
-      console.error("Error fetching User Image: ", error);
-    }
-  };
-
-  const updateResume = async (e) => {
+  const updateResume = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setResumeLoading(true);
+    const formData = new FormData();
+    formData.append("resumeOrCv", file);
 
-    try {
-      const formData = new FormData();
-      formData.append("resumeOrCv", file);
-
-      await userEndpoints.updateUserResume(formData);
-
-      fetchUserResume();
-      notify.success({ title: "Resume Updated!" });
-    } catch (error) {
-      console.error("Error updating resume:", error);
-      notify.error({ title: error?.message || "Failed to update resume" });
-    } finally {
-      setResumeLoading(false);
-    }
+    callApi("resumeUploading", () => userEndpoints.updateUserResume(formData), {
+      onSuccess: (res) => {
+        fetchUserResume();
+        notify.success({ title: res?.message || "Resume Updated!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to update resume",
+        });
+      },
+    });
   };
 
-  const deleteResume = async () => {
-    setResumeLoading(true);
-
-    try {
-      await userEndpoints.deleteUserResume();
-
-      setResume({});
-      fetchUserResume();
-      notify.success({ title: "Resume Updated!" });
-    } catch (error) {
-      console.error("Error deleting resume:", error);
-      notify.error({ title: error?.message || "Failed to delete resume" });
-    } finally {
-      setResumeLoading(false);
-    }
+  const deleteResume = () => {
+    callApi("resumeDeleting", userEndpoints.deleteUserResume, {
+      onSuccess: (res) => {
+        setResume({});
+        fetchUserResume();
+        notify.success({ title: res?.message || "Resume Deleted!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to delete resume",
+        });
+      },
+    });
   };
 
   const handleDragOver = (e) => {
@@ -94,7 +92,7 @@ export default function UploadUserResume() {
 
   useEffect(() => {
     fetchUserResume();
-  }, []);
+  }, [fetchUserResume]);
 
   return (
     <>

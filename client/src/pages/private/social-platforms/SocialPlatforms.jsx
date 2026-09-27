@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { ExternalLink, FilePenLine, Plus, Trash2 } from "lucide-react";
@@ -16,6 +16,7 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { socialPlatformEndpoints } from "../../../services/socialPlatform.service";
 
+import useApi from "../../../hooks/useApi";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useModal } from "../../../context/modal/useModal";
@@ -26,66 +27,67 @@ export default function SocialPlatforms() {
   const { openModal, closeModal } = useModal();
 
   const { visibilities } = useVisibilities();
+  const { loading, callApi } = useApi({ platformsLoading: true });
 
   const navigate = useNavigate();
 
   const [params, setParams] = useState({
     page: 1,
   });
-
-  const [deleting, setDeleting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [platforms, setPlatforms] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const fetchSocialPlatforms = async () => {
-    try {
-      const res = await socialPlatformEndpoints.getSocialPlatforms(params);
+  const fetchSocialPlatforms = useCallback(() => {
+    callApi(
+      "platformsLoading",
+      () => socialPlatformEndpoints.getSocialPlatforms(params),
+      {
+        onSuccess: (res) => {
+          const data = res.data;
 
-      const data = res.data;
+          setPlatforms(data?.data);
+          setPagination(data?.pagination);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to fetch social platforms",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, params]);
 
-      setPlatforms(data?.data);
-      setPagination(data?.pagination);
-      console.log("User Social Platforms: ", data);
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to fetch social platforms",
-      });
-    } finally {
-      setLoading(false);
-    }
+  const deletePlatform = (platformId) => {
+    callApi(
+      "deleting",
+      () => socialPlatformEndpoints.deleteSocialPlatform(platformId),
+      {
+        onSuccess: (res) => {
+          fetchSocialPlatforms();
+          closeModal();
+          notify.success({ title: res?.message || "Platform Deleted!" });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to delete social platform",
+          });
+        },
+      },
+    );
   };
 
-  const deletePlatform = async (platformId) => {
-    setDeleting(true);
-
-    try {
-      await socialPlatformEndpoints.deleteSocialPlatform(platformId);
-
-      fetchSocialPlatforms();
-      closeModal();
-      notify.success({ title: "Platform Deleted!" });
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to delete social platform",
-      });
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const deletePlatformModal = (_id) => {
+  const deletePlatformModal = (id) => {
     openModal(
       "Delete Platform",
       <Trash2 strokeWidth={3} />,
-      <DeleteItemModal func={() => deletePlatform(_id)} />,
+      <DeleteItemModal func={() => deletePlatform(id)} />,
       "bg-red-500",
     );
   };
 
   useEffect(() => {
     fetchSocialPlatforms();
-  }, [params?.page]);
+  }, [fetchSocialPlatforms]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -119,14 +121,14 @@ export default function SocialPlatforms() {
             icon={FilePenLine}
             variant="green"
             onClick={() => navigate(`${_id}/edit`)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
 
           <ActionButton
             icon={Trash2}
             variant="red"
             onClick={() => deletePlatformModal(_id)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
         </div>,
       ],
@@ -148,7 +150,7 @@ export default function SocialPlatforms() {
       </PageHeader>
 
       <Table
-        loading={loading}
+        loading={loading.platformsLoading}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />

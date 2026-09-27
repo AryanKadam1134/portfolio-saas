@@ -12,10 +12,14 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { authEndpoints } from "../../services/auth.service";
 
+import useApi from "../../hooks/useApi";
+
 import { useNotify } from "../../context/notification/useNotify";
 
 export default function ResetPassword() {
   const { notify } = useNotify();
+
+  const { loading, callApi } = useApi();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,26 +31,28 @@ export default function ResetPassword() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
-    defaultValues: { email },
-    mode: "onChange", // 🔥 important
+    defaultValues: {
+      email,
+    },
+    mode: "onChange",
   });
 
   const newPassword = watch("new_password");
 
-  const onSubmit = async (payload) => {
-    try {
-      const res = await authEndpoints.resetPassword(payload);
-
-      setError(null);
-      navigate("/auth");
-      notify.success({ title: res?.message });
-    } catch (error) {
-      console.error("Reset Password failed: ", error);
-      notify.error({ title: error?.message });
-      setError(error?.message);
-    }
+  const onSubmit = (payload) => {
+    callApi("resetting", () => authEndpoints.resetPassword(payload), {
+      onSuccess: (res) => {
+        setError(null);
+        navigate("/signin");
+        notify.success({ title: res?.message });
+      },
+      onError: (error) => {
+        notify.error({ title: error?.message });
+        setError(error?.message);
+      },
+    });
   };
 
   return (
@@ -119,9 +125,9 @@ export default function ResetPassword() {
           {/* Submit */}
           <CustomButton
             type="submit"
-            name={isSubmitting ? "Saving..." : "Save"}
+            name={loading.resetting ? "Saving..." : "Save"}
             className="w-full"
-            loading={isSubmitting}
+            loading={loading.resetting}
           />
         </>
       }

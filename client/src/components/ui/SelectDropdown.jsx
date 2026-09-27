@@ -137,7 +137,7 @@ export default function SelectDropdown({
             ref={(node) => refs.setFloating(node)}
             style={floatingStyles}
             {...getFloatingProps()}
-            className="z-[10000] flex flex-col overflow-hidden rounded-md border border-light-border-secondary bg-light-bg-primary shadow-md dark:border-dark-border-secondary dark:bg-dark-bg-tertiary"
+            className="z-10000 flex flex-col overflow-hidden rounded-md border border-light-border-secondary bg-light-bg-primary shadow-md dark:border-dark-border-secondary dark:bg-dark-bg-tertiary"
           >
             <div className="relative shrink-0 border-b border-light-border-secondary p-2 dark:border-dark-border-secondary">
               <Search

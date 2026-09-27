@@ -1,4 +1,3 @@
-import { GoogleLogin } from "@react-oauth/google";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LockKeyholeOpen, Mail } from "lucide-react";
@@ -13,6 +12,8 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { authEndpoints } from "../../services/auth.service";
 
+import useApi from "../../hooks/useApi";
+
 import { useAuth } from "../../context/auth/useAuth";
 import { useNotify } from "../../context/notification/useNotify";
 
@@ -20,29 +21,32 @@ export default function SignUp() {
   const { notify } = useNotify();
   const { error, setError } = useAuth();
 
+  const { loading, callApi } = useApi();
+
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
-    mode: "onChange", // 🔥 important
+    mode: "onChange",
   });
 
-  const onSubmit = async (payload) => {
-    try {
-      await authEndpoints.register(payload);
-
-      reset();
-      notify.success({ title: "Account Created Successfully!" });
-      // console.log("User Registered: ", data);
-    } catch (error) {
-      console.error("Login failed: ", error);
-      notify.error({ title: "Registration Failed!" });
-      setError(error?.message);
-    }
+  const onSubmit = (payload) => {
+    callApi("registering", () => authEndpoints.register(payload), {
+      onSuccess: () => {
+        reset();
+        setError(null);
+        notify.success({ title: "Account Created Successfully!" });
+        navigate("/signin");
+      },
+      onError: (error) => {
+        notify.error({ title: "Registration Failed!" });
+        setError(error?.message);
+      },
+    });
   };
 
   return (
@@ -151,9 +155,9 @@ export default function SignUp() {
           {/* Submit */}
           <CustomButton
             type="submit"
-            name={isSubmitting ? "Signing Up..." : "Sign Up"}
+            name={loading.registering ? "Signing Up..." : "Sign Up"}
             className="w-full"
-            loading={isSubmitting}
+            loading={loading.registering}
           />
         </>
       }

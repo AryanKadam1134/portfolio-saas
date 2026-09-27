@@ -1,44 +1,21 @@
-import React, { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 import { FingerprintPattern, LockKeyholeOpen, Trash2 } from "lucide-react";
 
 import PageHeader from "../../components/common/PageHeader";
 import DeleteUserModal from "../../components/settings/DeleteUserModal";
 
-import { userEndpoints } from "../../services/user.service";
-
-import { useAuth } from "../../context/auth/useAuth";
 import { useModal } from "../../context/modal/useModal";
-import { useNotify } from "../../context/notification/useNotify";
 
 export default function Settings() {
-  const { setUser } = useAuth();
-  const { notify } = useNotify();
-  const { openModal, closeModal } = useModal();
+  const { openModal } = useModal();
 
   const navigate = useNavigate();
-
-  const [deleting, setDeleting] = useState(false);
-
-  const deleteUser = async () => {
-    setDeleting(true);
-    try {
-      await userEndpoints.deleteUser();
-      setUser(null);
-      closeModal();
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete account" });
-    } finally {
-      setDeleting(false);
-    }
-  };
 
   const openDeleteConfirmation = () => {
     openModal(
       "Delete Account",
       <Trash2 size={24} />,
-      <DeleteUserModal onConfirm={deleteUser} isDeleting={deleting} />,
+      <DeleteUserModal />,
       "bg-red-500",
     );
   };

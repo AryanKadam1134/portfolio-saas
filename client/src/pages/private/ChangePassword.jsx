@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { LockKeyholeOpen } from "lucide-react";
@@ -12,12 +12,15 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { authEndpoints } from "../../services/auth.service";
 
+import useApi from "../../hooks/useApi";
+
 import { useNotify } from "../../context/notification/useNotify";
 
 export default function ChangePassword() {
   const { notify } = useNotify();
 
-  const [loading, setLoading] = useState(true);
+  const { loading, callApi } = useApi({ checking: true });
+
   const [hasPassword, setHasPassword] = useState();
 
   const {
@@ -25,45 +28,49 @@ export default function ChangePassword() {
     handleSubmit,
     reset,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
-    mode: "onChange", // 🔥 important
+    mode: "onChange",
   });
 
   // Watch password fields for real-time validation
   const newPassword = watch("new_password");
 
-  const changePassword = async (payload) => {
-    try {
-      await authEndpoints.changePassword(payload);
-
-      reset();
-      notify.success({ title: "Password changed successfully!" });
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to change password" });
-    }
+  const changePassword = (payload) => {
+    callApi("changing", () => authEndpoints.changePassword(payload), {
+      onSuccess: (res) => {
+        reset();
+        notify.success({
+          title: res?.message || "Password changed successfully!",
+        });
+      },
+      onError: (error) => {
+        notify.error({ title: error?.message || "Failed to change password" });
+      },
+    });
   };
 
   useEffect(() => {
     const checkPassword = async () => {
-      try {
-        const res = await authEndpoints.checkPassword();
+      callApi("checking", authEndpoints.checkPassword, {
+        onSuccess: (res) => {
+          const data = res.data;
 
-        const data = res.data;
-
-        reset({ isInitializing: !data });
-        setHasPassword(data);
-      } catch (error) {
-        notify.error({ title: error?.message || "Failed to check password" });
-      } finally {
-        setLoading(false);
-      }
+          reset({ isInitializing: !data });
+          setHasPassword(data);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to check password",
+          });
+        },
+      });
     };
 
     checkPassword();
-  }, []);
+  }, [callApi, notify, reset]);
 
-  if (loading) {
+  if (loading.checking) {
     return <CommonSkeleton count={3} />;
   }
 
@@ -166,9 +173,9 @@ export default function ChangePassword() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.changing ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.changing}
         />
       </form>
     </div>

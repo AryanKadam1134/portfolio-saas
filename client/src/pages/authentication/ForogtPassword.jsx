@@ -12,10 +12,14 @@ import CustomButton from "../../components/ui/CustomButton";
 
 import { authEndpoints } from "../../services/auth.service";
 
+import useApi from "../../hooks/useApi";
+
 import { useNotify } from "../../context/notification/useNotify";
 
 export default function ForogtPassword() {
   const { notify } = useNotify();
+
+  const { loading, callApi } = useApi();
 
   const navigate = useNavigate();
 
@@ -25,29 +29,35 @@ export default function ForogtPassword() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
-    mode: "onChange", // 🔥 important
+    mode: "onChange",
   });
 
-  const onSubmit = async (payload) => {
-    try {
-      let res;
-      if (isOtp) {
-        res = await authEndpoints.verifyOTP(payload);
-        navigate("/reset-password", { state: { email: payload?.email } });
-      } else {
-        res = await authEndpoints.forgotPassword(payload);
-        setIsOtp(true);
-      }
+  const onSubmit = (payload) => {
+    callApi(
+      "submitting",
+      () =>
+        isOtp
+          ? authEndpoints.verifyOTP(payload)
+          : authEndpoints.forgotPassword(payload),
+      {
+        onSuccess: (res) => {
+          if (isOtp) {
+            navigate("/reset-password", { state: { email: payload?.email } });
+          } else {
+            setIsOtp(true);
+          }
 
-      setError(null);
-      notify.success({ title: res?.message });
-    } catch (error) {
-      console.error("Forgot Password failed: ", error);
-      notify.error({ title: error?.message });
-      setError(error?.message);
-    }
+          setError(null);
+          notify.success({ title: res?.message });
+        },
+        onError: (error) => {
+          notify.error({ title: error?.message });
+          setError(error?.message);
+        },
+      },
+    );
   };
 
   return (
@@ -112,15 +122,15 @@ export default function ForogtPassword() {
             type="submit"
             name={
               isOtp
-                ? isSubmitting
+                ? loading.submitting
                   ? "Verifying..."
                   : "Verifying OTP"
-                : isSubmitting
+                : loading.submitting
                   ? "Sending..."
                   : "Send OTP"
             }
             className="w-full"
-            loading={isSubmitting}
+            loading={loading.submitting}
           />
         </>
       }

@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Loader, SquarePen, Trash2 } from "lucide-react";
 
 import { userEndpoints } from "../../services/user.service";
+
+import useApi from "../../hooks/useApi";
 
 import { useAuth } from "../../context/auth/useAuth";
 import { useNotify } from "../../context/notification/useNotify";
@@ -13,70 +15,67 @@ export default function UploadUserImage() {
   const { notify } = useNotify();
   const { setUser } = useAuth();
 
+  const { loading, callApi } = useApi();
+
   const [isClicked, setIsClicked] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
-  const [imageLoading, setImageLoading] = useState(false);
+  const imageLoading =
+    loading.imageLoading || loading.imageUploading || loading.imageDeleting;
 
   const imageInputRef = useRef(null);
 
-  const fetchUserImage = async () => {
-    try {
-      const res = await userEndpoints.getUserImage();
-      const image = res.data;
+  const fetchUserImage = useCallback(() => {
+    callApi("imageLoading", userEndpoints.getUserImage, {
+      onSuccess: (res) => {
+        const image = res.data;
 
-      setImageUrl(image?.url);
-      setUser((prev) => ({ ...prev, image }));
-    } catch (error) {
-      console.error("Error fetching User Image: ", error);
-    }
-  };
+        setImageUrl(image?.url);
+        setUser((prev) => ({ ...prev, image }));
+      },
+    });
+  }, [callApi, setUser]);
 
-  const updateProfileImage = async (e) => {
+  const updateProfileImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const previewImageUrl = URL.createObjectURL(file);
     setImageUrl(previewImageUrl);
 
-    setImageLoading(true);
+    const formData = new FormData();
+    formData.append("image", file);
 
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      await userEndpoints.updateUserImage(formData);
-
-      fetchUserImage();
-      notify.success({ title: "Profile Image Updated!" });
-    } catch (error) {
-      setImageUrl(null);
-      console.error("Error updating image:", error);
-      notify.error({ title: error?.message || "Failed to update profile image" });
-    } finally {
-      setImageLoading(false);
-    }
+    callApi("imageUploading", () => userEndpoints.updateUserImage(formData), {
+      onSuccess: (res) => {
+        fetchUserImage();
+        notify.success({ title: res?.message || "Profile Image Updated!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to update profile image",
+        });
+      },
+    });
   };
 
-  const deleteProfileImage = async () => {
-    setImageLoading(true);
-
-    try {
-      await userEndpoints.deleteUserImage();
-
-      setImageUrl(null);
-      fetchUserImage();
-      notify.success({ title: "Profile Image Deleted!" });
-    } catch (error) {
-      console.error("Error deleting image:", error);
-      notify.error({ title: error?.message || "Failed to delete profile image" });
-    } finally {
-      setImageLoading(false);
-    }
+  const deleteProfileImage = () => {
+    callApi("imageDeleting", userEndpoints.deleteUserImage, {
+      onSuccess: (res) => {
+        setImageUrl(null);
+        fetchUserImage();
+        notify.success({ title: res?.message || "Profile Image Deleted!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to delete profile image",
+        });
+      },
+    });
   };
 
   useEffect(() => {
     fetchUserImage();
-  }, []);
+  }, [fetchUserImage]);
 
   useEffect(() => {
     const handleClickOutside = () => setIsClicked(false);

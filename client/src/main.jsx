@@ -31,15 +31,15 @@ export default function AppConfiguration() {
       }}
     >
       <NotificationProvider>
-        <ModalProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <ModalProvider>
             <GoogleOAuthProvider
               clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
             >
               <App />
             </GoogleOAuthProvider>
-          </AuthProvider>
-        </ModalProvider>
+          </ModalProvider>
+        </AuthProvider>
       </NotificationProvider>
     </ConfigProvider>
   );

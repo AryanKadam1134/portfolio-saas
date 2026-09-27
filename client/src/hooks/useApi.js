@@ -1,28 +1,33 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export default function useApi(deafults) {
   const [loading, setLoading] = useState(deafults || {});
 
-  const setLoadingKey = (key, boolean) => {
+  const setLoadingKey = useCallback((key, boolean) => {
     setLoading((prev) => ({ ...prev, [key]: boolean }));
-  };
+  }, []);
 
-  const callApi = async (api, keyName, onSuccess, onError) => {
-    setLoadingKey(keyName, true);
-
-    try {
-      const res = await api();
-
-      if (res.success) {
-        onSuccess(res.data);
+  const callApi = useCallback(
+    async (keyName, api, { loading = true, onSuccess, onError } = {}) => {
+      if (loading) {
+        setLoadingKey(keyName, true);
       }
-    } catch (error) {
-      console.error("Error: ", error);
-      onError(error);
-    } finally {
-      setLoadingKey(keyName, false);
-    }
-  };
+
+      try {
+        const res = await api();
+
+        onSuccess?.(res);
+        return res;
+      } catch (error) {
+        console.error("Error: ", error);
+        onError?.(error);
+        return undefined;
+      } finally {
+        setLoadingKey(keyName, false);
+      }
+    },
+    [setLoadingKey],
+  );
 
   return { loading, callApi };
 }

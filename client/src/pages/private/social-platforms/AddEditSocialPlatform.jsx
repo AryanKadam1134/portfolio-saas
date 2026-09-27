@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
@@ -15,6 +15,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { socialPlatformEndpoints } from "../../../services/socialPlatform.service";
 
+import useApi from "../../../hooks/useApi";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/notification/useNotify";
@@ -263,19 +264,18 @@ export default function AddEditSocialPlatform() {
   const { notify } = useNotify();
 
   const { visibilities } = useVisibilities();
+  const { loading, callApi } = useApi({ platformLoading: true });
 
   const { platformId } = useParams();
 
   const [id, setId] = useState(platformId);
-
-  const [loading, setLoading] = useState(true);
 
   const {
     register,
     handleSubmit,
     reset,
     control,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
   } = useForm({
     defaultValues: {
       visibility: "public",
@@ -302,55 +302,58 @@ export default function AddEditSocialPlatform() {
     return updated;
   };
 
-  const fetchSocialPlatform = async () => {
-    try {
-      const res = await socialPlatformEndpoints.getSocialPlatform(id);
+  const fetchSocialPlatform = useCallback(() => {
+    callApi(
+      "platformLoading",
+      () => socialPlatformEndpoints.getSocialPlatform(id),
+      {
+        onSuccess: (res) => {
+          reset(res?.data);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to fetch social platform",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, id, reset]);
 
-      const data = res.data;
+  const addUpdatePlatform = (payload) => {
+    const isEditing = Boolean(id);
+    const updatedData = getUpdatedFields(payload, dirtyFields);
 
-      reset(data);
-      console.log("Social Platform: ", data);
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to fetch social platform",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addUpdatePlatform = async (payload) => {
-    try {
-      let res;
-      if (id) {
-        const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await socialPlatformEndpoints.updateSocialPlatform(
-          id,
-          updatedData,
-        );
-        notify.success({ title: "Platform Updated!" });
-      } else {
-        res = await socialPlatformEndpoints.addSocialPlatform(payload);
-        notify.success({ title: "Platform Added!" });
-      }
-
-      const data = res.data;
-
-      setId(data?._id);
-      // console.log("Social Platform Saved: ", data);
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to save social platform",
-      });
-    }
+    callApi(
+      "updatingPlatform",
+      () =>
+        isEditing
+          ? socialPlatformEndpoints.updateSocialPlatform(id, updatedData)
+          : socialPlatformEndpoints.addSocialPlatform(payload),
+      {
+        onSuccess: (res) => {
+          setId(res.data?._id);
+          fetchSocialPlatform();
+          notify.success({
+            title:
+              res.message ||
+              (isEditing ? "Platform Updated!" : "Platform Added!"),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to save social platform",
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (!id) return;
     fetchSocialPlatform();
-  }, [id]);
+  }, [fetchSocialPlatform, id]);
 
-  if (id && loading) {
+  if (id && loading.platformLoading) {
     return <CommonSkeleton count={5} />;
   }
 
@@ -501,9 +504,9 @@ export default function AddEditSocialPlatform() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updatingPlatform ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.updatingPlatform}
         />
       </form>
     </div>

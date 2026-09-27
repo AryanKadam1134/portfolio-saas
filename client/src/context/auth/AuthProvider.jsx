@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
 import { authEndpoints } from "../../services/auth.service";
+
+import useApi from "../../hooks/useApi";
 
 import { AuthContext } from "./useAuth";
 
@@ -11,9 +13,11 @@ import { useNotify } from "../notification/useNotify";
 export function AuthProvider({ children }) {
   const { notify } = useNotify();
 
+  const { loading, callApi } = useApi({ authLoading: true });
+
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const authLoading = loading.authLoading;
 
   const [deviceId] = useState(() => {
     let storedDeviceId = localStorage.getItem("deviceId");
@@ -26,87 +30,67 @@ export function AuthProvider({ children }) {
     return storedDeviceId;
   });
 
-  const googleAuth = async (body) => {
-    try {
-      const res = await authEndpoints.googleAuth(body, {
-        headers: {
-          "x-device-id": deviceId,
-        },
-      });
+  const config = useMemo(() => {
+    return {
+      headers: {
+        "x-device-id": deviceId,
+      },
+    };
+  }, [deviceId]);
 
-      const data = res.data;
-
-      if (res?.success) {
-        setUser(data?.user);
-      }
-
-      console.log("Login with Google succesfull:", data);
-    } catch (error) {
-      console.error("Error Login with Google: ", error);
-    }
+  const googleAuth = (body) => {
+    callApi("authLoading", () => authEndpoints.googleAuth(body, config), {
+      onSuccess: (res) => {
+        setUser(res.data?.user);
+        setError(null);
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Google Authentication failed!",
+        });
+        setError(error?.message);
+      },
+    });
   };
 
   const login = async (payload) => {
-    try {
-      const res = await authEndpoints.login(payload, {
-        headers: {
-          "x-device-id": deviceId,
+    const success = await callApi(
+      "authLoading",
+      () => authEndpoints.login(payload, config),
+      {
+        onSuccess: (res) => {
+          setUser(res.data?.user);
+          setError(null);
         },
-      });
-      const data = res.data;
-      const success = res.success;
+        onError: (error) => {
+          notify.error({ title: error?.message || "Login failed!" });
+          setError(error?.message);
+        },
+      },
+    );
 
-      if (success) {
-        setUser(data?.user);
-      }
-
-      setError(null);
-      return success;
-
-      // console.log("Login succesfull:", data);
-    } catch (error) {
-      console.error("Error while login: ", error);
-      notify.error({ title: error?.message || "Login failed!" });
-      setError(error?.message);
-    } finally {
-      setAuthLoading(false);
-    }
+    return success;
   };
 
-  const logout = async () => {
-    try {
-      await authEndpoints.logout();
-      setUser(null);
-    } catch (error) {
-      console.error("Error logging out: ", error);
-    }
+  const logout = () => {
+    callApi("loggingOut", authEndpoints.logout, {
+      onSuccess: () => {
+        setUser(null);
+      },
+    });
   };
 
   useEffect(() => {
-    const restoreSession = async () => {
-      try {
-        const res = await authEndpoints.restoreSession({
-          headers: {
-            "x-device-id": deviceId,
-          },
-        });
-
-        const data = res.data;
-
-        if (res?.success) {
-          setUser(data?.user);
-        }
-
-        console.log("Session restored: ", data);
-      } catch (error) {
-        console.error("Error restoring session: ", error);
-      } finally {
-        setAuthLoading(false);
-      }
+    const restoreSession = () => {
+      callApi("authLoading", () => authEndpoints.restoreSession(config), {
+        onSuccess: (res) => {
+          setUser(res.data?.user);
+        },
+      });
     };
 
     restoreSession();
-  }, [deviceId]);
+  }, [callApi, config, deviceId]);
 
   return (
     <AuthContext.Provider
@@ -114,10 +98,11 @@ export function AuthProvider({ children }) {
         error,
         setError,
         user,
+        setUser,
+        deviceId,
         authLoading,
         googleAuth,
         login,
-        setUser,
         logout,
       }}
     >
