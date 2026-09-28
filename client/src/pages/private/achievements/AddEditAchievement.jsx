@@ -19,6 +19,7 @@ import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDateInISO } from "../../../utils/formatDate";
+import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 
 import { achievementEndpoints } from "../../../services/achievement.service";
 
@@ -60,23 +61,6 @@ export default function AddEditAchievement() {
   const achievementImages = useWatch({ control, name: "achievementImages" });
   const coverImageIndex = useWatch({ control, name: "coverImageIndex" });
   const link = useWatch({ control, name: "link" });
-
-  const getUpdatedFields = (data, dirtyFields) => {
-    const updated = {};
-
-    for (const key in dirtyFields) {
-      if (
-        typeof dirtyFields[key] === "object" &&
-        !Array.isArray(dirtyFields[key])
-      ) {
-        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
-      } else {
-        updated[key] = data[key];
-      }
-    }
-
-    return updated;
-  };
 
   const fetchAchievement = useCallback(() => {
     callApi(

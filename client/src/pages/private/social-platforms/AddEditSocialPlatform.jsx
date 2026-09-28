@@ -13,6 +13,8 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
+import { getUpdatedFields } from "../../../utils/getUpdatedFields";
+
 import { socialPlatformEndpoints } from "../../../services/socialPlatform.service";
 
 import useApi from "../../../hooks/useApi";
@@ -284,23 +286,6 @@ export default function AddEditSocialPlatform() {
   });
 
   const platformLink = useWatch({ control, name: "link" });
-
-  const getUpdatedFields = (data, dirtyFields) => {
-    const updated = {};
-
-    for (const key in dirtyFields) {
-      if (
-        typeof dirtyFields[key] === "object" &&
-        !Array.isArray(dirtyFields[key])
-      ) {
-        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
-      } else {
-        updated[key] = data[key];
-      }
-    }
-
-    return updated;
-  };
 
   const fetchSocialPlatform = useCallback(() => {
     callApi(

@@ -14,6 +14,8 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomCheckbox from "../../../components/ui/CustomCheckbox";
 import CustomTextArea from "../../../components/ui/CustomTextArea";
 
+import { getUpdatedFields } from "../../../utils/getUpdatedFields";
+
 import { educationEndpoints } from "../../../services/education.service";
 
 import useApi from "../../../hooks/useApi";
@@ -40,23 +42,6 @@ export default function AddEditEducation() {
 
   const instituteImage = useWatch({ control, name: "instituteImage" });
   const startYear = watch("startYear");
-
-  const getUpdatedFields = (data, dirtyFields) => {
-    const updated = {};
-
-    for (const key in dirtyFields) {
-      if (
-        typeof dirtyFields[key] === "object" &&
-        !Array.isArray(dirtyFields[key])
-      ) {
-        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
-      } else {
-        updated[key] = data[key];
-      }
-    }
-
-    return updated;
-  };
 
   const fetchEducation = useCallback(() => {
     callApi("educationLoading", () => educationEndpoints.getEducation(id), {

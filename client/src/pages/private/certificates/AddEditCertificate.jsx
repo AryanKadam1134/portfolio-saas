@@ -20,6 +20,7 @@ import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDateInISO } from "../../../utils/formatDate";
+import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 
 import { certificateEndpoints } from "../../../services/certificate.service";
 
@@ -60,23 +61,6 @@ export default function AddEditCertificate() {
   const certificateImage = useWatch({ control, name: "certificateImage" });
   const issueDate = watch("issueDate");
   const expiryDate = watch("expiryDate");
-
-  const getUpdatedFields = (data, dirtyFields) => {
-    const updated = {};
-
-    for (const key in dirtyFields) {
-      if (
-        typeof dirtyFields[key] === "object" &&
-        !Array.isArray(dirtyFields[key])
-      ) {
-        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
-      } else {
-        updated[key] = data[key];
-      }
-    }
-
-    return updated;
-  };
 
   const fetchCertificate = useCallback(() => {
     callApi(

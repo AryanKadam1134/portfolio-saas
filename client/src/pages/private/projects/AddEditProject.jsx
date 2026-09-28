@@ -21,6 +21,7 @@ import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDateInISO } from "../../../utils/formatDate";
+import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 
 import { projectEndpoints } from "../../../services/project.service";
 
@@ -68,23 +69,6 @@ export default function AddEditProject() {
   const liveLink = useWatch({ control, name: "liveLink" });
   const startDate = watch("startDate");
   const endDate = watch("endDate");
-
-  const getUpdatedFields = (data, dirtyFields) => {
-    const updated = {};
-
-    for (const key in dirtyFields) {
-      if (
-        typeof dirtyFields[key] === "object" &&
-        !Array.isArray(dirtyFields[key])
-      ) {
-        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
-      } else {
-        updated[key] = data[key];
-      }
-    }
-
-    return updated;
-  };
 
   const fetchProject = useCallback(() => {
     callApi("projectLoading", () => projectEndpoints.getProject(id), {

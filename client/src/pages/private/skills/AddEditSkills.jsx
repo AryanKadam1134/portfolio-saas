@@ -12,6 +12,8 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
+import { getUpdatedFields } from "../../../utils/getUpdatedFields";
+
 import { skillEndpoints } from "../../../services/skill.service";
 
 import useApi from "../../../hooks/useApi";
@@ -88,23 +90,6 @@ export default function AddEditSkills() {
     },
     mode: "onChange",
   });
-
-  const getUpdatedFields = (data, dirtyFields) => {
-    const updated = {};
-
-    for (const key in dirtyFields) {
-      if (
-        typeof dirtyFields[key] === "object" &&
-        !Array.isArray(dirtyFields[key])
-      ) {
-        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
-      } else {
-        updated[key] = data[key];
-      }
-    }
-
-    return updated;
-  };
 
   const fetchSkill = useCallback(() => {
     callApi("skillLoading", () => skillEndpoints.getSkill(id), {

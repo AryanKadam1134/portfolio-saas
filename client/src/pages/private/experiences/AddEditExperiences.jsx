@@ -21,6 +21,7 @@ import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDateInISO } from "../../../utils/formatDate";
+import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 
 import { experienceEndpoints } from "../../../services/experience.service";
 
@@ -93,23 +94,6 @@ export default function AddEditExperiences() {
 
   const handleAppendRole = () => {
     append({ role: "", startDate: "", endDate: "", isCurrent: false });
-  };
-
-  const getUpdatedFields = (data, dirtyFields) => {
-    const updated = {};
-
-    for (const key in dirtyFields) {
-      if (
-        typeof dirtyFields[key] === "object" &&
-        !Array.isArray(dirtyFields[key])
-      ) {
-        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
-      } else {
-        updated[key] = data[key];
-      }
-    }
-
-    return updated;
   };
 
   const fetchExperience = useCallback(() => {

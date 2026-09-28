@@ -15,6 +15,8 @@ import CustomButton from "../../components/ui/CustomButton";
 import CustomTextArea from "../../components/ui/CustomTextArea";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
+import { getUpdatedFields } from "../../utils/getUpdatedFields";
+
 import { userEndpoints } from "../../services/user.service";
 
 import useApi from "../../hooks/useApi";
@@ -50,23 +52,6 @@ export default function Dashboard() {
       },
     });
   }, [callApi, reset, setUser]);
-
-  const getUpdatedFields = (data, dirtyFields) => {
-    const updated = {};
-
-    for (const key in dirtyFields) {
-      if (
-        typeof dirtyFields[key] === "object" &&
-        !Array.isArray(dirtyFields[key])
-      ) {
-        updated[key] = getUpdatedFields(data[key], dirtyFields[key]);
-      } else {
-        updated[key] = data[key];
-      }
-    }
-
-    return updated;
-  };
 
   const onSubmit = (data) => {
     const updatedData = getUpdatedFields(data, dirtyFields);
