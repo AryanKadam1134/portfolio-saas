@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
@@ -15,6 +15,8 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { educationEndpoints } from "../../../services/education.service";
 
+import useApi from "../../../hooks/useApi";
+
 import { useModal } from "../../../context/modal/useModal";
 import { useNotify } from "../../../context/notification/useNotify";
 
@@ -22,61 +24,64 @@ export default function Educations() {
   const { notify } = useNotify();
   const { openModal, closeModal } = useModal();
 
+  const { loading, callApi } = useApi({ educationsLoading: true });
+
   const navigate = useNavigate();
 
   const [params, setParams] = useState({
     page: 1,
   });
 
-  const [deleting, setDeleting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [educations, setEducations] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const fetchEducations = async () => {
-    try {
-      const res = await educationEndpoints.getEducations(params);
+  const fetchEducations = useCallback(() => {
+    callApi(
+      "educationsLoading",
+      () => educationEndpoints.getEducations(params),
+      {
+        onSuccess: (res) => {
+          const data = res.data;
 
-      const data = res.data;
+          setEducations(data?.data);
+          setPagination(data?.pagination);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to load educations",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, params]);
 
-      setEducations(data?.data);
-      setPagination(data?.pagination);
-      console.log("User Educations: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch educations" });
-    } finally {
-      setLoading(false);
-    }
+  const deleteEducation = (id) => {
+    callApi("deleting", () => educationEndpoints.deleteEducation(id), {
+      onSuccess: (res) => {
+        fetchEducations();
+        closeModal();
+        notify.success({ title: res?.message || "Education Deleted!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to delete education",
+        });
+      },
+    });
   };
 
-  const deleteEducation = async (educationId) => {
-    setDeleting(true);
-
-    try {
-      await educationEndpoints.deleteEducation(educationId);
-
-      fetchEducations();
-      closeModal();
-      notify.success({ title: "Education Deleted!" });
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete education" });
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const deleteEducationModal = (_id) => {
+  const deleteEducationModal = (id) => {
     openModal(
       "Delete Education",
       <Trash2 strokeWidth={3} />,
-      <DeleteItemModal func={() => deleteEducation(_id)} />,
+      <DeleteItemModal func={() => deleteEducation(id)} />,
       "bg-red-500",
     );
   };
 
   useEffect(() => {
     fetchEducations();
-  }, [params?.page]);
+  }, [fetchEducations]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -103,14 +108,14 @@ export default function Educations() {
             icon={FilePenLine}
             variant="green"
             onClick={() => navigate(`${_id}/edit`)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
 
           <ActionButton
             icon={Trash2}
             variant="red"
             onClick={() => deleteEducationModal(_id)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
         </div>,
       ],
@@ -132,7 +137,7 @@ export default function Educations() {
       </PageHeader>
 
       <Table
-        loading={loading}
+        loading={loading.educationsLoading}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />

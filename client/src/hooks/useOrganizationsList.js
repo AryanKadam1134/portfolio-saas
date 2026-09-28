@@ -2,28 +2,23 @@ import React, { useState, useEffect } from "react";
 
 import { filterEndpoints } from "../services/filter.service";
 
+import useApi from "./useApi";
+
 export default function useOrganizationsList() {
-  const [organiaztionsLoading, setLoading] = useState(true);
+  const { loading, callApi } = useApi({ organiaztionsLoading: true });
+
   const [organizationsList, setOrganizationsList] = useState([]);
 
-  const fetchOrganizationsList = async () => {
-    try {
-      const res = await filterEndpoints.getOrganizationsList();
-
-      const data = res.data;
-
-      setOrganizationsList(data);
-      // console.log("Organizations List: ", data);
-    } catch (error) {
-      console.error("Error fetching Organizations List: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchOrganizationsList();
-  }, []);
+    callApi("organiaztionsLoading", filterEndpoints.getOrganizationsList, {
+      onSuccess: (res) => {
+        setOrganizationsList(res.data);
+      },
+    });
+  }, [callApi]);
 
-  return { organiaztionsLoading, organizationsList };
+  return {
+    organiaztionsLoading: loading.organiaztionsLoading,
+    organizationsList,
+  };
 }

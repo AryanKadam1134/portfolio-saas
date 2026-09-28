@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { skillCategoryEndpoints } from "../../../services/skillCategory.service";
 
+import useApi from "../../../hooks/useApi";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/notification/useNotify";
@@ -21,18 +22,17 @@ export default function AddEditSkillCategory() {
   const { notify } = useNotify();
 
   const { visibilities } = useVisibilities();
+  const { loading, callApi } = useApi({ categoryLoading: true });
 
   const { categoryId } = useParams();
 
   const [id, setId] = useState(categoryId);
 
-  const [loading, setLoading] = useState(true);
-
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
   } = useForm({
     defaultValues: {
       visibility: "public",
@@ -57,52 +57,59 @@ export default function AddEditSkillCategory() {
     return updated;
   };
 
-  const fetchSkillCategory = async () => {
-    try {
-      const res = await skillCategoryEndpoints.getSkillCategory(id);
+  const fetchSkillCategory = useCallback(() => {
+    callApi(
+      "categoryLoading",
+      () => skillCategoryEndpoints.getSkillCategory(id),
+      {
+        loading: false,
+        onSuccess: (res) => {
+          reset(res?.data);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to load category details",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, id, reset]);
 
-      const data = res.data;
+  const addUpdateSkillCategory = (payload) => {
+    const isEditing = Boolean(id);
+    const updatedData = getUpdatedFields(payload, dirtyFields);
 
-      reset(data);
-      console.log("Skill Category: ", data);
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to fetch skill category",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addUpdateSkillCategory = async (payload) => {
-    try {
-      let res;
-      if (id) {
-        const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await skillCategoryEndpoints.updateSkillCategory(id, updatedData);
-        notify.success({ title: "Category Updated!" });
-      } else {
-        res = await skillCategoryEndpoints.addSkillCategory(payload);
-        notify.success({ title: "Category Saved!" });
-      }
-
-      const data = res.data;
-
-      setId(data?._id);
-      // console.log("Skill Category Saved: ", data);
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to save skill category",
-      });
-    }
+    callApi(
+      "updating",
+      () =>
+        isEditing
+          ? skillCategoryEndpoints.updateSkillCategory(id, updatedData)
+          : skillCategoryEndpoints.addSkillCategory(payload),
+      {
+        onSuccess: (res) => {
+          setId(res.data?._id);
+          fetchSkillCategory();
+          notify.success({
+            title:
+              res?.message ||
+              (isEditing ? "Category Updated!" : "Category Added!"),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to save category",
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (!id) return;
     fetchSkillCategory();
-  }, [id]);
+  }, [fetchSkillCategory, id]);
 
-  if (id && loading) {
+  if (id && loading.categoryLoading) {
     return <CommonSkeleton count={4} />;
   }
 
@@ -198,9 +205,9 @@ export default function AddEditSkillCategory() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updating ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.updating}
         />
       </form>
     </div>

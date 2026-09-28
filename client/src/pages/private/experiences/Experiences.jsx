@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
@@ -16,6 +16,7 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { experienceEndpoints } from "../../../services/experience.service";
 
+import useApi from "../../../hooks/useApi";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
 import useLocationTypesList from "../../../hooks/useLocationTypesList";
@@ -30,6 +31,7 @@ export default function Experiences() {
   const { visibilities } = useVisibilities();
   const { employmentTypes } = useEmploymentTypes();
   const { locationTypesList } = useLocationTypesList();
+  const { loading, callApi } = useApi({ experiencesLoading: true });
 
   const navigate = useNavigate();
 
@@ -37,55 +39,56 @@ export default function Experiences() {
     page: 1,
   });
 
-  const [deleting, setDeleting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [experiences, setExperiences] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const fetchExperiences = async () => {
-    try {
-      const res = await experienceEndpoints.getExperiences(params);
+  const fetchExperiences = useCallback(() => {
+    callApi(
+      "experiencesLoading",
+      () => experienceEndpoints.getExperiences(params),
+      {
+        onSuccess: (res) => {
+          const data = res.data;
 
-      const data = res.data;
+          setExperiences(data?.data);
+          setPagination(data?.pagination);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to load experiences",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, params]);
 
-      setExperiences(data?.data);
-      setPagination(data?.pagination);
-      // console.log("User Experiences: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch experiences" });
-    } finally {
-      setLoading(false);
-    }
+  const deleteExperience = (id) => {
+    callApi("deleting", () => experienceEndpoints.deleteExperience(id), {
+      onSuccess: (res) => {
+        fetchExperiences();
+        closeModal();
+        notify.success({ title: res?.message || "Experience Deleted!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to delete experience",
+        });
+      },
+    });
   };
 
-  const deleteExperience = async (experienceId) => {
-    setDeleting(true);
-
-    try {
-      await experienceEndpoints.deleteExperience(experienceId);
-
-      fetchExperiences();
-      closeModal();
-      notify.success({ title: "Experience Deleted!" });
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete experience" });
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const deleteExperienceModal = (_id) => {
+  const deleteExperienceModal = (id) => {
     openModal(
       "Delete Experience",
       <Trash2 strokeWidth={3} />,
-      <DeleteItemModal func={() => deleteExperience(_id)} />,
+      <DeleteItemModal func={() => deleteExperience(id)} />,
       "bg-red-500",
     );
   };
 
   useEffect(() => {
     fetchExperiences();
-  }, [params?.page]);
+  }, [fetchExperiences]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -120,14 +123,14 @@ export default function Experiences() {
             icon={FilePenLine}
             variant="green"
             onClick={() => navigate(`${_id}/edit`)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
 
           <ActionButton
             icon={Trash2}
             variant="red"
             onClick={() => deleteExperienceModal(_id)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
         </div>,
       ],
@@ -149,7 +152,7 @@ export default function Experiences() {
       </PageHeader>
 
       <Table
-        loading={loading}
+        loading={loading.experiencesLoading}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />

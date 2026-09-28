@@ -60,6 +60,8 @@ export default function ForogtPassword() {
     );
   };
 
+  const submitting = loading.submitting;
+
   return (
     <Authentication
       heading="Forgot Password"
@@ -122,15 +124,15 @@ export default function ForogtPassword() {
             type="submit"
             name={
               isOtp
-                ? loading.submitting
+                ? submitting
                   ? "Verifying..."
                   : "Verifying OTP"
-                : loading.submitting
+                : submitting
                   ? "Sending..."
                   : "Send OTP"
             }
             className="w-full"
-            loading={loading.submitting}
+            loading={submitting}
           />
         </>
       }

@@ -2,28 +2,23 @@ import React, { useState, useEffect } from "react";
 
 import { filterEndpoints } from "../services/filter.service";
 
+import useApi from "./useApi";
+
 export default function useEmploymentTypes() {
-  const [employemntTypesLoading, setLoading] = useState(true);
+  const { loading, callApi } = useApi({ employemntTypesLoading: true });
+
   const [employmentTypes, setEmploymentTypes] = useState([]);
 
-  const fetchEmploymentTypes = async () => {
-    try {
-      const res = await filterEndpoints.getEmploymentTypes();
-
-      const data = res.data;
-
-      setEmploymentTypes(data);
-      // console.log("Employment Types: ", data);
-    } catch (error) {
-      console.error("Error fetching Employment Types: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchEmploymentTypes();
-  }, []);
+    callApi("employemntTypesLoading", filterEndpoints.getEmploymentTypes, {
+      onSuccess: (res) => {
+        setEmploymentTypes(res.data);
+      },
+    });
+  }, [callApi]);
 
-  return { employemntTypesLoading, employmentTypes };
+  return {
+    employemntTypesLoading: loading.employemntTypesLoading,
+    employmentTypes,
+  };
 }

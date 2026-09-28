@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
@@ -24,6 +24,7 @@ import { formatDateInISO } from "../../../utils/formatDate";
 
 import { experienceEndpoints } from "../../../services/experience.service";
 
+import useApi from "../../../hooks/useApi";
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
@@ -38,22 +39,18 @@ export default function AddEditExperiences() {
   const { visibilities } = useVisibilities();
   const { employmentTypes } = useEmploymentTypes();
   const { locationTypesList } = useLocationTypesList();
+  const { loading, callApi } = useApi({ experienceLoading: true });
 
   const { experienceId } = useParams();
 
   const [id, setId] = useState(experienceId);
-
-  const [loading, setLoading] = useState(true);
-
-  const [imagesUploading, setImagesUploading] = useState(false);
-  const [imageDeleting, setImageDeleting] = useState(false);
 
   const {
     register,
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
   } = useForm({
     defaultValues: {
       sortOrder: 0,
@@ -115,101 +112,110 @@ export default function AddEditExperiences() {
     return updated;
   };
 
-  const fetchExperience = async () => {
-    try {
-      const res = await experienceEndpoints.getExperience(id);
+  const fetchExperience = useCallback(() => {
+    callApi("experienceLoading", () => experienceEndpoints.getExperience(id), {
+      loading: false,
+      onSuccess: (res) => {
+        const data = res.data;
 
-      const data = res.data;
+        reset({
+          ...data,
+          positions: data?.positions?.map((pos) => ({
+            ...pos,
+            startDate: formatDateInISO(pos?.startDate),
+            endDate: formatDateInISO(pos?.endDate),
+          })),
+          highlights: data?.highlights || [""],
+        });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to load experience",
+        });
+      },
+    });
+  }, [callApi, notify, id, reset]);
 
-      reset({
-        ...data,
-        positions: data?.positions?.map((pos) => ({
-          ...pos,
-          startDate: formatDateInISO(pos?.startDate),
-          endDate: formatDateInISO(pos?.endDate),
-        })),
-        highlights: data?.highlights || [""],
-      });
-      console.log("Experience: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch experience" });
-    } finally {
-      setLoading(false);
-    }
+  const addUpdateExperience = (payload) => {
+    const isEditing = Boolean(id);
+    const updatedData = getUpdatedFields(payload, dirtyFields);
+    updatedData.highlights = payload.highlights;
+
+    callApi(
+      "updatingExperience",
+      () =>
+        isEditing
+          ? experienceEndpoints.updateExperience(id, updatedData)
+          : experienceEndpoints.addExperience(payload),
+      {
+        onSuccess: (res) => {
+          setId(res.data?._id);
+          fetchExperience();
+          notify.success({
+            title:
+              res?.message ||
+              (isEditing ? "Experience Updated!" : "Experience Added!"),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to save experience",
+          });
+        },
+      },
+    );
   };
 
-  const addUpdateExperience = async (payload) => {
-    console.log("paylaod: ", payload);
-    try {
-      let res;
-      if (id) {
-        const updatedData = getUpdatedFields(payload, dirtyFields);
-        updatedData.highlights = payload.highlights;
-
-        res = await experienceEndpoints.updateExperience(id, updatedData);
-        notify.success({ title: "Experience Updated!" });
-      } else {
-        res = await experienceEndpoints.addExperience(payload);
-        notify.success({ title: "Experience Saved!" });
-      }
-
-      const data = res.data;
-
-      setId(data?._id);
-      // console.log("Experience Saved: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to save experience" });
-    }
-  };
-
-  // Can uplaod multiple
-  const updateOrganizationImage = async (files) => {
+  const updateOrganizationImage = (files) => {
     const file = files[0];
+    const formData = new FormData();
+    formData.append("organizationImage", file);
 
-    setImagesUploading(true);
-
-    try {
-      const formData = new FormData();
-
-      formData.append("organizationImage", file);
-
-      await experienceEndpoints.updateOrganizationImage(id, formData);
-
-      fetchExperience();
-      notify.success({ title: "Organization Image Updated!" });
-      // console.log("Images uploaded successfully!");
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to update organization image",
-      });
-    } finally {
-      setImagesUploading(false);
-    }
+    callApi(
+      "uploadingImage",
+      () => experienceEndpoints.updateOrganizationImage(id, formData),
+      {
+        onSuccess: (res) => {
+          fetchExperience();
+          notify.success({
+            title: res?.message || "Organization Images Updated!",
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to upload organization images",
+          });
+        },
+      },
+    );
   };
 
-  const deleteOrganizationImage = async () => {
-    setImageDeleting(true);
-    try {
-      await experienceEndpoints.deleteOrganizationImage(id);
-
-      fetchExperience();
-      notify.success({ title: "Organization Image Deleted!" });
-      // console.log("Image deleted successfully!");
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to delete organization image",
-      });
-    } finally {
-      setImageDeleting(false);
-    }
+  const deleteOrganizationImage = () => {
+    callApi(
+      "imageDeleting",
+      () => experienceEndpoints.deleteOrganizationImage(id),
+      {
+        onSuccess: (res) => {
+          fetchExperience();
+          notify.success({
+            title: res?.message || "Organization Image Deleted!",
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to delete organization image",
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (!id) return;
     fetchExperience();
-  }, [id]);
+  }, [fetchExperience, id]);
 
-  if (id && loading) {
+  if (id && loading.experienceLoading) {
     return <CommonSkeleton count={9} />;
   }
 
@@ -239,7 +245,7 @@ export default function AddEditExperiences() {
               <DragDropUpload
                 id="upload"
                 accept="image/*"
-                loading={imagesUploading}
+                loading={loading.uploadingImage}
                 onChange={(files) => updateOrganizationImage(files)}
               />
             </FormField>
@@ -251,7 +257,7 @@ export default function AddEditExperiences() {
             >
               <CoverImage
                 image={organizationImage}
-                imageDeleting={imageDeleting}
+                imageDeleting={loading.imageDeleting}
                 deleteImage={deleteOrganizationImage}
               />
             </FormField>
@@ -629,9 +635,9 @@ export default function AddEditExperiences() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updatingExperience ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.updatingExperience}
         />
       </form>
     </div>

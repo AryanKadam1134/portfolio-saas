@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
@@ -24,6 +24,7 @@ import { formatDateInISO } from "../../../utils/formatDate";
 
 import { projectEndpoints } from "../../../services/project.service";
 
+import useApi from "../../../hooks/useApi";
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useOrganizationsList from "../../../hooks/useOrganizationsList";
@@ -38,14 +39,11 @@ export default function AddEditProject() {
   const { visibilities } = useVisibilities();
   const { organizationsList } = useOrganizationsList();
   const { projectCategoriesList } = useProjectCategoriesList();
+  const { loading, callApi } = useApi({ projectLoading: true });
 
   const { projectId } = useParams();
 
   const [id, setId] = useState(projectId);
-
-  const [loading, setLoading] = useState(true);
-
-  const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(null);
 
   const {
@@ -53,7 +51,7 @@ export default function AddEditProject() {
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
     setValue,
     watch,
   } = useForm({
@@ -88,114 +86,128 @@ export default function AddEditProject() {
     return updated;
   };
 
-  const fetchProject = async () => {
-    try {
-      const res = await projectEndpoints.getProject(id);
+  const fetchProject = useCallback(() => {
+    callApi("projectLoading", () => projectEndpoints.getProject(id), {
+      loading: false,
+      onSuccess: (res) => {
+        const data = res.data;
 
-      const data = res.data;
+        reset({
+          ...data,
+          startDate: formatDateInISO(data?.startDate),
+          endDate: formatDateInISO(data?.endDate),
+        });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to load project details",
+        });
+      },
+    });
+  }, [callApi, notify, id, reset]);
 
-      reset({
-        ...data,
-        startDate: formatDateInISO(data?.startDate),
-        endDate: formatDateInISO(data?.endDate),
-      });
-      console.log("Project: ", data);
-    } catch (error) {
-      console.error("Error fetching Project: ", error);
-      notify.error({
-        title: error?.message || "Failed to load project details",
-      });
-    } finally {
-      setLoading(false);
-    }
+  const addUpdateProject = (payload) => {
+    const isEditing = Boolean(id);
+    const updatedData = getUpdatedFields(payload, dirtyFields);
+
+    callApi(
+      "updatingProject",
+      () =>
+        isEditing
+          ? projectEndpoints.updateProject(id, updatedData)
+          : projectEndpoints.addProject(payload),
+      {
+        onSuccess: (res) => {
+          setId(res.data?._id);
+          fetchProject();
+          notify.success({
+            title:
+              res?.message ||
+              (isEditing ? "Project Updated!" : "Project Added!"),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to save project",
+          });
+        },
+      },
+    );
   };
 
-  const addUpdateProject = async (payload) => {
-    try {
-      let res;
-      if (id) {
-        const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await projectEndpoints.updateProject(id, updatedData);
-        notify.success({ title: "Project Updated!" });
-      } else {
-        res = await projectEndpoints.addProject(payload);
-        notify.success({ title: "Project Saved!" });
-      }
-
-      const data = res.data;
-
-      setId(data?._id);
-      // console.log("Project Saved: ", data);
-    } catch (error) {
-      console.error("Error saving Project: ", error);
-      notify.error({ title: error?.message || "Failed to save project" });
-    }
-  };
-
-  const handleCoverChange = async (idx) => {
-    try {
-      await projectEndpoints.updateProject(id, {
-        coverImageIndex: idx,
-      });
-
-      setValue("coverImageIndex", idx, { shouldDirty: true });
-      notify.success({ title: "Cover Image Changed!" });
-    } catch (err) {
-      console.error(err);
-      notify.error({ title: err?.message || "Failed to change cover image" });
-    }
+  const handleCoverChange = (idx) => {
+    callApi(
+      "updatingCoverImage",
+      () =>
+        projectEndpoints.updateProject(id, {
+          coverImageIndex: idx,
+        }),
+      {
+        onSuccess: (res) => {
+          setValue("coverImageIndex", idx, { shouldDirty: true });
+          notify.success({ title: res?.message || "Cover Image Changed!" });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to change cover image",
+          });
+        },
+      },
+    );
   };
 
   // Can uplaod multiple
-  const updateProjectImage = async (files) => {
-    setImagesUploading(true);
+  const updateProjectImage = (files) => {
+    const formData = new FormData();
+    Array.from(files).forEach((file) => {
+      formData.append("projectImages", file);
+    });
 
-    try {
-      const formData = new FormData();
-      Array.from(files).forEach((file) => {
-        formData.append("projectImages", file);
-      });
-
-      await projectEndpoints.updateProjectImage(id, formData);
-
-      fetchProject();
-      notify.success({ title: "Project Images Updated!" });
-      // console.log("Images uploaded successfully!");
-    } catch (error) {
-      console.error("Error updating Project Images: ", error);
-      notify.error({
-        title: error?.message || "Failed to upload project images",
-      });
-    } finally {
-      setImagesUploading(false);
-    }
+    callApi(
+      "uploadingImages",
+      () => projectEndpoints.updateProjectImage(id, formData),
+      {
+        onSuccess: (res) => {
+          fetchProject();
+          notify.success({ title: res?.message || "Project Images Updated!" });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to upload project images",
+          });
+        },
+      },
+    );
   };
 
-  const deleteProjectImage = async (imagePublicId) => {
+  const deleteProjectImage = (imagePublicId) => {
     setImageDeleting(imagePublicId);
 
-    try {
-      await projectEndpoints.deleteProjectImage(id, imagePublicId);
-
-      fetchProject();
-      notify.success({ title: "Project Image Deleted!" });
-      // console.log("Image deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting Project Image: ", error);
-      notify.error({
-        title: error?.message || "Failed to delete project image",
-      });
-    } finally {
-      setImageDeleting(null);
-    }
+    callApi(
+      "imageDeleting",
+      () => projectEndpoints.deleteProjectImage(id, imagePublicId),
+      {
+        onSuccess: (res) => {
+          fetchProject();
+          notify.success({ title: res?.message || "Project Image Deleted!" });
+          setImageDeleting(null);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to delete project image",
+          });
+          setImageDeleting(null);
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (!id) return;
     fetchProject();
-  }, [id]);
+  }, [fetchProject, id]);
 
-  if (id && loading) {
+  if (id && loading.projectLoading) {
     return <CommonSkeleton count={13} />;
   }
 
@@ -226,7 +238,7 @@ export default function AddEditProject() {
                 id="upload"
                 multiple
                 accept="image/*"
-                loading={imagesUploading}
+                loading={loading.uploadingImages}
                 onChange={(files) => updateProjectImage(files)}
               />
             </FormField>
@@ -535,9 +547,9 @@ export default function AddEditProject() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updatingProject ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.updatingProject}
         />
       </form>
     </div>

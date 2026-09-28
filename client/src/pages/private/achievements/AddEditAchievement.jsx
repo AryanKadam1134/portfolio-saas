@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
@@ -22,6 +22,7 @@ import { formatDateInISO } from "../../../utils/formatDate";
 
 import { achievementEndpoints } from "../../../services/achievement.service";
 
+import useApi from "../../../hooks/useApi";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCertificatesList from "../../../hooks/useCertificatesList";
 
@@ -32,14 +33,12 @@ export default function AddEditAchievement() {
 
   const { visibilities } = useVisibilities();
   const { certificatesList } = useCertificatesList();
+  const { loading, callApi } = useApi({ achievementLoading: true });
 
   const { achievementId } = useParams();
 
   const [id, setId] = useState(achievementId);
 
-  const [loading, setLoading] = useState(true);
-
-  const [imagesUploading, setImagesUploading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(null);
 
   const {
@@ -47,7 +46,7 @@ export default function AddEditAchievement() {
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
     setValue,
   } = useForm({
     defaultValues: {
@@ -79,104 +78,135 @@ export default function AddEditAchievement() {
     return updated;
   };
 
-  const fetchAchievement = async () => {
-    try {
-      const res = await achievementEndpoints.getAchievement(id);
+  const fetchAchievement = useCallback(() => {
+    callApi(
+      "achievementLoading",
+      () => achievementEndpoints.getAchievement(id),
+      {
+        loading: false,
+        onSuccess: (res) => {
+          const data = res.data;
 
-      const data = res.data;
+          reset({
+            ...data,
+            date: formatDateInISO(data?.date),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to load achievement",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, id, reset]);
 
-      reset({
-        ...data,
-        date: formatDateInISO(data?.date),
-      });
-      console.log("Achievement: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch achievement" });
-    } finally {
-      setLoading(false);
-    }
+  const addUpdateAchievement = (payload) => {
+    const isEditing = Boolean(id);
+    const updatedData = getUpdatedFields(payload, dirtyFields);
+
+    callApi(
+      "updatingAchievement",
+      () =>
+        isEditing
+          ? achievementEndpoints.updateAchievement(id, updatedData)
+          : achievementEndpoints.addAchievement(payload),
+      {
+        onSuccess: (res) => {
+          setId(res.data?._id);
+          fetchAchievement();
+          notify.success({
+            title:
+              res?.message ||
+              (isEditing ? "Achievement Updated!" : "Achievement Added!"),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to save achievement",
+          });
+        },
+      },
+    );
   };
 
-  const addUpdateAchievement = async (payload) => {
-    try {
-      let res;
-      if (id) {
-        const updatedData = getUpdatedFields(payload, dirtyFields);
-        res = await achievementEndpoints.updateAchievement(id, updatedData);
-        notify.success({ title: "Achievement Updated!" });
-      } else {
-        res = await achievementEndpoints.addAchievement(payload);
-        notify.success({ title: "Achievement Saved!" });
-      }
-
-      const data = res.data;
-
-      setId(data?._id);
-      // console.log("Achievement Saved: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to save achievement" });
-    }
-  };
-
-  const handleCoverChange = async (idx) => {
-    try {
-      await achievementEndpoints.updateAchievement(id, {
-        coverImageIndex: idx,
-      });
-
-      setValue("coverImageIndex", idx, { shouldDirty: true });
-      notify.success({ title: "Cover Image Changed!" });
-    } catch (err) {
-      notify.error({ title: err?.message || "Failed to update cover image" });
-    }
+  const handleCoverChange = (idx) => {
+    callApi(
+      "updatingCoverImage",
+      () =>
+        achievementEndpoints.updateAchievement(id, {
+          coverImageIndex: idx,
+        }),
+      {
+        onSuccess: (res) => {
+          setValue("coverImageIndex", idx, { shouldDirty: true });
+          notify.success({ title: res?.message || "Cover Image Changed!" });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to change cover image",
+          });
+        },
+      },
+    );
   };
 
   // Can uplaod multiple
-  const updateAchievementImage = async (files) => {
-    setImagesUploading(true);
+  const updateAchievementImage = (files) => {
+    const formData = new FormData();
+    Array.from(files).forEach((file) => {
+      formData.append("achievementImages", file);
+    });
 
-    try {
-      const formData = new FormData();
-      Array.from(files).forEach((file) => {
-        formData.append("achievementImages", file);
-      });
-
-      await achievementEndpoints.updateAchievementImage(id, formData);
-
-      fetchAchievement();
-      notify.success({ title: "Achievement Images Updated!" });
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to update achievement images",
-      });
-    } finally {
-      setImagesUploading(false);
-    }
+    callApi(
+      "uploadingImages",
+      () => achievementEndpoints.updateAchievementImage(id, formData),
+      {
+        onSuccess: (res) => {
+          fetchAchievement();
+          notify.success({
+            title: res?.message || "Achievement Images Updated!",
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to upload achievement images",
+          });
+        },
+      },
+    );
   };
 
-  const deleteAchievementImage = async (imagePublicId) => {
+  const deleteAchievementImage = (imagePublicId) => {
     setImageDeleting(imagePublicId);
 
-    try {
-      await achievementEndpoints.deleteAchievementImage(id, imagePublicId);
-
-      fetchAchievement();
-      notify.success({ title: "Achievement Image Deleted!" });
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to delete achievement image",
-      });
-    } finally {
-      setImageDeleting(null);
-    }
+    callApi(
+      "imageDeleting",
+      () => achievementEndpoints.deleteAchievementImage(id, imagePublicId),
+      {
+        onSuccess: (res) => {
+          fetchAchievement();
+          notify.success({
+            title: res?.message || "Achievement Image Deleted!",
+          });
+          setImageDeleting(null);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to delete achievement image",
+          });
+          setImageDeleting(null);
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (!id) return;
     fetchAchievement();
-  }, [id]);
+  }, [fetchAchievement, id]);
 
-  if (id && loading) {
+  if (id && loading.achievementLoading) {
     return <CommonSkeleton count={9} />;
   }
 
@@ -207,7 +237,7 @@ export default function AddEditAchievement() {
                 id="upload"
                 multiple
                 accept="image/*"
-                loading={imagesUploading}
+                loading={loading.uploadingImages}
                 onChange={(files) => updateAchievementImage(files)}
               />
             </FormField>
@@ -424,9 +454,9 @@ export default function AddEditAchievement() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updatingAchievement ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.updatingAchievement}
         />
       </form>
     </div>

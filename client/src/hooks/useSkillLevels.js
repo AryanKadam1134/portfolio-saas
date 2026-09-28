@@ -2,28 +2,23 @@ import React, { useState, useEffect } from "react";
 
 import { filterEndpoints } from "../services/filter.service";
 
+import useApi from "./useApi";
+
 export default function useSkillLevels() {
-  const [skillLevelsLoading, setLoading] = useState(true);
+  const { loading, callApi } = useApi({ skillLevelsLoading: true });
+
   const [skillLevels, setSkillLevels] = useState([]);
 
-  const fetchSkillLevels = async () => {
-    try {
-      const res = await filterEndpoints.getSkillLevels();
-
-      const data = res.data;
-
-      setSkillLevels(data);
-      // console.log("Skill Levels: ", data);
-    } catch (error) {
-      console.error("Error fetching Skill Levels: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchSkillLevels();
-  }, []);
+    callApi("skillLevelsLoading", filterEndpoints.getSkillLevels, {
+      onSuccess: (res) => {
+        setSkillLevels(res.data);
+      },
+    });
+  }, [callApi]);
 
-  return { skillLevelsLoading, skillLevels };
+  return {
+    skillLevelsLoading: loading.skillLevelsLoading,
+    skillLevels,
+  };
 }

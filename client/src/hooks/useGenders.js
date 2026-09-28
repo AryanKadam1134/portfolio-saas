@@ -2,28 +2,23 @@ import React, { useState, useEffect } from "react";
 
 import { filterEndpoints } from "../services/filter.service";
 
+import useApi from "./useApi";
+
 export default function useGenders() {
-  const [gendersLoading, setLoading] = useState(true);
+  const { loading, callApi } = useApi({ gendersLoading: true });
+
   const [genders, setGenders] = useState([]);
 
-  const fetchGenders = async () => {
-    try {
-      const res = await filterEndpoints.getGenders();
-
-      const data = res.data;
-
-      setGenders(data);
-      // console.log("All Genders: ", data);
-    } catch (error) {
-      console.error("Error fetching Genders: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchGenders();
-  }, []);
+    callApi("gendersLoading", filterEndpoints.getGenders, {
+      onSuccess: (res) => {
+        setGenders(res.data);
+      },
+    });
+  }, [callApi]);
 
-  return { gendersLoading, genders };
+  return {
+    gendersLoading: loading.gendersLoading,
+    genders,
+  };
 }

@@ -114,7 +114,7 @@ export default function AddEditSkills() {
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to load skill details",
+          title: error?.message || "Failed to load skill details!",
         });
       },
     });
@@ -125,7 +125,7 @@ export default function AddEditSkills() {
     const updatedData = getUpdatedFields(payload, dirtyFields);
 
     callApi(
-      "updatingSkill",
+      "updating",
       () =>
         isEditing
           ? skillEndpoints.updateSkill(id, updatedData)
@@ -237,7 +237,7 @@ export default function AddEditSkills() {
                 placeholder="Select Category"
                 options={categoriesList}
                 value={field.value}
-                onChange={field.onChange} // send value to hook form
+                onChange={field.onChange}
               />
             )}
           />
@@ -319,9 +319,9 @@ export default function AddEditSkills() {
 
         <CustomButton
           type="submit"
-          name={loading.updatingSkill ? "Saving..." : "Save"}
+          name={loading.updating ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={loading.updatingSkill}
+          loading={loading.updating}
         />
       </form>
     </div>

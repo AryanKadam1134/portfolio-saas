@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
@@ -23,6 +23,7 @@ import { formatDateInISO } from "../../../utils/formatDate";
 
 import { certificateEndpoints } from "../../../services/certificate.service";
 
+import useApi from "../../../hooks/useApi";
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
 
@@ -33,22 +34,18 @@ export default function AddEditCertificate() {
 
   const { skillsList } = useSkillsList();
   const { visibilities } = useVisibilities();
+  const { loading, callApi } = useApi({ certificateLoading: true });
 
   const { certificateId } = useParams();
 
   const [id, setId] = useState(certificateId);
-
-  const [loading, setLoading] = useState(true);
-
-  const [imagesUploading, setImagesUploading] = useState(false);
-  const [imageDeleting, setImageDeleting] = useState(false);
 
   const {
     register,
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
     watch,
   } = useForm({
     defaultValues: {
@@ -81,93 +78,109 @@ export default function AddEditCertificate() {
     return updated;
   };
 
-  const fetchCertificate = async () => {
-    try {
-      const res = await certificateEndpoints.getCertificate(id);
+  const fetchCertificate = useCallback(() => {
+    callApi(
+      "certificateLoading",
+      () => certificateEndpoints.getCertificate(id),
+      {
+        loading: false,
+        onSuccess: (res) => {
+          const data = res.data;
 
-      const data = res.data;
+          reset({
+            ...data,
+            issueDate: formatDateInISO(data?.issueDate),
+            expiryDate: formatDateInISO(data?.expiryDate),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to load certificate",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, id, reset]);
 
-      reset({
-        ...data,
-        issueDate: formatDateInISO(data?.issueDate),
-        expiryDate: formatDateInISO(data?.expiryDate),
-      });
-      console.log("Certificate: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch certificate" });
-    } finally {
-      setLoading(false);
-    }
+  const addUpdateCertificate = (payload) => {
+    const isEditing = Boolean(id);
+    const updatedData = getUpdatedFields(payload, dirtyFields);
+
+    callApi(
+      "updatingCertificate",
+      () =>
+        isEditing
+          ? certificateEndpoints.updateCertificate(id, updatedData)
+          : certificateEndpoints.addCertificate(payload),
+      {
+        onSuccess: (res) => {
+          setId(res.data?._id);
+          fetchCertificate();
+          notify.success({
+            title:
+              res?.message ||
+              (isEditing ? "Certificate Updated!" : "Certificate Added!"),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to save certificate",
+          });
+        },
+      },
+    );
   };
 
-  const addUpdateCertificate = async (payload) => {
-    try {
-      let res;
-      if (id) {
-        const updatedData = getUpdatedFields(payload, dirtyFields);
-
-        res = await certificateEndpoints.updateCertificate(id, updatedData);
-        notify.success({ title: "Certificate Updated!" });
-      } else {
-        res = await certificateEndpoints.addCertificate(payload);
-        notify.success({ title: "Certificate Saved!" });
-      }
-
-      const data = res.data;
-
-      setId(data?._id);
-      // console.log("Certificate Saved: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to save certificate" });
-    }
-  };
-
-  // Can uplaod multiple
-  const updateCertificateImage = async (files) => {
+  const updateCertificateImage = (files) => {
     const file = files[0];
+    const formData = new FormData();
+    formData.append("certificateImage", file);
 
-    setImagesUploading(true);
-
-    try {
-      const formData = new FormData();
-
-      formData.append("certificateImage", file);
-
-      await certificateEndpoints.updateCertificateImage(id, formData);
-
-      fetchCertificate();
-      notify.success({ title: "Certificate Image Updated!" });
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to update certificate image",
-      });
-    } finally {
-      setImagesUploading(false);
-    }
+    callApi(
+      "uploadingImage",
+      () => certificateEndpoints.updateCertificateImage(id, formData),
+      {
+        onSuccess: (res) => {
+          fetchCertificate();
+          notify.success({
+            title: res?.message || "Certificate Images Updated!",
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to upload certificate images",
+          });
+        },
+      },
+    );
   };
 
-  const deleteCertificateImage = async () => {
-    setImageDeleting(true);
-    try {
-      await certificateEndpoints.deleteCertificateImage(id);
-
-      fetchCertificate();
-      notify.success({ title: "Certificate Image Deleted!" });
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to delete certificate image",
-      });
-    } finally {
-      setImageDeleting(false);
-    }
+  const deleteCertificateImage = () => {
+    callApi(
+      "imageDeleting",
+      () => certificateEndpoints.deleteCertificateImage(id),
+      {
+        onSuccess: (res) => {
+          fetchCertificate();
+          notify.success({
+            title: res?.message || "Certificate Image Deleted!",
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to delete certificate image",
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (!id) return;
     fetchCertificate();
-  }, [id]);
+  }, [fetchCertificate, id]);
 
-  if (id && loading) {
+  if (id && loading.certificateLoading) {
     return <CommonSkeleton count={11} />;
   }
 
@@ -197,7 +210,7 @@ export default function AddEditCertificate() {
               <DragDropUpload
                 id="upload"
                 accept="image/*"
-                loading={imagesUploading}
+                loading={loading.uploadingImage}
                 onChange={(files) => updateCertificateImage(files)}
               />
             </FormField>
@@ -209,7 +222,7 @@ export default function AddEditCertificate() {
             >
               <CoverImage
                 image={certificateImage}
-                imageDeleting={imageDeleting}
+                imageDeleting={loading.imageDeleting}
                 deleteImage={deleteCertificateImage}
               />
             </FormField>
@@ -470,9 +483,9 @@ export default function AddEditCertificate() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updatingCertificate ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.updatingCertificate}
         />
       </form>
     </div>

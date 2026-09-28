@@ -325,7 +325,7 @@ export default function AddEditSocialPlatform() {
     const updatedData = getUpdatedFields(payload, dirtyFields);
 
     callApi(
-      "updatingPlatform",
+      "updating",
       () =>
         isEditing
           ? socialPlatformEndpoints.updateSocialPlatform(id, updatedData)
@@ -505,9 +505,9 @@ export default function AddEditSocialPlatform() {
 
         <CustomButton
           type="submit"
-          name={loading.updatingPlatform ? "Saving..." : "Save"}
+          name={loading.updating ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={loading.updatingPlatform}
+          loading={loading.updating}
         />
       </form>
     </div>

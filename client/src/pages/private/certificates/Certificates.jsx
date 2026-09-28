@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { ExternalLink, FilePenLine, Plus, Trash2 } from "lucide-react";
@@ -16,6 +16,7 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { certificateEndpoints } from "../../../services/certificate.service";
 
+import useApi from "../../../hooks/useApi";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useModal } from "../../../context/modal/useModal";
@@ -26,6 +27,7 @@ export default function Certificates() {
   const { openModal, closeModal } = useModal();
 
   const { visibilities } = useVisibilities();
+  const { loading, callApi } = useApi({ certificatesLoading: true });
 
   const navigate = useNavigate();
 
@@ -33,55 +35,56 @@ export default function Certificates() {
     page: 1,
   });
 
-  const [deleting, setDeleting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [certificates, setCertificates] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const fetchCertificate = async () => {
-    try {
-      const res = await certificateEndpoints.getCertificates(params);
+  const fetchCertificate = useCallback(() => {
+    callApi(
+      "certificatesLoading",
+      () => certificateEndpoints.getCertificates(params),
+      {
+        onSuccess: (res) => {
+          const data = res.data;
 
-      const data = res.data;
+          setCertificates(data?.data);
+          setPagination(data?.pagination);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to load certificates",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, params]);
 
-      setCertificates(data?.data);
-      setPagination(data?.pagination);
-      console.log("User Certificates: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch certificates" });
-    } finally {
-      setLoading(false);
-    }
+  const deleteCertificate = (id) => {
+    callApi("deleting", () => certificateEndpoints.deleteCertificate(id), {
+      onSuccess: (res) => {
+        fetchCertificate();
+        closeModal();
+        notify.success({ title: res?.message || "Certificate Deleted!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to delete certificate",
+        });
+      },
+    });
   };
 
-  const deleteCertificate = async (certificateId) => {
-    setDeleting(true);
-
-    try {
-      await certificateEndpoints.deleteCertificate(certificateId);
-
-      fetchCertificate();
-      closeModal();
-      notify.success({ title: "Certificate Deleted!" });
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to delete certificate" });
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const deleteCertificateModal = (_id) => {
+  const deleteCertificateModal = (id) => {
     openModal(
       "Delete Certificate",
       <Trash2 strokeWidth={3} />,
-      <DeleteItemModal func={() => deleteCertificate(_id)} />,
+      <DeleteItemModal func={() => deleteCertificate(id)} />,
       "bg-red-500",
     );
   };
 
   useEffect(() => {
     fetchCertificate();
-  }, [params?.page]);
+  }, [fetchCertificate]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -117,14 +120,14 @@ export default function Certificates() {
             icon={FilePenLine}
             variant="green"
             onClick={() => navigate(`${_id}/edit`)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
 
           <ActionButton
             icon={Trash2}
             variant="red"
             onClick={() => deleteCertificateModal(_id)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
         </div>,
       ],
@@ -146,7 +149,7 @@ export default function Certificates() {
       </PageHeader>
 
       <Table
-        loading={loading}
+        loading={loading.certificatesLoading}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />

@@ -71,11 +71,11 @@ export default function Skills() {
     });
   };
 
-  const deleteSkillModal = (_id) => {
+  const deleteSkillModal = (id) => {
     openModal(
       "Delete Skill",
       <Trash2 strokeWidth={3} />,
-      <DeleteItemModal func={() => deleteSkill(_id)} />,
+      <DeleteItemModal func={() => deleteSkill(id)} />,
       "bg-red-500",
     );
   };

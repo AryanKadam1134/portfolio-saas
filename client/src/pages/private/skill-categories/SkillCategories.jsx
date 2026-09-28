@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
@@ -16,6 +16,7 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { skillCategoryEndpoints } from "../../../services/skillCategory.service";
 
+import useApi from "../../../hooks/useApi";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useModal } from "../../../context/modal/useModal";
@@ -26,6 +27,7 @@ export default function SkillCategories() {
   const { openModal, closeModal } = useModal();
 
   const { visibilities } = useVisibilities();
+  const { loading, callApi } = useApi({ categoriesLoading: true });
 
   const navigate = useNavigate();
 
@@ -33,59 +35,56 @@ export default function SkillCategories() {
     page: 1,
   });
 
-  const [deleting, setDeleting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const fetchSkillCategories = async () => {
-    try {
-      const res = await skillCategoryEndpoints.getSkillCategories(params);
+  const fetchSkillCategories = useCallback(() => {
+    callApi(
+      "categoriesLoading",
+      () => skillCategoryEndpoints.getSkillCategories(params),
+      {
+        onSuccess: (res) => {
+          const data = res.data;
 
-      const data = res.data;
+          setCategories(data?.data);
+          setPagination(data?.pagination);
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to load categories",
+          });
+        },
+      },
+    );
+  }, [callApi, notify, params]);
 
-      setCategories(data?.data);
-      setPagination(data?.pagination);
-      console.log("User Skill Categories: ", data);
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to fetch skill categories",
-      });
-    } finally {
-      setLoading(false);
-    }
+  const deleteSkillCategory = (id) => {
+    callApi("deleting", () => skillCategoryEndpoints.deleteSkillCategory(id), {
+      onSuccess: (res) => {
+        fetchSkillCategories();
+        closeModal();
+        notify.success({ title: res?.message || "Category Deleted!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to delete category",
+        });
+      },
+    });
   };
 
-  const deleteSkillCategory = async (categoryId) => {
-    setDeleting(true);
-
-    try {
-      await skillCategoryEndpoints.deleteSkillCategory(categoryId);
-
-      fetchSkillCategories();
-      closeModal();
-      notify.success({ title: "Category Deleted!" });
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to delete skill category",
-      });
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const deleteSkillCategoryModal = (_id) => {
+  const deleteSkillCategoryModal = (id) => {
     openModal(
       "Delete Skill Category",
       <Trash2 strokeWidth={3} />,
-      <DeleteItemModal func={() => deleteSkillCategory(_id)} />,
+      <DeleteItemModal func={() => deleteSkillCategory(id)} />,
       "bg-red-500",
     );
   };
 
   useEffect(() => {
     fetchSkillCategories();
-  }, [params?.page]);
+  }, [fetchSkillCategories]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -109,14 +108,14 @@ export default function SkillCategories() {
             icon={FilePenLine}
             variant="green"
             onClick={() => navigate(`${_id}/edit`)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
 
           <ActionButton
             icon={Trash2}
             variant="red"
             onClick={() => deleteSkillCategoryModal(_id)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
         </div>,
       ],
@@ -138,7 +137,7 @@ export default function SkillCategories() {
       </PageHeader>
 
       <Table
-        loading={loading}
+        loading={loading.categoriesLoading}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />

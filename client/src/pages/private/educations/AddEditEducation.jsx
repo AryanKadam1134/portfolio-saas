@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
@@ -16,26 +16,25 @@ import CustomTextArea from "../../../components/ui/CustomTextArea";
 
 import { educationEndpoints } from "../../../services/education.service";
 
+import useApi from "../../../hooks/useApi";
+
 import { useNotify } from "../../../context/notification/useNotify";
 
 export default function AddEditEducation() {
   const { notify } = useNotify();
 
+  const { loading, callApi } = useApi({ educationLoading: true });
+
   const { educationId } = useParams();
 
   const [id, setId] = useState(educationId);
-
-  const [loading, setLoading] = useState(true);
-
-  const [imagesUploading, setImagesUploading] = useState(false);
-  const [imageDeleting, setImageDeleting] = useState(false);
 
   const {
     register,
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
     watch,
   } = useForm({ mode: "onChange" });
 
@@ -59,89 +58,99 @@ export default function AddEditEducation() {
     return updated;
   };
 
-  const fetchEducation = async () => {
-    try {
-      const res = await educationEndpoints.getEducation(id);
+  const fetchEducation = useCallback(() => {
+    callApi("educationLoading", () => educationEndpoints.getEducation(id), {
+      loading: false,
+      onSuccess: (res) => {
+        reset(res?.data);
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to load education",
+        });
+      },
+    });
+  }, [callApi, notify, id, reset]);
 
-      const data = res.data;
+  const addUpdateEducation = (payload) => {
+    const isEditing = Boolean(id);
+    const updatedData = getUpdatedFields(payload, dirtyFields);
 
-      reset(data);
-      console.log("Education: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to fetch education" });
-    } finally {
-      setLoading(false);
-    }
+    callApi(
+      "updatingEducation",
+      () =>
+        isEditing
+          ? educationEndpoints.updateEducation(id, updatedData)
+          : educationEndpoints.addEducation(payload),
+      {
+        onSuccess: (res) => {
+          setId(res.data?._id);
+          fetchEducation();
+          notify.success({
+            title:
+              res?.message ||
+              (isEditing ? "Education Updated!" : "Education Added!"),
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to save education",
+          });
+        },
+      },
+    );
   };
 
-  const addUpdateEducation = async (payload) => {
-    try {
-      let res;
-      if (id) {
-        const updatedData = getUpdatedFields(payload, dirtyFields);
-
-        res = await educationEndpoints.updateEducation(id, updatedData);
-        notify.success({ title: "Education Updated!" });
-      } else {
-        res = await educationEndpoints.addEducation(payload);
-        notify.success({ title: "Education Saved!" });
-      }
-
-      const data = res.data;
-
-      setId(data?._id);
-      // console.log("Education Saved: ", data);
-    } catch (error) {
-      notify.error({ title: error?.message || "Failed to save education" });
-    }
-  };
-
-  // Can uplaod multiple
-  const updateInstituteImage = async (files) => {
+  const updateInstituteImage = (files) => {
     const file = files[0];
+    const formData = new FormData();
+    formData.append("instituteImage", file);
 
-    setImagesUploading(true);
-
-    try {
-      const formData = new FormData();
-
-      formData.append("instituteImage", file);
-
-      await educationEndpoints.updateInstituteImage(id, formData);
-
-      fetchEducation();
-      notify.success({ title: "Institute Image Updated!" });
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to update institute image",
-      });
-    } finally {
-      setImagesUploading(false);
-    }
+    callApi(
+      "uploadingImage",
+      () => educationEndpoints.updateInstituteImage(id, formData),
+      {
+        onSuccess: (res) => {
+          fetchEducation();
+          notify.success({
+            title: res?.message || "Institute Images Updated!",
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to upload institute images",
+          });
+        },
+      },
+    );
   };
 
-  const deleteInstituteImage = async () => {
-    setImageDeleting(true);
-    try {
-      await educationEndpoints.deleteInstituteImage(id);
-
-      fetchEducation();
-      notify.success({ title: "Institute Image Deleted!" });
-    } catch (error) {
-      notify.error({
-        title: error?.message || "Failed to delete institute image",
-      });
-    } finally {
-      setImageDeleting(false);
-    }
+  const deleteInstituteImage = () => {
+    callApi(
+      "imageDeleting",
+      () => educationEndpoints.deleteInstituteImage(id),
+      {
+        onSuccess: (res) => {
+          fetchEducation();
+          notify.success({
+            title: res?.message || "Institute Image Deleted!",
+          });
+        },
+        onError: (error) => {
+          notify.error({
+            title: error?.message || "Failed to delete institute image",
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (!id) return;
     fetchEducation();
-  }, [id]);
+  }, [fetchEducation, id]);
 
-  if (id && loading) {
+  if (id && loading.educationLoading) {
     return <CommonSkeleton count={9} />;
   }
 
@@ -171,7 +180,7 @@ export default function AddEditEducation() {
               <DragDropUpload
                 id="upload"
                 accept="image/*"
-                loading={imagesUploading}
+                loading={loading.uploadingImage}
                 onChange={(files) => updateInstituteImage(files)}
               />
             </FormField>
@@ -183,7 +192,7 @@ export default function AddEditEducation() {
             >
               <CoverImage
                 image={instituteImage}
-                imageDeleting={imageDeleting}
+                imageDeleting={loading.imageDeleting}
                 deleteImage={deleteInstituteImage}
               />
             </FormField>
@@ -407,9 +416,9 @@ export default function AddEditEducation() {
 
         <CustomButton
           type="submit"
-          name={isSubmitting ? "Saving..." : "Save"}
+          name={loading.updatingEducation ? "Saving..." : "Save"}
           className="col-span-12 place-self-end"
-          loading={isSubmitting}
+          loading={loading.updatingEducation}
         />
       </form>
     </div>

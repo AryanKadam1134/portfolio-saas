@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { ExternalLink, FilePenLine, Plus, Trash2 } from "lucide-react";
@@ -16,6 +16,7 @@ import { calculateSerialNumber } from "../../../utils/calculateSerialNumber";
 
 import { projectEndpoints } from "../../../services/project.service";
 
+import useApi from "../../../hooks/useApi";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useModal } from "../../../context/modal/useModal";
@@ -26,6 +27,7 @@ export default function Projects() {
   const { openModal, closeModal } = useModal();
 
   const { visibilities } = useVisibilities();
+  const { loading, callApi } = useApi({ projectsLoading: true });
 
   const navigate = useNavigate();
 
@@ -33,57 +35,52 @@ export default function Projects() {
     page: 1,
   });
 
-  const [deleting, setDeleting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const fetchProjects = async () => {
-    try {
-      const res = await projectEndpoints.getProjects(params);
+  const fetchProjects = useCallback(() => {
+    callApi("projectsLoading", () => projectEndpoints.getProjects(params), {
+      onSuccess: (res) => {
+        const data = res.data;
 
-      const data = res.data;
+        setProjects(data?.data);
+        setPagination(data?.pagination);
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to load projects",
+        });
+      },
+    });
+  }, [callApi, notify, params]);
 
-      setProjects(data?.data);
-      setPagination(data?.pagination);
-      console.log("User Projects: ", data);
-    } catch (error) {
-      console.error("Error fetching User Projects: ", error);
-      notify.error({ title: error?.message || "Failed to load projects" });
-    } finally {
-      setLoading(false);
-    }
+  const deleteProject = (id) => {
+    callApi("deleting", () => projectEndpoints.deleteProject(id), {
+      onSuccess: (res) => {
+        fetchProjects();
+        closeModal();
+        notify.success({ title: res?.message || "Project Deleted!" });
+      },
+      onError: (error) => {
+        notify.error({
+          title: error?.message || "Failed to delete project",
+        });
+      },
+    });
   };
 
-  const deleteProject = async (projectId) => {
-    setDeleting(true);
-
-    try {
-      await projectEndpoints.deleteProject(projectId);
-
-      fetchProjects();
-      closeModal();
-      notify.success({ title: "Project Deleted!" });
-    } catch (error) {
-      console.error("Error deleting Project: ", error);
-      notify.error({ title: error?.message || "Failed to delete project" });
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const deleteProjectModal = (_id) => {
+  const deleteProjectModal = (id) => {
     openModal(
       "Delete Project",
       <Trash2 strokeWidth={3} />,
-      <DeleteItemModal func={() => deleteProject(_id)} />,
+      <DeleteItemModal func={() => deleteProject(id)} />,
       "bg-red-500",
     );
   };
 
   useEffect(() => {
     fetchProjects();
-  }, [params?.page]);
+  }, [fetchProjects]);
 
   const tableHeading = [
     { label: "Sr. No." },
@@ -137,14 +134,14 @@ export default function Projects() {
             icon={FilePenLine}
             variant="green"
             onClick={() => navigate(`${_id}/edit`)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
 
           <ActionButton
             icon={Trash2}
             variant="red"
             onClick={() => deleteProjectModal(_id)}
-            disabled={deleting}
+            disabled={loading.deleting}
           />
         </div>,
       ],
@@ -166,7 +163,7 @@ export default function Projects() {
       </PageHeader>
 
       <Table
-        loading={loading}
+        loading={loading.projectsLoading}
         tableHeading={tableHeading}
         tableBody={tableBody}
       />

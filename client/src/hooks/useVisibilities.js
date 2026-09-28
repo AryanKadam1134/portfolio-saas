@@ -2,28 +2,23 @@ import React, { useState, useEffect } from "react";
 
 import { filterEndpoints } from "../services/filter.service";
 
+import useApi from "./useApi";
+
 export default function useVisibilities() {
-  const [visibilitiesLoading, setLoading] = useState(true);
+  const { loading, callApi } = useApi({ visibilitiesLoading: true });
+
   const [visibilities, setVisibilities] = useState([]);
 
-  const fetchVisibiities = async () => {
-    try {
-      const res = await filterEndpoints.getVisibilities();
-
-      const data = res.data;
-
-      setVisibilities(data);
-      // console.log("Visibilities: ", data);
-    } catch (error) {
-      console.error("Error fetching Visibilities: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchVisibiities();
-  }, []);
+    callApi("visibilitiesLoading", filterEndpoints.getVisibilities, {
+      onSuccess: (res) => {
+        setVisibilities(res.data);
+      },
+    });
+  }, [callApi]);
 
-  return { visibilitiesLoading, visibilities };
+  return {
+    visibilitiesLoading: loading.visibilitiesLoading,
+    visibilities,
+  };
 }
