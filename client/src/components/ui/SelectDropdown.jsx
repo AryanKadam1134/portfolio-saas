@@ -12,18 +12,21 @@ import {
   useFloating,
   useInteractions,
 } from "@floating-ui/react";
-import { ChevronDown, Search } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 
 import { inputClass } from "../../utils/getInputClass";
+import CustomInput from "./CustomInput";
 
 export default function SelectDropdown({
   id,
   options,
-  selectedLabel,
+  selectedOptions = [],
   placeholder,
   isSelected,
   onSelect,
   multiple = false,
+  allowClear = false,
+  onClear,
   error,
   disabled = false,
   required = false,
@@ -42,6 +45,10 @@ export default function SelectDropdown({
         String(option.label).toLowerCase().includes(normalizedSearchQuery),
       )
     : options;
+
+  const hasSelection = selectedOptions.length > 0;
+  const showClear =
+    allowClear && !multiple && hasSelection && !normalizedSearchQuery;
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
@@ -71,6 +78,7 @@ export default function SelectDropdown({
     ],
   });
 
+  // useClick adds Enter/Space handling for non-button references automatically.
   const click = useClick(context, { enabled: !disabled });
   const dismiss = useDismiss(context);
   const { getReferenceProps, getFloatingProps } = useInteractions([
@@ -94,33 +102,79 @@ export default function SelectDropdown({
     }
   };
 
+  const handleRemove = (event, optionValue) => {
+    event.stopPropagation();
+    if (disabled) return;
+    onSelect(optionValue);
+  };
+
+  const handleClear = () => {
+    onClear?.();
+    setSearchQuery("");
+    setIsOpen(false);
+    refs.domReference.current?.focus();
+  };
+
   return (
     <>
-      <button
+      <div
         ref={(node) => refs.setReference(node)}
         {...getReferenceProps({
           id,
-          type: "button",
-          disabled,
-          onBlur,
           role: "combobox",
+          tabIndex: disabled ? -1 : 0,
+          onBlur,
           "aria-controls": listboxId,
           "aria-expanded": isOpen,
           "aria-haspopup": "listbox",
           "aria-invalid": error ? true : undefined,
           "aria-required": required || undefined,
+          "aria-disabled": disabled || undefined,
         })}
-        className={`${inputClass(error)} ${className} flex items-center justify-between gap-3 text-left`}
+        className={`${inputClass(error)} ${className} ${
+          multiple ? "h-auto min-h-10" : ""
+        } flex items-center justify-between gap-3 text-left ${
+          disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+        }`}
       >
-        <span
-          className={`min-w-0 flex-1 truncate ${
-            selectedLabel
-              ? "text-light-input-text dark:text-dark-input-text"
-              : "text-light-input-placeholder/60 dark:text-dark-input-placeholder/60"
-          }`}
-        >
-          {selectedLabel || placeholder || "Select an option"}
-        </span>
+        {multiple ? (
+          <div className="flex min-w-0 flex-1 flex-wrap gap-2">
+            {hasSelection ? (
+              selectedOptions.map((option) => (
+                <span
+                  key={option.value}
+                  className="flex max-w-full items-center gap-1 rounded bg-light-bg-tertiary py-0.5 pr-1 pl-2 text-xs text-light-text-primary dark:bg-dark-bg-tertiary dark:text-dark-text-primary"
+                >
+                  <span className="truncate">{option.label}</span>
+                  <button
+                    type="button"
+                    tabIndex={disabled ? -1 : 0}
+                    disabled={disabled}
+                    aria-label={`Remove ${option.label}`}
+                    onClick={(event) => handleRemove(event, option.value)}
+                    className="shrink-0 rounded p-0.5 text-light-text-tertiary hover:bg-light-bg-hover disabled:cursor-not-allowed dark:text-dark-text-tertiary dark:hover:bg-dark-bg-hover"
+                  >
+                    <X size={12} aria-hidden="true" />
+                  </button>
+                </span>
+              ))
+            ) : (
+              <span className="text-light-input-placeholder/60 dark:text-dark-input-placeholder/60">
+                {placeholder || "Select an option"}
+              </span>
+            )}
+          </div>
+        ) : (
+          <span
+            className={`min-w-0 flex-1 truncate ${
+              hasSelection
+                ? "text-light-input-text dark:text-dark-input-text"
+                : "text-light-input-placeholder/60 dark:text-dark-input-placeholder/60"
+            }`}
+          >
+            {selectedOptions[0]?.label || placeholder || "Select an option"}
+          </span>
+        )}
 
         <ChevronDown
           aria-hidden="true"
@@ -129,7 +183,7 @@ export default function SelectDropdown({
             isOpen ? "rotate-180" : ""
           }`}
         />
-      </button>
+      </div>
 
       {isOpen && !disabled && (
         <FloatingPortal>
@@ -140,19 +194,15 @@ export default function SelectDropdown({
             className="z-10000 flex flex-col overflow-hidden rounded-md border border-light-border-secondary bg-light-bg-primary shadow-md dark:border-dark-border-secondary dark:bg-dark-bg-tertiary"
           >
             <div className="relative shrink-0 border-b border-light-border-secondary p-2 dark:border-dark-border-secondary">
-              <Search
-                aria-hidden="true"
-                size={16}
-                className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-light-text-tertiary dark:text-dark-text-tertiary"
-              />
-              <input
+              <CustomInput
                 ref={searchInputRef}
+                icon={Search}
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 aria-label="Search options"
                 placeholder="Search options..."
-                className="w-full rounded-md border border-light-input-border bg-light-input-bg py-2 pr-3 pl-9 text-sm text-light-input-text outline-none placeholder:text-light-input-placeholder/60 focus:border-transparent focus:ring focus:ring-light-input-ring dark:border-dark-input-border dark:bg-dark-input-bg dark:text-dark-input-text dark:placeholder:text-dark-input-placeholder/60 dark:focus:ring-dark-input-ring"
+                className={inputClass()}
               />
             </div>
 
@@ -160,8 +210,18 @@ export default function SelectDropdown({
               id={listboxId}
               role="listbox"
               aria-multiselectable={multiple || undefined}
-              className="min-h-0 flex-1 flex flex-col gap-1 overflow-y-auto p-1"
+              className="min-h-0 flex flex-1 flex-col gap-1 overflow-y-auto p-1"
             >
+              {showClear && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="w-full rounded px-3 py-2 text-left text-sm text-light-text-tertiary transition-colors hover:bg-light-bg-hover dark:text-dark-text-tertiary dark:hover:bg-dark-bg-hover"
+                >
+                  Clear selection
+                </button>
+              )}
+
               {filteredOptions.length ? (
                 filteredOptions.map((option) => {
                   const selected = isSelected(option.value);
@@ -176,11 +236,12 @@ export default function SelectDropdown({
                       onClick={() => handleSelect(option.value)}
                       className={`w-full rounded px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                         selected
-                          ? "font-medium bg-light-bg-tertiary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary"
+                          ? "bg-light-bg-tertiary font-medium text-light-text-primary dark:bg-dark-bg-secondary dark:text-dark-text-primary"
                           : "text-light-text-secondary hover:bg-light-bg-hover dark:text-dark-text-secondary dark:hover:bg-dark-bg-hover"
                       }`}
                     >
-                      {option.label} {selected && "✔"}
+                      {option.label}{" "}
+                      {selected && <span aria-hidden="true">✔</span>}
                     </button>
                   );
                 })

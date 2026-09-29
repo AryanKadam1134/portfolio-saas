@@ -16,18 +16,28 @@ export default function CustomMultiSelect({
 }) {
   const selectedValues = Array.isArray(value) ? value : [];
   const selectedValueKeys = new Set(selectedValues.map(String));
-  const selectedLabel = options
-    .filter((option) => selectedValueKeys.has(String(option.value)))
-    .map((option) => option.label)
-    .join(", ");
+  const selectedOptions = options.filter((option) =>
+    selectedValueKeys.has(String(option.value)),
+  );
 
   const toggleOption = (optionValue) => {
     const optionKey = String(optionValue);
-    const nextValue = selectedValueKeys.has(optionKey)
+    const option =
+      options.find((opt) => String(opt.value) === optionKey) || null;
+    const wasSelected = selectedValueKeys.has(optionKey);
+
+    const nextValue = wasSelected
       ? selectedValues.filter((item) => String(item) !== optionKey)
       : [...selectedValues, optionValue];
 
-    onChange?.(nextValue);
+    const nextOptions = wasSelected
+      ? selectedOptions.filter((opt) => String(opt.value) !== optionKey)
+      : [...selectedOptions, option];
+
+    // value: the new array of raw values (for field.onChange)
+    // option: the option that was just toggled, with an `added` flag
+    // options: the new array of full option objects, for convenience
+    onChange?.(nextValue, { ...option, added: !wasSelected }, nextOptions);
   };
 
   return (
@@ -35,7 +45,7 @@ export default function CustomMultiSelect({
       <SelectDropdown
         id={id}
         options={options}
-        selectedLabel={selectedLabel}
+        selectedOptions={selectedOptions}
         placeholder={placeholder}
         isSelected={(optionValue) => selectedValueKeys.has(String(optionValue))}
         onSelect={toggleOption}

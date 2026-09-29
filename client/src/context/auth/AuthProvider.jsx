@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (payload) => {
-    const success = await callApi(
+    const res = await callApi(
       "authLoading",
       () => authEndpoints.login(payload, config),
       {
@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
       },
     );
 
-    return success;
+    return res?.success;
   };
 
   const logout = () => {

@@ -17,15 +17,36 @@ export default function CustomSelect({
   const selectedItem =
     options.find((option) => String(option.value) === String(value)) || null;
 
+  const handleSelect = (optionValue) => {
+    const isSame = String(optionValue) === String(value);
+
+    // Clicking the selected option again unselects it (unless required).
+    if (isSame && required) return;
+
+    if (isSame) {
+      onChange?.("", null);
+      return;
+    }
+
+    const option =
+      options.find((opt) => String(opt.value) === String(optionValue)) || null;
+
+    onChange?.(optionValue, option);
+  };
+
+  const handleClear = () => onChange?.("", null);
+
   return (
     <div className="relative w-full">
       <SelectDropdown
         id={id}
         options={options}
-        selectedLabel={selectedItem?.label || ""}
+        selectedOptions={selectedItem ? [selectedItem] : []}
         placeholder={placeholder}
         isSelected={(optionValue) => String(optionValue) === String(value)}
-        onSelect={(optionValue) => onChange?.(optionValue)}
+        onSelect={handleSelect}
+        allowClear={!required}
+        onClear={handleClear}
         error={error}
         disabled={disabled}
         required={required}

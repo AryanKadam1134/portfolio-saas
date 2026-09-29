@@ -298,7 +298,7 @@ export default function AddEditSocialPlatform() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to fetch social platform",
+            title: error?.message || "Failed to load social platform",
           });
         },
       },
