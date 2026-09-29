@@ -28,7 +28,7 @@ const addAchievement = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!title) {
-    throw new ApiError(400, "Title is required!");
+    throw new ApiError(400, "Achievement name is required!");
   }
 
   const achievementExists = await Achievement.findOne({
@@ -37,7 +37,7 @@ const addAchievement = asynchandler(async (req, res) => {
   });
 
   if (achievementExists) {
-    throw new ApiError(409, "Achievement name already exists!");
+    throw new ApiError(409, "Achievement already exists!");
   }
 
   const fields = {};
@@ -90,9 +90,7 @@ const addAchievement = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(
-      new ApiRes(201, createdAchievement, "achievement created successfully!"),
-    );
+    .json(new ApiRes(201, createdAchievement, "Achievement added!"));
 });
 
 const updateAchievement = asynchandler(async (req, res) => {
@@ -167,9 +165,7 @@ const updateAchievement = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, updatedAchievement, "achievement updated successfully!"),
-    );
+    .json(new ApiRes(200, updatedAchievement, "Achievement updated!"));
 });
 
 const updateAchievementImages = asynchandler(async (req, res) => {
@@ -209,13 +205,7 @@ const updateAchievementImages = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        updatedAchievement,
-        "achievement images updated successfully!",
-      ),
-    );
+    .json(new ApiRes(200, updatedAchievement, "Achievement images updated!"));
 });
 
 const deleteAchievement = asynchandler(async (req, res) => {
@@ -237,9 +227,7 @@ const deleteAchievement = asynchandler(async (req, res) => {
     );
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "achievement deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Achievement deleted!"));
 });
 
 const deleteAchievementImage = asynchandler(async (req, res) => {
@@ -296,17 +284,13 @@ const deleteAchievementImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, achievement, "achievement image deleted successfully!"),
-    );
+    .json(new ApiRes(200, achievement, "Achievement image deleted!"));
 });
 
 const getAchievement = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(
-      new ApiRes(200, req.achievement, "achievement fecthed successfully!"),
-    );
+    .json(new ApiRes(200, req.achievement, "Achievement fetched!"));
 });
 
 const getAllAchievement = asynchandler(async (req, res) => {
@@ -325,18 +309,12 @@ const getAllAchievement = asynchandler(async (req, res) => {
   if (paginatedAchievements?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedAchievements, "no achievements found!"));
+      .json(new ApiRes(200, paginatedAchievements, "No achievements found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        paginatedAchievements,
-        "achievements fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, paginatedAchievements, "Achievements fetched!"));
 });
 
 export {

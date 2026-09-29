@@ -28,7 +28,7 @@ const addCertificate = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!title) {
-    throw new ApiError(400, "Title is required!");
+    throw new ApiError(400, "Certificate name is required!");
   }
 
   if (!issuer) {
@@ -87,9 +87,7 @@ const addCertificate = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(
-      new ApiRes(201, createdCertificate, "certificate created successfully!"),
-    );
+    .json(new ApiRes(201, createdCertificate, "Certificate added!"));
 });
 
 const updateCertificate = asynchandler(async (req, res) => {
@@ -117,7 +115,7 @@ const updateCertificate = asynchandler(async (req, res) => {
     });
 
     if (sameCertificateTitle) {
-      throw new ApiError(409, "Certificate title already exists!");
+      throw new ApiError(409, "Certificate name already exists!");
     }
   }
 
@@ -148,9 +146,7 @@ const updateCertificate = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, updatedCertificate, "certificate updated successfully!"),
-    );
+    .json(new ApiRes(200, updatedCertificate, "Certificate updated!"));
 });
 
 const updateCertificateImage = asynchandler(async (req, res) => {
@@ -195,13 +191,7 @@ const updateCertificateImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        updatedCertificate,
-        "certificateImage updated successfully!",
-      ),
-    );
+    .json(new ApiRes(200, updatedCertificate, "Certificate image updated!"));
 });
 
 const deleteCertificate = asynchandler(async (req, res) => {
@@ -220,9 +210,7 @@ const deleteCertificate = asynchandler(async (req, res) => {
     }
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "certificate deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Certificate deleted!"));
 });
 
 const deleteCertificateImage = asynchandler(async (req, res) => {
@@ -249,21 +237,13 @@ const deleteCertificateImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        upatedCertificate,
-        "certificateImage deleted successfully!",
-      ),
-    );
+    .json(new ApiRes(200, upatedCertificate, "Certificate image deleted!"));
 });
 
 const getCertificate = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(
-      new ApiRes(200, req.certificate, "certificate fetched successfully!"),
-    );
+    .json(new ApiRes(200, req.certificate, "Certificate fetched!"));
 });
 
 const getAllCertificates = asynchandler(async (req, res) => {
@@ -282,18 +262,12 @@ const getAllCertificates = asynchandler(async (req, res) => {
   if (paginatedCertificates?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedCertificates, "no certificates found!"));
+      .json(new ApiRes(200, paginatedCertificates, "No certificates found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        paginatedCertificates,
-        "certificates fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, paginatedCertificates, "Certificates fetched!"));
 });
 
 export {

@@ -55,7 +55,7 @@ export default function Experiences() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load experiences",
+            title: error?.message || "Failed to load experiences!",
           });
         },
       },
@@ -67,11 +67,11 @@ export default function Experiences() {
       onSuccess: (res) => {
         fetchExperiences();
         closeModal();
-        notify.success({ title: res?.message || "Experience Deleted!" });
+        notify.success({ title: res?.message || "Experience deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete experience",
+          title: error?.message || "Failed to delete experience!",
         });
       },
     });

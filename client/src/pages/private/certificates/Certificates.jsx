@@ -51,7 +51,7 @@ export default function Certificates() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load certificates",
+            title: error?.message || "Failed to load certificates!",
           });
         },
       },
@@ -63,11 +63,11 @@ export default function Certificates() {
       onSuccess: (res) => {
         fetchCertificate();
         closeModal();
-        notify.success({ title: res?.message || "Certificate Deleted!" });
+        notify.success({ title: res?.message || "Certificate deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete certificate",
+          title: error?.message || "Failed to delete certificate!",
         });
       },
     });

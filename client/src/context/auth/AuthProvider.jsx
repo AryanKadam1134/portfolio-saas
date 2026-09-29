@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
 
   const login = async (payload) => {
     const res = await callApi(
-      "authLoading",
+      "loading",
       () => authEndpoints.login(payload, config),
       {
         onSuccess: (res) => {

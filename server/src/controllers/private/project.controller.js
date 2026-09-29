@@ -31,7 +31,7 @@ const addProject = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!title) {
-    throw new ApiError(400, "Title is required!");
+    throw new ApiError(400, "Project name is required!");
   }
 
   const projectExists = await Project.findOne({
@@ -40,7 +40,7 @@ const addProject = asynchandler(async (req, res) => {
   });
 
   if (projectExists) {
-    throw new ApiError(409, "Project name already exists!");
+    throw new ApiError(409, "Project already exists!");
   }
 
   const fields = {};
@@ -100,7 +100,7 @@ const addProject = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiRes(201, createdProject, "Project created successfully!"));
+    .json(new ApiRes(201, createdProject, "Project added!"));
 });
 
 const updateProjectDetails = asynchandler(async (req, res) => {
@@ -185,7 +185,7 @@ const updateProjectDetails = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, updatedProject, "Project updated successfully!"));
+    .json(new ApiRes(200, updatedProject, "Project updated!"));
 });
 
 const updateProjectImages = asynchandler(async (req, res) => {
@@ -225,9 +225,7 @@ const updateProjectImages = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, updatedProject, "Project images updated successfully!"),
-    );
+    .json(new ApiRes(200, updatedProject, "Project images updated!"));
 });
 
 const deleteProject = asynchandler(async (req, res) => {
@@ -244,9 +242,7 @@ const deleteProject = asynchandler(async (req, res) => {
     console.error("Error deleting projectImages in deleteProject: ", error);
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "Project deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Project deleted!"));
 });
 
 const deleteProjectImage = asynchandler(async (req, res) => {
@@ -300,13 +296,11 @@ const deleteProjectImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, project, "Project image deleted successfully!"));
+    .json(new ApiRes(200, project, "Project image deleted!"));
 });
 
 const getProject = asynchandler(async (req, res) => {
-  return res
-    .status(200)
-    .json(new ApiRes(200, req.project, "Project fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, req.project, "Project fetched!"));
 });
 
 const getAllProjects = asynchandler(async (req, res) => {
@@ -330,7 +324,7 @@ const getAllProjects = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedProjects, "Projects fetched successfully!"));
+    .json(new ApiRes(200, paginatedProjects, "Projects fetched!"));
 });
 
 export {

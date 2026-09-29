@@ -53,11 +53,11 @@ export default function UserSessionCard({ session, onDelete }) {
 
         onDelete();
         notify.success({
-          title: res.message || "Session removed successfully",
+          title: res?.message || "Session removed!",
         });
       },
       onError: (error) => {
-        notify.error({ title: error?.message || "Failed to remove session" });
+        notify.error({ title: error?.message || "Failed to remove session!" });
       },
     });
   };

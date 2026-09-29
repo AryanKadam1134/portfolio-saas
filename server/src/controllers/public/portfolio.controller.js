@@ -54,15 +54,11 @@ const getProfileSummary = asynchandler(async (req, res) => {
     educations: educations?.length,
   };
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, summary, "summary fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, summary, "Summary fetched!"));
 });
 
 const getUserByUsername = asynchandler(async (req, res) => {
-  return res
-    .status(200)
-    .json(new ApiRes(200, req.user, "user data fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, req.user, "Details fetched!"));
 });
 
 const getUserSocialPlatforms = asynchandler(async (req, res) => {
@@ -75,7 +71,7 @@ const getUserSocialPlatforms = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, platforms, "Platforms fetched successfully!"));
+    .json(new ApiRes(200, platforms, "Social platforms fetched!"));
 });
 
 const getSkillWithCategory = asynchandler(async (req, res) => {
@@ -109,12 +105,10 @@ const getSkillWithCategory = asynchandler(async (req, res) => {
   ]);
 
   if (skills?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no skills found!"));
+    return res.status(200).json(new ApiRes(200, [], "No skills found!"));
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, skills, "skills fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, skills, "Skills fetched!"));
 });
 
 const getCategoryWiseSkills = asynchandler(async (req, res) => {
@@ -148,12 +142,12 @@ const getCategoryWiseSkills = asynchandler(async (req, res) => {
   ]);
 
   if (categories?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no categories found!"));
+    return res.status(200).json(new ApiRes(200, [], "No categories found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, categories, "categories fetched successfully!"));
+    .json(new ApiRes(200, categories, "Categories fetched!"));
 });
 
 const getProjects = asynchandler(async (req, res) => {
@@ -210,12 +204,12 @@ const getProjects = asynchandler(async (req, res) => {
   if (paginatedProjects?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedProjects, "no projects found!"));
+      .json(new ApiRes(200, paginatedProjects, "No projects found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedProjects, "projects fetched successfully!"));
+    .json(new ApiRes(200, paginatedProjects, "Projects fetched!"));
 });
 
 const getExperiences = asynchandler(async (req, res) => {
@@ -251,7 +245,7 @@ const getExperiences = asynchandler(async (req, res) => {
   if (paginatedExperiences?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedExperiences, "no experiences found!"));
+      .json(new ApiRes(200, paginatedExperiences, "No experiences found!"));
   }
 
   paginatedExperiences.data.forEach((exp) => {
@@ -260,13 +254,7 @@ const getExperiences = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        paginatedExperiences,
-        "experiences fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, paginatedExperiences, "Experiences fetched!"));
 });
 
 const getEducations = asynchandler(async (req, res) => {
@@ -293,14 +281,12 @@ const getEducations = asynchandler(async (req, res) => {
   if (paginatedEducations?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedEducations, "no educations found!"));
+      .json(new ApiRes(200, paginatedEducations, "No educations found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, paginatedEducations, "educations fetched successfully!"),
-    );
+    .json(new ApiRes(200, paginatedEducations, "Educations fetched!"));
 });
 
 const getCertificates = asynchandler(async (req, res) => {
@@ -342,18 +328,12 @@ const getCertificates = asynchandler(async (req, res) => {
   if (paginatedCertificates?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedCertificates, "no certificates found!"));
+      .json(new ApiRes(200, paginatedCertificates, "No certificates found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        paginatedCertificates,
-        "certificates fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, paginatedCertificates, "Certificates fetched!"));
 });
 
 const getAchievements = asynchandler(async (req, res) => {
@@ -402,18 +382,12 @@ const getAchievements = asynchandler(async (req, res) => {
   if (paginatedAchievements?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedAchievements, "no achievements found!"));
+      .json(new ApiRes(200, paginatedAchievements, "No achievements found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        paginatedAchievements,
-        "achievements fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, paginatedAchievements, "Achievements fetched!"));
 });
 
 export {

@@ -36,14 +36,16 @@ export default function SignUp() {
 
   const onSubmit = (payload) => {
     callApi("registering", () => authEndpoints.register(payload), {
-      onSuccess: () => {
+      onSuccess: (res) => {
         reset();
         setError(null);
-        notify.success({ title: "Account Created Successfully!" });
+        notify.success({
+          title: res?.message || "Account created!",
+        });
         navigate("/signin");
       },
       onError: (error) => {
-        notify.error({ title: "Registration Failed!" });
+        notify.error({ title: error?.message || "Registration failed!" });
         setError(error?.message);
       },
     });

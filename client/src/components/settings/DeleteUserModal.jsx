@@ -26,7 +26,7 @@ export default function DeleteUserModal() {
         closeModal();
       },
       onError: (error) => {
-        notify.error({ title: error?.message || "Failed to delete account" });
+        notify.error({ title: error?.message || "Failed to delete account!" });
       },
     });
   };

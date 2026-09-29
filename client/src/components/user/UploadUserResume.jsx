@@ -40,11 +40,11 @@ export default function UploadUserResume() {
     callApi("resumeUploading", () => userEndpoints.updateUserResume(formData), {
       onSuccess: (res) => {
         fetchUserResume();
-        notify.success({ title: res?.message || "Resume Updated!" });
+        notify.success({ title: res?.message || "Resume updated!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to update resume",
+          title: error?.message || "Failed to update resume!",
         });
       },
     });
@@ -55,11 +55,11 @@ export default function UploadUserResume() {
       onSuccess: (res) => {
         setResume({});
         fetchUserResume();
-        notify.success({ title: res?.message || "Resume Deleted!" });
+        notify.success({ title: res?.message || "Resume deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete resume",
+          title: error?.message || "Failed to delete resume!",
         });
       },
     });

@@ -51,7 +51,7 @@ export default function SkillCategories() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load categories",
+            title: error?.message || "Failed to load categories!",
           });
         },
       },
@@ -63,11 +63,11 @@ export default function SkillCategories() {
       onSuccess: (res) => {
         fetchSkillCategories();
         closeModal();
-        notify.success({ title: res?.message || "Category Deleted!" });
+        notify.success({ title: res?.message || "Category deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete category",
+          title: error?.message || "Failed to delete category!",
         });
       },
     });

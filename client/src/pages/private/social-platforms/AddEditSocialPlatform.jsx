@@ -298,7 +298,7 @@ export default function AddEditSocialPlatform() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load social platform",
+            title: error?.message || "Failed to load social platform!",
           });
         },
       },
@@ -322,12 +322,12 @@ export default function AddEditSocialPlatform() {
           notify.success({
             title:
               res?.message ||
-              (isEditing ? "Platform Updated!" : "Platform Added!"),
+              (isEditing ? "Platform updated!" : "Platform added!"),
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to save social platform",
+            title: error?.message || "Failed to save social platform!",
           });
         },
       },

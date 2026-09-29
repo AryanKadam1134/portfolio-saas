@@ -52,7 +52,7 @@ const manageSocialPlatforms = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, result, "Platforms managed successfully!"));
+    .json(new ApiRes(200, result, "Social platforms managed!"));
 });
 
 const addSocialPlatform = asynchandler(async (req, res) => {
@@ -61,7 +61,7 @@ const addSocialPlatform = asynchandler(async (req, res) => {
   const { name, logoUrl, link, visibility, sortOrder } = req.body;
 
   if (!name) {
-    throw new ApiError(400, "Name is required!");
+    throw new ApiError(400, "Platform name is required!");
   }
 
   if (!link) {
@@ -74,7 +74,7 @@ const addSocialPlatform = asynchandler(async (req, res) => {
   });
 
   if (platformExists) {
-    throw new ApiError(409, "Platform name already exists!");
+    throw new ApiError(409, "Platform already exists!");
   }
 
   const fields = {};
@@ -92,13 +92,7 @@ const addSocialPlatform = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(
-      new ApiRes(
-        201,
-        newSocialPlatform,
-        "Social platform created successfully!",
-      ),
-    );
+    .json(new ApiRes(201, newSocialPlatform, "Social platform added!"));
 });
 
 const updateSocialPlatform = asynchandler(async (req, res) => {
@@ -114,7 +108,7 @@ const updateSocialPlatform = asynchandler(async (req, res) => {
     });
 
     if (samePlatformName) {
-      throw new ApiError(409, "Social platform name already exists!");
+      throw new ApiError(409, "Platform name already exists!");
     }
   }
 
@@ -140,13 +134,7 @@ const updateSocialPlatform = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        updatedSocialPlatform,
-        "social platform updated successfully!",
-      ),
-    );
+    .json(new ApiRes(200, updatedSocialPlatform, "Social platform updated!"));
 });
 
 const deleteSocialPlatform = asynchandler(async (req, res) => {
@@ -154,19 +142,13 @@ const deleteSocialPlatform = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, null, "social platform deleted successfully!"));
+    .json(new ApiRes(200, null, "Social platform deleted!"));
 });
 
 const getSocialPlatform = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        req.socialPlatform,
-        "social platform fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, req.socialPlatform, "Social platform fetched!"));
 });
 
 const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
@@ -189,14 +171,14 @@ const getAllUserSocialPlatforms = asynchandler(async (req, res) => {
   });
 
   if (paginatedPlatforms?.length <= 0) {
-    return res.status(200).json(new ApiRes(200, [], "no platforms found!"));
+    return res
+      .status(200)
+      .json(new ApiRes(200, [], "No social platforms found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, paginatedPlatforms, "platforms fetched successfully!"),
-    );
+    .json(new ApiRes(200, paginatedPlatforms, "Social platforms fetched!"));
 });
 
 export {

@@ -27,7 +27,7 @@ export default function UserSessions() {
       onError: (error) => {
         if (error?.statusCode !== 404) {
           notify.error({
-            title: error?.message || "Failed to load active sessions",
+            title: error?.message || "Failed to load active sessions!",
           });
         }
       },

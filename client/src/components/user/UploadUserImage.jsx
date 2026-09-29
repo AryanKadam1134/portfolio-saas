@@ -48,11 +48,11 @@ export default function UploadUserImage() {
     callApi("imageUploading", () => userEndpoints.updateUserImage(formData), {
       onSuccess: (res) => {
         fetchUserImage();
-        notify.success({ title: res?.message || "Profile Image Updated!" });
+        notify.success({ title: res?.message || "Profile image updated!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to update profile image",
+          title: error?.message || "Failed to update profile image!",
         });
       },
     });
@@ -63,11 +63,11 @@ export default function UploadUserImage() {
       onSuccess: (res) => {
         setImageUrl(null);
         fetchUserImage();
-        notify.success({ title: res?.message || "Profile Image Deleted!" });
+        notify.success({ title: res?.message || "Profile image deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete profile image",
+          title: error?.message || "Failed to delete profile image!",
         });
       },
     });

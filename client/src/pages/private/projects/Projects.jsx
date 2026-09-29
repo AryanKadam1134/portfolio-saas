@@ -48,7 +48,7 @@ export default function Projects() {
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to load projects",
+          title: error?.message || "Failed to load projects!",
         });
       },
     });
@@ -59,11 +59,11 @@ export default function Projects() {
       onSuccess: (res) => {
         fetchProjects();
         closeModal();
-        notify.success({ title: res?.message || "Project Deleted!" });
+        notify.success({ title: res?.message || "Project deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete project",
+          title: error?.message || "Failed to delete project!",
         });
       },
     });

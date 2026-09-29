@@ -99,13 +99,13 @@ const experienceSchema = new Schema(
 
 experienceSchema.pre("validate", async function () {
   if (!this.positions || this.positions.length === 0) {
-    throw new ApiError(400, "At least one positions is required");
+    throw new ApiError(400, "At least one positions is required!");
   }
 
   const presentCount = this.positions.filter((p) => p.isCurrent).length;
 
   if (presentCount > 1) {
-    throw new ApiError(409, "Only one positions can have isCurrent=true");
+    throw new ApiError(409, "Only one positions can be the current position!");
   }
 });
 

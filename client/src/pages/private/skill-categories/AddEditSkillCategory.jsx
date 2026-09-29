@@ -53,7 +53,7 @@ export default function AddEditSkillCategory() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load category details",
+            title: error?.message || "Failed to load category details!",
           });
         },
       },
@@ -77,12 +77,12 @@ export default function AddEditSkillCategory() {
           notify.success({
             title:
               res?.message ||
-              (isEditing ? "Category Updated!" : "Category Added!"),
+              (isEditing ? "Category updated!" : "Category added!"),
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to save category",
+            title: error?.message || "Failed to save category!",
           });
         },
       },

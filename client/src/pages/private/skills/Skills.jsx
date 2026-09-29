@@ -50,7 +50,7 @@ export default function Skills() {
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to load skills",
+          title: error?.message || "Failed to load skills!",
         });
       },
     });
@@ -61,11 +61,11 @@ export default function Skills() {
       onSuccess: (res) => {
         fetchSkills();
         closeModal();
-        notify.success({ title: res?.message || "Skill Deleted!" });
+        notify.success({ title: res?.message || "Skill deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete skill",
+          title: error?.message || "Failed to delete skill!",
         });
       },
     });

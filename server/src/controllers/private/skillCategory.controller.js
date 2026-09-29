@@ -11,7 +11,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
   const { name, logoUrl, visibility, sortOrder } = req.body;
 
   if (!name) {
-    throw new ApiError(400, "Name is required!");
+    throw new ApiError(400, "Category name is required!");
   }
 
   const category = await SkillCategory.findOne({
@@ -20,7 +20,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
   });
 
   if (category) {
-    throw new ApiError(409, "Category name already exists!");
+    throw new ApiError(409, "Category already exists!");
   }
 
   const fields = {};
@@ -36,9 +36,7 @@ const addSkillCategory = asynchandler(async (req, res) => {
     ...fields,
   });
 
-  return res
-    .status(201)
-    .json(new ApiRes(201, newCategory, "category created successfully!"));
+  return res.status(201).json(new ApiRes(201, newCategory, "Category added!"));
 });
 
 const updateSkillCategory = asynchandler(async (req, res) => {
@@ -80,21 +78,19 @@ const updateSkillCategory = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, updatedCategory, "category updated successfully!"));
+    .json(new ApiRes(200, updatedCategory, "Category updated!"));
 });
 
 const deleteSkillCategory = asynchandler(async (req, res) => {
   await req.category.deleteOne();
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "category deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Category deleted!"));
 });
 
 const getSkillCategory = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiRes(200, req.category, "category fetced successfully!"));
+    .json(new ApiRes(200, req.category, "Category fetced!"));
 });
 
 const getAllCategoryWiseSkills = asynchandler(async (req, res) => {
@@ -113,14 +109,12 @@ const getAllCategoryWiseSkills = asynchandler(async (req, res) => {
   if (paginatedCategories?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedCategories, "no categories found!"));
+      .json(new ApiRes(200, paginatedCategories, "No categories found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, paginatedCategories, "categories fetched successfully!"),
-    );
+    .json(new ApiRes(200, paginatedCategories, "Categories fetched!"));
 });
 
 export {

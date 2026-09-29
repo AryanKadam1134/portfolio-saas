@@ -50,7 +50,7 @@ export default function SocialPlatforms() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load social platforms",
+            title: error?.message || "Failed to load social platforms!",
           });
         },
       },
@@ -65,11 +65,11 @@ export default function SocialPlatforms() {
         onSuccess: (res) => {
           fetchSocialPlatforms();
           closeModal();
-          notify.success({ title: res?.message || "Platform Deleted!" });
+          notify.success({ title: res?.message || "Platform deleted!" });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to delete social platform",
+            title: error?.message || "Failed to delete social platform!",
           });
         },
       },

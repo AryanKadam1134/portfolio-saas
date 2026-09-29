@@ -59,11 +59,11 @@ export default function Dashboard() {
     callApi("updating", () => userEndpoints.updateUser(updatedData), {
       onSuccess: (res) => {
         fetchUserDetails();
-        notify.success({ title: res?.message || "Details Updated!" });
+        notify.success({ title: res?.message || "Details updated!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to update user details",
+          title: error?.message || "Failed to update user details!",
         });
       },
     });

@@ -27,7 +27,7 @@ const addExperience = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!organization) {
-    throw new ApiError(400, "Organization is required!");
+    throw new ApiError(400, "Organization name is required!");
   }
 
   const oragnizationExists = await Experience.findOne({
@@ -36,7 +36,7 @@ const addExperience = asynchandler(async (req, res) => {
   });
 
   if (oragnizationExists) {
-    throw new ApiError(409, "Organization name already exists!");
+    throw new ApiError(409, "Organization already exists!");
   }
 
   const fields = {};
@@ -88,9 +88,7 @@ const addExperience = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(
-      new ApiRes(201, createdOrganization, "experience created successfully!"),
-    );
+    .json(new ApiRes(201, createdOrganization, "Experience created!"));
 });
 
 const updateExperience = asynchandler(async (req, res) => {
@@ -159,9 +157,7 @@ const updateExperience = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, updatedExperience, "Experience updated successfully!"),
-    );
+    .json(new ApiRes(200, updatedExperience, "Experience updated!"));
 });
 
 const updateOrganizationImage = asynchandler(async (req, res) => {
@@ -206,13 +202,7 @@ const updateOrganizationImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        updatedExperience,
-        "organizationImage updated successfully!",
-      ),
-    );
+    .json(new ApiRes(200, updatedExperience, "Organization image updated!"));
 });
 
 const deleteExperience = asynchandler(async (req, res) => {
@@ -231,9 +221,7 @@ const deleteExperience = asynchandler(async (req, res) => {
     }
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "Experience deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Experience deleted!"));
 });
 
 const deleteOrganiaztionImage = asynchandler(async (req, res) => {
@@ -260,19 +248,13 @@ const deleteOrganiaztionImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        upatedExpereince,
-        "organizationImage deleted successfully!",
-      ),
-    );
+    .json(new ApiRes(200, upatedExpereince, "Organization image deleted!"));
 });
 
 const getExperience = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiRes(200, req.experience, "experience fetched successfully!"));
+    .json(new ApiRes(200, req.experience, "Experience fetched!"));
 });
 
 const getAllExperiences = asynchandler(async (req, res) => {
@@ -291,18 +273,12 @@ const getAllExperiences = asynchandler(async (req, res) => {
   if (paginatedExperiences?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedExperiences, "no experiences found!"));
+      .json(new ApiRes(200, paginatedExperiences, "No experiences found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        paginatedExperiences,
-        "experiences fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, paginatedExperiences, "Experiences fetched!"));
 });
 
 export {

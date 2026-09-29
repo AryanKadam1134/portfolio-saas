@@ -48,7 +48,7 @@ export default function Educations() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load educations",
+            title: error?.message || "Failed to load educations!",
           });
         },
       },
@@ -60,11 +60,11 @@ export default function Educations() {
       onSuccess: (res) => {
         fetchEducations();
         closeModal();
-        notify.success({ title: res?.message || "Education Deleted!" });
+        notify.success({ title: res?.message || "Education deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete education",
+          title: error?.message || "Failed to delete education!",
         });
       },
     });

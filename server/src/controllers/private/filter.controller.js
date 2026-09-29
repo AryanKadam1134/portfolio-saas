@@ -19,13 +19,7 @@ import {
 const getSocialPlatforms = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        SOCIAL_PLATFORMS,
-        "socail platforms fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, SOCIAL_PLATFORMS, "Social platforms fetched!"));
 });
 
 const getSkillCategories = asynchandler(async (req, res) => {
@@ -34,7 +28,7 @@ const getSkillCategories = asynchandler(async (req, res) => {
   });
 
   if (categories?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no categories found!"));
+    return res.status(200).json(new ApiRes(200, [], "No categories found!"));
   }
 
   const formatted = categories?.map((category) => ({
@@ -44,7 +38,7 @@ const getSkillCategories = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, formatted, "categories fetched successfully!"));
+    .json(new ApiRes(200, formatted, "Categories fetched!"));
 });
 
 const getAllOrganizations = asynchandler(async (req, res) => {
@@ -53,7 +47,7 @@ const getAllOrganizations = asynchandler(async (req, res) => {
   });
 
   if (organizations?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no organizations found!"));
+    return res.status(200).json(new ApiRes(200, [], "No organizations found!"));
   }
 
   const formatted = organizations?.map((category) => ({
@@ -63,19 +57,13 @@ const getAllOrganizations = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, formatted, "organizations fetched successfully!"));
+    .json(new ApiRes(200, formatted, "Organizations fetched!"));
 });
 
 const getProjectCategories = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        PROJECT_CATEGORIES,
-        "project categories fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, PROJECT_CATEGORIES, "Project categories fetched!"));
 });
 
 const getAllSkills = asynchandler(async (req, res) => {
@@ -84,7 +72,7 @@ const getAllSkills = asynchandler(async (req, res) => {
   });
 
   if (skills?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no skills found!"));
+    return res.status(200).json(new ApiRes(200, [], "No skills found!"));
   }
 
   const formatted = skills?.map((category) => ({
@@ -92,9 +80,7 @@ const getAllSkills = asynchandler(async (req, res) => {
     value: category?._id,
   }));
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, formatted, "skills fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, formatted, "Skills fetched!"));
 });
 
 const getAllCertificates = asynchandler(async (req, res) => {
@@ -103,7 +89,7 @@ const getAllCertificates = asynchandler(async (req, res) => {
   });
 
   if (certificates?.length === 0) {
-    return res.status(200).json(new ApiRes(200, [], "no certificates found!"));
+    return res.status(200).json(new ApiRes(200, [], "No certificates found!"));
   }
 
   const formatted = certificates?.map((certificate) => ({
@@ -113,45 +99,35 @@ const getAllCertificates = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, formatted, "certificates fetched successfully!"));
+    .json(new ApiRes(200, formatted, "Certificates fetched!"));
 });
 
 const getSkillLevel = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiRes(200, SKILL_LEVEL, "skill levels fetched successfully!"));
+    .json(new ApiRes(200, SKILL_LEVEL, "Skill levels fetched!"));
 });
 
 const getGenders = asynchandler(async (req, res) => {
-  return res
-    .status(200)
-    .json(new ApiRes(200, GENDERS, "genders fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, GENDERS, "Genders fetched!"));
 });
 
 const getEmploymentTypes = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(
-      new ApiRes(
-        200,
-        EMPLOYMENT_TYPE,
-        "employment types fetched successfully!",
-      ),
-    );
+    .json(new ApiRes(200, EMPLOYMENT_TYPE, "Employment types fetched!"));
 });
 
 const getLocationTypes = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(
-      new ApiRes(200, LOCATION_TYPE, "location types fetched successfully!"),
-    );
+    .json(new ApiRes(200, LOCATION_TYPE, "Location types fetched!"));
 });
 
 const getVisibility = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiRes(200, VISIBILITY, "visibility fetched successfully!"));
+    .json(new ApiRes(200, VISIBILITY, "Visibility fetched!"));
 });
 
 export {

@@ -189,7 +189,7 @@ const googleAuth = asynchandler(async (req, res) => {
       refreshToken,
       rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
-    .json(new ApiRes(200, { user: loggedUser }, "Google login successful!"));
+    .json(new ApiRes(200, { user: loggedUser }, "Google auth successful!"));
 });
 
 const refreshAccessToken = asynchandler(async (req, res) => {
@@ -248,11 +248,7 @@ const refreshAccessToken = asynchandler(async (req, res) => {
       rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
     .json(
-      new ApiRes(
-        200,
-        { user, accessToken, refreshToken },
-        "session revived successfully!",
-      ),
+      new ApiRes(200, { user, accessToken, refreshToken }, "Session restored!"),
     );
 });
 
@@ -274,7 +270,7 @@ const registerUser = asynchandler(async (req, res) => {
   if (userExists) {
     throw new ApiError(
       409,
-      "user already exist with similar username or email!",
+      "User already exist with similar username or email!",
     );
   }
 
@@ -298,16 +294,14 @@ const registerUser = asynchandler(async (req, res) => {
     );
   });
 
-  return res
-    .status(201)
-    .json(new ApiRes(201, {}, "user created successfully!"));
+  return res.status(201).json(new ApiRes(201, {}, "User created!"));
 });
 
 const loginUser = asynchandler(async (req, res) => {
   const { userCredential, password, rememberMe } = req.body;
 
   if (!userCredential) {
-    throw new ApiError(400, "Username or email is required!");
+    throw new ApiError(400, "Username or Email is required!");
   }
 
   if (!password) {
@@ -353,9 +347,7 @@ const loginUser = asynchandler(async (req, res) => {
       refreshToken,
       rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
-    .json(
-      new ApiRes(200, { user: loggedUser }, "user logged in successfully!"),
-    );
+    .json(new ApiRes(200, { user: loggedUser }, "Logged in!"));
 });
 
 const logoutUser = asynchandler(async (req, res) => {
@@ -369,7 +361,7 @@ const logoutUser = asynchandler(async (req, res) => {
     .status(204)
     .clearCookie("accessToken", COOKIE_OPTIONS)
     .clearCookie("refreshToken", COOKIE_OPTIONS)
-    .json(new ApiRes(204, "user logged out successfully!"));
+    .json(new ApiRes(204, "Logged out!"));
 });
 
 const removeSession = asynchandler(async (req, res) => {
@@ -402,14 +394,10 @@ const removeSession = asynchandler(async (req, res) => {
       .status(200)
       .clearCookie("accessToken", COOKIE_OPTIONS)
       .clearCookie("refreshToken", COOKIE_OPTIONS)
-      .json(
-        new ApiRes(200, { isCurrentSession }, "user logged out successfully!"),
-      );
+      .json(new ApiRes(200, { isCurrentSession }, "Logged out!"));
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, {}, "user session logged out successfully!"));
+  return res.status(200).json(new ApiRes(200, {}, "Logged out of session!"));
 });
 
 const changePassword = asynchandler(async (req, res) => {
@@ -460,9 +448,7 @@ const changePassword = asynchandler(async (req, res) => {
     );
   });
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "Password changed successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Password changed!"));
 });
 
 const forgotPassword = asynchandler(async (req, res) => {
@@ -542,9 +528,7 @@ const resetPassword = asynchandler(async (req, res) => {
     );
   });
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "Password changed successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Password changed!"));
 });
 
 export {

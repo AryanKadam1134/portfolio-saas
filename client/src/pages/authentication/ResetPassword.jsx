@@ -46,10 +46,10 @@ export default function ResetPassword() {
       onSuccess: (res) => {
         setError(null);
         navigate("/signin");
-        notify.success({ title: res?.message });
+        notify.success({ title: res?.message || "Password changed!" });
       },
       onError: (error) => {
-        notify.error({ title: error?.message });
+        notify.error({ title: error?.message || "Failed to change password!" });
         setError(error?.message);
       },
     });

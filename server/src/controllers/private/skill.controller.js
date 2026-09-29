@@ -22,7 +22,7 @@ const addSkill = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!name) {
-    throw new ApiError(400, "Name is required!");
+    throw new ApiError(400, "Skill name is required!");
   }
 
   const skillExists = await Skill.findOne({
@@ -62,9 +62,7 @@ const addSkill = asynchandler(async (req, res) => {
     ...fields,
   });
 
-  return res
-    .status(201)
-    .json(new ApiRes(201, newSkill, "Skill added successfully!"));
+  return res.status(201).json(new ApiRes(201, newSkill, "Skill added!"));
 });
 
 const updateSkill = asynchandler(async (req, res) => {
@@ -128,23 +126,17 @@ const updateSkill = asynchandler(async (req, res) => {
     { new: true },
   );
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, updatedSkill, "skill updated successfully!"));
+  return res.status(200).json(new ApiRes(200, updatedSkill, "Skill updated!"));
 });
 
 const deleteSkill = asynchandler(async (req, res) => {
   await req.skill.deleteOne();
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "skill deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Skill deleted!"));
 });
 
 const getSkill = asynchandler(async (req, res) => {
-  return res
-    .status(200)
-    .json(new ApiRes(200, req.skill, "skill fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, req.skill, "Skill fetched!"));
 });
 
 const getAllSkillWithCategory = asynchandler(async (req, res) => {
@@ -186,12 +178,12 @@ const getAllSkillWithCategory = asynchandler(async (req, res) => {
   if (paginatedSkills?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedSkills, "no skills found!"));
+      .json(new ApiRes(200, paginatedSkills, "No skills found!"));
   }
 
   return res
     .status(200)
-    .json(new ApiRes(200, paginatedSkills, "skills fetched successfully!"));
+    .json(new ApiRes(200, paginatedSkills, "Skills fetched!"));
 });
 
 export {

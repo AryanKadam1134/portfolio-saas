@@ -78,7 +78,7 @@ export default function AddEditAchievement() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load achievement",
+            title: error?.message || "Failed to load achievement!",
           });
         },
       },
@@ -102,12 +102,12 @@ export default function AddEditAchievement() {
           notify.success({
             title:
               res?.message ||
-              (isEditing ? "Achievement Updated!" : "Achievement Added!"),
+              (isEditing ? "Achievement updated!" : "Achievement added!"),
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to save achievement",
+            title: error?.message || "Failed to save achievement!",
           });
         },
       },
@@ -124,11 +124,11 @@ export default function AddEditAchievement() {
       {
         onSuccess: (res) => {
           setValue("coverImageIndex", idx, { shouldDirty: true });
-          notify.success({ title: res?.message || "Cover Image Changed!" });
+          notify.success({ title: res?.message || "Cover image changed!" });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to change cover image",
+            title: error?.message || "Failed to change cover image!",
           });
         },
       },
@@ -149,12 +149,12 @@ export default function AddEditAchievement() {
         onSuccess: (res) => {
           fetchAchievement();
           notify.success({
-            title: res?.message || "Achievement Images Updated!",
+            title: res?.message || "Achievement images updated!",
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to upload achievement images",
+            title: error?.message || "Failed to upload achievement images!",
           });
         },
       },
@@ -171,13 +171,13 @@ export default function AddEditAchievement() {
         onSuccess: (res) => {
           fetchAchievement();
           notify.success({
-            title: res?.message || "Achievement Image Deleted!",
+            title: res?.message || "Achievement image deleted!",
           });
           setImageDeleting(null);
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to delete achievement image",
+            title: error?.message || "Failed to delete achievement image!",
           });
           setImageDeleting(null);
         },

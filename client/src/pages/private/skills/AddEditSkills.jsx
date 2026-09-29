@@ -121,12 +121,12 @@ export default function AddEditSkills() {
           fetchSkill();
           notify.success({
             title:
-              res?.message || (isEditing ? "Skill Updated!" : "Skill Added!"),
+              res?.message || (isEditing ? "Skill updated!" : "Skill added!"),
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to save skill",
+            title: error?.message || "Failed to save skill!",
           });
         },
       },

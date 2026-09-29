@@ -26,7 +26,7 @@ const addEducation = asynchandler(async (req, res) => {
   } = req.body;
 
   if (!instituteName) {
-    throw new ApiError(400, "InstituteName is required!");
+    throw new ApiError(400, "Institute name is required!");
   }
 
   if (!qualification) {
@@ -78,7 +78,7 @@ const addEducation = asynchandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiRes(201, createdInstitute, "institute created successfully!"));
+    .json(new ApiRes(201, createdInstitute, "Education added!"));
 });
 
 const updateEducationDetails = asynchandler(async (req, res) => {
@@ -129,7 +129,7 @@ const updateEducationDetails = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiRes(200, updatedEducation, "education updated successfully!"));
+    .json(new ApiRes(200, updatedEducation, "Education updated!"));
 });
 
 const updateInstituteImage = asynchandler(async (req, res) => {
@@ -177,9 +177,7 @@ const updateInstituteImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, updatedEducation, "instituteImage updated successfully!"),
-    );
+    .json(new ApiRes(200, updatedEducation, "Institute image updated!"));
 });
 
 const deleteEducation = asynchandler(async (req, res) => {
@@ -198,9 +196,7 @@ const deleteEducation = asynchandler(async (req, res) => {
     }
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "education deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Education deleted!"));
 });
 
 const deleteInstituteImage = asynchandler(async (req, res) => {
@@ -227,15 +223,13 @@ const deleteInstituteImage = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, updatedEducation, "instituteImage deleted successfully!"),
-    );
+    .json(new ApiRes(200, updatedEducation, "Institute image deleted!"));
 });
 
 const getEducation = asynchandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiRes(200, req.education, "education fetched successfully!"));
+    .json(new ApiRes(200, req.education, "Education fetched!"));
 });
 
 const getAllEducations = asynchandler(async (req, res) => {
@@ -254,14 +248,12 @@ const getAllEducations = asynchandler(async (req, res) => {
   if (paginatedEducations?.data?.length === 0) {
     return res
       .status(200)
-      .json(new ApiRes(200, paginatedEducations, "no educations found!"));
+      .json(new ApiRes(200, paginatedEducations, "No educations found!"));
   }
 
   return res
     .status(200)
-    .json(
-      new ApiRes(200, paginatedEducations, "educations fetched successfully!"),
-    );
+    .json(new ApiRes(200, paginatedEducations, "Educations fetched!"));
 });
 
 export {

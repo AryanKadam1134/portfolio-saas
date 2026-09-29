@@ -114,7 +114,7 @@ export default function AddEditExperiences() {
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to load experience",
+          title: error?.message || "Failed to load experience!",
         });
       },
     });
@@ -138,12 +138,12 @@ export default function AddEditExperiences() {
           notify.success({
             title:
               res?.message ||
-              (isEditing ? "Experience Updated!" : "Experience Added!"),
+              (isEditing ? "Experience updated!" : "Experience added!"),
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to save experience",
+            title: error?.message || "Failed to save experience!",
           });
         },
       },
@@ -162,12 +162,12 @@ export default function AddEditExperiences() {
         onSuccess: (res) => {
           fetchExperience();
           notify.success({
-            title: res?.message || "Organization Images Updated!",
+            title: res?.message || "Organization images updated!",
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to upload organization images",
+            title: error?.message || "Failed to upload organization images!",
           });
         },
       },
@@ -182,12 +182,12 @@ export default function AddEditExperiences() {
         onSuccess: (res) => {
           fetchExperience();
           notify.success({
-            title: res?.message || "Organization Image Deleted!",
+            title: res?.message || "Organization image deleted!",
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to delete organization image",
+            title: error?.message || "Failed to delete organization image!",
           });
         },
       },

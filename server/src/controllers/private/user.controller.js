@@ -22,9 +22,13 @@ const hasPassowrd = asynchandler(async (req, res) => {
   const user = await User.findById(req.user?._id);
 
   if (!user?.password && user?.googleId) {
-    return res.status(200).json(new ApiRes(200, false, ""));
+    return res
+      .status(200)
+      .json(new ApiRes(200, false, "Google auth signed up user!"));
   } else {
-    return res.status(200).json(new ApiRes(200, true, ""));
+    return res
+      .status(200)
+      .json(new ApiRes(200, true, "Manually signed up user!"));
   }
 });
 
@@ -98,22 +102,18 @@ const updateUserDetails = asynchandler(async (req, res) => {
     { new: true },
   ).select("-password -sessions -googleId -otp -otpExpiryDate");
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, updatedUser, "user details updated successfully!"));
+  return res.status(200).json(new ApiRes(200, updatedUser, "Details updated!"));
 });
 
 const getUserDetails = asynchandler(async (req, res) => {
-  return res
-    .status(200)
-    .json(new ApiRes(200, req.user, "user details fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, req.user, "Details fetched!"));
 });
 
 const getUserSessions = asynchandler(async (req, res) => {
   const user = await User.findById(req.user?._id);
 
   if (!user) {
-    throw new ApiError(404, "user not found!");
+    throw new ApiError(404, "User not found!");
   }
 
   const rawSessions = user?.sessions || [];
@@ -147,38 +147,30 @@ const getUserSessions = asynchandler(async (req, res) => {
   });
 
   if (!sessions.length) {
-    throw new ApiError(404, "no sessions found!");
+    throw new ApiError(404, "No sessions found!");
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, sessions, "user sessions fetched successfully!"));
+  return res.status(200).json(new ApiRes(200, sessions, "Sessions fetched!"));
 });
 
 const getUserImage = asynchandler(async (req, res) => {
   const { image } = req.user || {};
 
   if (image?.url) {
-    return res
-      .status(200)
-      .json(new ApiRes(200, image, "user image fetched successfully!"));
+    return res.status(200).json(new ApiRes(200, image, "Image fetched!"));
   }
 
-  return res.status(200).json(new ApiRes(200, {}, "couldn't find user image!"));
+  return res.status(200).json(new ApiRes(200, {}, "No image found!"));
 });
 
 const getUserResume = asynchandler(async (req, res) => {
   const { resumeOrCv } = req.user || {};
 
   if (resumeOrCv?.url) {
-    return res
-      .status(200)
-      .json(new ApiRes(200, resumeOrCv, "user resume fetched successfully!"));
+    return res.status(200).json(new ApiRes(200, resumeOrCv, "Resume fetched!"));
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, {}, "couldn't find user resume!"));
+  return res.status(200).json(new ApiRes(200, {}, "No resume found!"));
 });
 
 const updateUserImage = asynchandler(async (req, res) => {
@@ -220,9 +212,7 @@ const updateUserImage = asynchandler(async (req, res) => {
     }
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, updatedUser, "user image updated successfully!"));
+  return res.status(200).json(new ApiRes(200, updatedUser, "Image updated!"));
 });
 
 const updateUserResume = asynchandler(async (req, res) => {
@@ -233,7 +223,7 @@ const updateUserResume = asynchandler(async (req, res) => {
   const userResumeLocalPath = req.file?.path;
 
   if (!userResumeLocalPath) {
-    throw new ApiError(400, "Missing resumeOrCv file path!");
+    throw new ApiError(400, "Missing resume file path!");
   }
 
   const updatedResume = await uploadToCloudinary(userResumeLocalPath);
@@ -264,9 +254,7 @@ const updateUserResume = asynchandler(async (req, res) => {
     }
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, updatedUser, "user resume updated successfully!"));
+  return res.status(200).json(new ApiRes(200, updatedUser, "Resume updated!"));
 });
 
 const deleteUserImage = asynchandler(async (req, res) => {
@@ -290,9 +278,7 @@ const deleteUserImage = asynchandler(async (req, res) => {
     }
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, updatedUser, "image deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, updatedUser, "Image deleted!"));
 });
 
 const deleteUserResume = asynchandler(async (req, res) => {
@@ -316,9 +302,7 @@ const deleteUserResume = asynchandler(async (req, res) => {
     }
   }
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, updatedUser, "resumeOrCv deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, updatedUser, "Resume deleted!"));
 });
 
 const deleteUser = asynchandler(async (req, res) => {
@@ -405,9 +389,7 @@ const deleteUser = asynchandler(async (req, res) => {
   // Finally, delete the user document from database
   await User.findByIdAndDelete(loggedUserId);
 
-  return res
-    .status(200)
-    .json(new ApiRes(200, null, "user account deleted successfully!"));
+  return res.status(200).json(new ApiRes(200, null, "Account deleted!"));
 });
 
 export {

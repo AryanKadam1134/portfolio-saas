@@ -41,11 +41,11 @@ export default function ChangePassword() {
       onSuccess: (res) => {
         reset();
         notify.success({
-          title: res?.message || "Password changed successfully!",
+          title: res?.message || "Password changed!",
         });
       },
       onError: (error) => {
-        notify.error({ title: error?.message || "Failed to change password" });
+        notify.error({ title: error?.message || "Failed to change password!" });
       },
     });
   };
@@ -61,7 +61,7 @@ export default function ChangePassword() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to check password",
+            title: error?.message || "Failed to check password!",
           });
         },
       });

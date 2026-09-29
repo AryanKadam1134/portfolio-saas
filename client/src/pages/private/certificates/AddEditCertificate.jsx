@@ -79,7 +79,7 @@ export default function AddEditCertificate() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load certificate",
+            title: error?.message || "Failed to load certificate!",
           });
         },
       },
@@ -103,12 +103,12 @@ export default function AddEditCertificate() {
           notify.success({
             title:
               res?.message ||
-              (isEditing ? "Certificate Updated!" : "Certificate Added!"),
+              (isEditing ? "Certificate updated!" : "Certificate added!"),
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to save certificate",
+            title: error?.message || "Failed to save certificate!",
           });
         },
       },
@@ -127,12 +127,12 @@ export default function AddEditCertificate() {
         onSuccess: (res) => {
           fetchCertificate();
           notify.success({
-            title: res?.message || "Certificate Images Updated!",
+            title: res?.message || "Certificate images updated!",
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to upload certificate images",
+            title: error?.message || "Failed to upload certificate images!",
           });
         },
       },
@@ -147,12 +147,12 @@ export default function AddEditCertificate() {
         onSuccess: (res) => {
           fetchCertificate();
           notify.success({
-            title: res?.message || "Certificate Image Deleted!",
+            title: res?.message || "Certificate image deleted!",
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to delete certificate image",
+            title: error?.message || "Failed to delete certificate image!",
           });
         },
       },

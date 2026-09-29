@@ -84,7 +84,7 @@ export default function AddEditProject() {
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to load project details",
+          title: error?.message || "Failed to load project details!",
         });
       },
     });
@@ -107,12 +107,12 @@ export default function AddEditProject() {
           notify.success({
             title:
               res?.message ||
-              (isEditing ? "Project Updated!" : "Project Added!"),
+              (isEditing ? "Project updated!" : "Project added!"),
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to save project",
+            title: error?.message || "Failed to save project!",
           });
         },
       },
@@ -129,11 +129,11 @@ export default function AddEditProject() {
       {
         onSuccess: (res) => {
           setValue("coverImageIndex", idx, { shouldDirty: true });
-          notify.success({ title: res?.message || "Cover Image Changed!" });
+          notify.success({ title: res?.message || "Cover image changed!" });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to change cover image",
+            title: error?.message || "Failed to change cover image!",
           });
         },
       },
@@ -153,11 +153,11 @@ export default function AddEditProject() {
       {
         onSuccess: (res) => {
           fetchProject();
-          notify.success({ title: res?.message || "Project Images Updated!" });
+          notify.success({ title: res?.message || "Project images updated!" });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to upload project images",
+            title: error?.message || "Failed to upload project images!",
           });
         },
       },
@@ -173,12 +173,12 @@ export default function AddEditProject() {
       {
         onSuccess: (res) => {
           fetchProject();
-          notify.success({ title: res?.message || "Project Image Deleted!" });
+          notify.success({ title: res?.message || "Project image deleted!" });
           setImageDeleting(null);
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to delete project image",
+            title: error?.message || "Failed to delete project image!",
           });
           setImageDeleting(null);
         },

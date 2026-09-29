@@ -51,7 +51,7 @@ export default function AddEditEducation() {
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to load education",
+          title: error?.message || "Failed to load education!",
         });
       },
     });
@@ -74,12 +74,12 @@ export default function AddEditEducation() {
           notify.success({
             title:
               res?.message ||
-              (isEditing ? "Education Updated!" : "Education Added!"),
+              (isEditing ? "Education updated!" : "Education added!"),
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to save education",
+            title: error?.message || "Failed to save education!",
           });
         },
       },
@@ -98,12 +98,12 @@ export default function AddEditEducation() {
         onSuccess: (res) => {
           fetchEducation();
           notify.success({
-            title: res?.message || "Institute Images Updated!",
+            title: res?.message || "Institute images updated!",
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to upload institute images",
+            title: error?.message || "Failed to upload institute images!",
           });
         },
       },
@@ -118,12 +118,12 @@ export default function AddEditEducation() {
         onSuccess: (res) => {
           fetchEducation();
           notify.success({
-            title: res?.message || "Institute Image Deleted!",
+            title: res?.message || "Institute image deleted!",
           });
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to delete institute image",
+            title: error?.message || "Failed to delete institute image!",
           });
         },
       },

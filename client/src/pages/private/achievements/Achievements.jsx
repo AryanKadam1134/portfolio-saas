@@ -51,7 +51,7 @@ export default function Achievements() {
         },
         onError: (error) => {
           notify.error({
-            title: error?.message || "Failed to load achievements",
+            title: error?.message || "Failed to load achievements!",
           });
         },
       },
@@ -63,11 +63,11 @@ export default function Achievements() {
       onSuccess: (res) => {
         fetchAchievements();
         closeModal();
-        notify.success({ title: res?.message || "Achievement Deleted!" });
+        notify.success({ title: res?.message || "Achievement deleted!" });
       },
       onError: (error) => {
         notify.error({
-          title: error?.message || "Failed to delete achievement",
+          title: error?.message || "Failed to delete achievement!",
         });
       },
     });
