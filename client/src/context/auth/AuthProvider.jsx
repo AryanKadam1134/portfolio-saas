@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
   const googleAuth = (body) => {
     callApi("authLoading", () => authEndpoints.googleAuth(body, config), {
       onSuccess: (res) => {
-        setUser(res.data?.user);
+        setUser(res?.data);
         setError(null);
       },
       onError: (error) => {
@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
       () => authEndpoints.login(payload, config),
       {
         onSuccess: (res) => {
-          setUser(res.data?.user);
+          setUser(res?.data);
           setError(null);
         },
         onError: (error) => {
@@ -84,7 +84,7 @@ export function AuthProvider({ children }) {
     const restoreSession = () => {
       callApi("authLoading", () => authEndpoints.restoreSession(config), {
         onSuccess: (res) => {
-          setUser(res.data?.user);
+          setUser(res?.data);
         },
       });
     };

@@ -189,7 +189,7 @@ const googleAuth = asynchandler(async (req, res) => {
       refreshToken,
       rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
-    .json(new ApiRes(200, { user: loggedUser }, "Google auth successful!"));
+    .json(new ApiRes(200, loggedUser, "Google auth successful!"));
 });
 
 const refreshAccessToken = asynchandler(async (req, res) => {
@@ -247,9 +247,7 @@ const refreshAccessToken = asynchandler(async (req, res) => {
       refreshToken,
       rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
-    .json(
-      new ApiRes(200, { user, accessToken, refreshToken }, "Session restored!"),
-    );
+    .json(new ApiRes(200, user, "Session restored!"));
 });
 
 const registerUser = asynchandler(async (req, res) => {
@@ -347,7 +345,7 @@ const loginUser = asynchandler(async (req, res) => {
       refreshToken,
       rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
     )
-    .json(new ApiRes(200, { user: loggedUser }, "Logged in!"));
+    .json(new ApiRes(200, loggedUser, "Logged in!"));
 });
 
 const logoutUser = asynchandler(async (req, res) => {
@@ -361,7 +359,7 @@ const logoutUser = asynchandler(async (req, res) => {
     .status(204)
     .clearCookie("accessToken", COOKIE_OPTIONS)
     .clearCookie("refreshToken", COOKIE_OPTIONS)
-    .json(new ApiRes(204, "Logged out!"));
+    .json(new ApiRes(204, {}, "Logged out!"));
 });
 
 const removeSession = asynchandler(async (req, res) => {

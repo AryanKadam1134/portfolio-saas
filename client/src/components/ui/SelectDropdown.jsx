@@ -14,8 +14,9 @@ import {
 } from "@floating-ui/react";
 import { ChevronDown, Search, X } from "lucide-react";
 
-import { inputClass } from "../../utils/getInputClass";
 import CustomInput from "./CustomInput";
+
+import { inputClass } from "../../utils/getInputClass";
 
 export default function SelectDropdown({
   id,

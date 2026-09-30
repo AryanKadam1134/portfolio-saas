@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 
-export default function useApi(deafults) {
-  const [loading, setLoading] = useState(deafults || {});
+export default function useApi(defaults) {
+  const [loading, setLoading] = useState(defaults || {});
 
   const setLoadingKey = useCallback((key, boolean) => {
     setLoading((prev) => ({ ...prev, [key]: boolean }));
