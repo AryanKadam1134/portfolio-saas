@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LockKeyholeOpen, Mail } from "lucide-react";
@@ -14,14 +16,14 @@ import { authEndpoints } from "../../services/auth.service";
 
 import useApi from "../../hooks/useApi";
 
-import { useAuth } from "../../context/auth/useAuth";
 import { useNotify } from "../../context/notification/useNotify";
 
 export default function SignUp() {
   const { notify } = useNotify();
-  const { error, setError } = useAuth();
 
   const { loading, callApi } = useApi();
+
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
