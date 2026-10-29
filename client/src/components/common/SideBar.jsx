@@ -33,7 +33,7 @@ const menus = [
 ];
 
 const menuStyle =
-  "group relative flex min-w-0 items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all duration-200";
+  "group relative flex min-w-0 items-center gap-3 rounded-xl px-4 py-3.5 text-sm transition-all duration-200";
 
 function NavItem({ menu, onClick }) {
   const Icon = menu.icon;
@@ -52,15 +52,7 @@ function NavItem({ menu, onClick }) {
     >
       {({ isActive }) => (
         <>
-          <span
-            className={`flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors ${
-              isActive
-                ? "bg-light-text-primary text-white shadow-sm shadow-black/10 dark:bg-dark-text-primary dark:text-dark-bg-primary"
-                : "text-light-text-tertiary group-hover:text-light-text-primary dark:text-dark-text-tertiary dark:group-hover:text-dark-text-primary"
-            }`}
-          >
-            <Icon size={18} strokeWidth={isActive ? 2.2 : 1.8} />
-          </span>
+          <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
           <span className="truncate">{menu.name}</span>
         </>
       )}
@@ -121,30 +113,26 @@ export default function SideBar({ isOpen, onClose }) {
             </nav>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <div className="border-t border-light-border-primary pt-3 dark:border-dark-border-primary">
-              <NavItem
-                menu={{ name: "Settings", path: "/settings", icon: Settings }}
-                onClick={onClose}
-              />
+          <div className="pt-3 flex flex-col gap-1 border-t border-light-border-primary dark:border-dark-border-primary">
+            <NavItem
+              menu={{ name: "Settings", path: "/settings", icon: Settings }}
+              onClick={onClose}
+            />
 
-              <button
-                type="button"
-                onClick={() => {
-                  logout();
-                  onClose();
-                }}
-                className={`${menuStyle} mt-1 w-full
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                onClose();
+              }}
+              className={`${menuStyle} w-full
                 text-red-600 hover:text-red-700 hover:bg-red-50
                 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950 dark:hover:bg-opacity-30
                 cursor-pointer`}
-              >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg">
-                  <LogOut size={18} />
-                </span>
-                <span>Logout</span>
-              </button>
-            </div>
+            >
+              <LogOut size={18} />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </aside>
