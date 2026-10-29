@@ -28,7 +28,7 @@ export default {
             ring: "#09090b",
             text: "#09090b",
             placeholder: "#09090b",
-            error: "#09090b",
+            error: "#ef4444",
           },
         },
         dark: {

@@ -180,7 +180,7 @@ export default function SignUp() {
 
             <span
               onClick={() => navigate("/signin")}
-              className="text-light-text-secondary hover:text-light-text-primary dark:text-dark-text-secondary dark:hover:text-dark-text-primary cursor-pointer transition-colors"
+              className="text-blue-400 hover:text-blue-500 cursor-pointer transition-colors"
             >
               Sign In
             </span>

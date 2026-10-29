@@ -24,9 +24,10 @@ export default function GoogleAuthButton({ rememberMe }) {
       onClick={() => authenticate()}
       className="p-2.5 flex items-center justify-between gap-3
       text-light-text-primary dark:text-dark-text-primary
-      bg-light-input-bg dark:bg-dark-input-bg
-      border border-light-input-border dark:border-dark-input-border
-      rounded-full cursor-pointer"
+      bg-light-bg-secondary dark:bg-dark-bg-secondary
+      hover:bg-light-bg-tertiary hover:dark:bg-dark-bg-tertiary
+      border border-light-border-primary dark:border-dark-border-primary
+      rounded-full cursor-pointer transition-all duration-200"
     >
       <img src={googleLogo} alt="Google Logo" className="size-5" />
       <span className="w-full text-center">Continue with Google</span>
