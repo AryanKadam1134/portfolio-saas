@@ -41,14 +41,14 @@ export default function DragDropUpload({
         onClick={() => !loading && fileInputRef.current.click()}
         className={`max-h-35 w-full px-4 py-6 flex flex-col items-center justify-center gap-3
         text-center border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary
-        ${isDragging && "bg-blue-500/10 dark:bg-blue-950/20 border-blue-400 dark:border-blue-500"}
-        ${!loading && "hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-hover"}
+        ${isDragging && "bg-light-bg-secondary dark:bg-dark-bg-secondary border-light-border-secondary dark:border-dark-border-secondary"}
+        ${!loading && "hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-tertiary"}
         ${className} rounded-md cursor-pointer transition-all duration-200`}
       >
         {loading ? (
           <Loader
             size={24}
-            className="text-blue-500 dark:text-blue-400 animate-spin"
+            className="text-light-text-primary dark:text-dark-text-primary animate-spin"
           />
         ) : (
           <>

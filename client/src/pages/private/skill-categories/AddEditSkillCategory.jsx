@@ -111,7 +111,7 @@ export default function AddEditSkillCategory() {
 
       <form
         onSubmit={handleSubmit(addUpdateSkillCategory)}
-        className="grid grid-cols-12 gap-6 text-sm"
+        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
         {/* Category Name */}
         <FormField

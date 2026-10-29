@@ -20,7 +20,7 @@ export default function CustomInputPassword({
       {Icon && (
         <Icon
           size={18}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-light-text-secondary dark:text-dark-text-secondary cursor-pointer"
         />
       )}
 
@@ -33,7 +33,7 @@ export default function CustomInputPassword({
       <button
         type="button"
         onClick={() => setShowPassword((prev) => !prev)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black dark:hover:text-gray-100 cursor-pointer"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-light-text-secondary hover:text-light-text-primary dark:text-dark-text-secondary dark:hover:text-dark-text-primary cursor-pointer"
       >
         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
       </button>

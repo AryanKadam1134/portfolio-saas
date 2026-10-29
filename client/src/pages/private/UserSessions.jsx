@@ -44,21 +44,21 @@ export default function UserSessions() {
         heading="Active Sessions"
         subHeading="Review where your account is signed in and remove access you no longer recognize"
       >
-        <div className="hidden items-center gap-2 rounded-md border border-light-border-primary bg-light-bg-primary px-3 py-2 text-xs text-light-text-secondary shadow-sm dark:border-dark-border-primary dark:bg-dark-bg-tertiary dark:text-dark-text-secondary sm:flex">
+        <div className="hidden items-center gap-2 rounded-md border border-light-border-primary bg-light-bg-primary px-3 py-2 text-xs text-light-text-secondary shadow-sm dark:border-dark-border-primary dark:bg-dark-bg-primary dark:text-dark-text-secondary sm:flex">
           <LogOut size={15} />
           {userSessions.length} active
         </div>
       </PageHeader>
 
       {isLoading && (
-        <div className="flex items-center justify-center rounded-md border border-light-border-primary bg-light-bg-primary py-16 text-light-text-secondary dark:border-dark-border-primary dark:bg-dark-bg-tertiary dark:text-dark-text-secondary">
+        <div className="flex items-center justify-center rounded-md border border-light-border-primary bg-light-bg-primary py-16 text-light-text-secondary dark:border-dark-border-primary dark:bg-dark-bg-primary dark:text-dark-text-secondary">
           <LoaderCircle size={20} className="mr-2 animate-spin" />
           Loading sessions...
         </div>
       )}
 
       {!isLoading && !userSessions.length && (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-dashed border-light-border-primary bg-light-bg-primary px-6 py-16 text-center dark:border-dark-border-primary dark:bg-dark-bg-tertiary">
+        <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-dashed border-light-border-primary bg-light-bg-primary px-6 py-16 text-center dark:border-dark-border-primary dark:bg-dark-bg-primary">
           <div className="rounded-full bg-light-bg-secondary p-3 text-light-text-secondary dark:bg-dark-bg-secondary dark:text-dark-text-secondary">
             <Laptop size={24} />
           </div>

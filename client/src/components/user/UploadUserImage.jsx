@@ -138,7 +138,7 @@ export default function UploadUserImage() {
 
               <div
                 onClick={() => imageInputRef.current.click()}
-                className="p-2 text-blue-400 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 bg-black/50 rounded-full cursor-pointer transition-colors"
+                className="p-2 text-green-400 hover:text-green-500 bg-black/50 rounded-full cursor-pointer transition-colors"
               >
                 <SquarePen size={20} />
               </div>

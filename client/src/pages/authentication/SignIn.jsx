@@ -64,7 +64,7 @@ export default function SignIn() {
             attachment={
               <Link
                 to="/forgot-password"
-                className="text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+                className="text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
               >
                 Forgot Password?
               </Link>
@@ -115,7 +115,7 @@ export default function SignIn() {
         <>
           <div className="flex items-center gap-3 text-xs">
             <p className="flex-1 border-b border-light-input-border dark:border-dark-input-border"></p>
-            <p className="text-gray-400">OR</p>
+            <p className="text-light-text-secondary">OR</p>
             <p className="flex-1 border-b border-light-input-border dark:border-dark-input-border"></p>
           </div>
 
@@ -126,7 +126,7 @@ export default function SignIn() {
 
             <span
               onClick={() => navigate("/signup")}
-              className="text-blue-500 hover:text-blue-600 cursor-pointer transition-colors"
+              className="text-light-text-secondary hover:text-light-text-primary dark:text-dark-text-secondary dark:hover:text-dark-text-primary cursor-pointer transition-colors"
             >
               Sign Up
             </span>

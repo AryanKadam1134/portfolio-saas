@@ -30,14 +30,14 @@ export default function FormField({
   return (
     <div
       className={`${className} ${colSpan}
-      flex ${orientation == "vertical" ? `flex-col gap-1.5` : `items-center gap-3`}`}
+      flex ${orientation == "vertical" ? `flex-col gap-2` : `items-center gap-3`}`}
     >
       <div className="flex items-center gap-3">
         {isCheckbox && child}
 
         <label
           htmlFor={id}
-          className={`w-full flex ${isCheckbox || orientation == "horizontal" ? "flex-col gap-0.5" : "flex-row items-center whitespace-nowrap"} justify-between font-medium text-[13px] text-light-text-primary dark:text-dark-text-primary
+          className={`w-full flex ${isCheckbox || orientation == "horizontal" ? "flex-col gap-0.5" : "flex-row items-center whitespace-nowrap"} justify-between font-semibold text-xs tracking-wide text-light-text-secondary dark:text-dark-text-secondary
           ${bold && `font-semibold`}`}
         >
           <p>

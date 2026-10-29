@@ -16,7 +16,7 @@ function ScrollButton({ icon, scroll, className = "" }) {
           ?.scrollBy({ left: scroll, behavior: "smooth" })
       }
       className={`${className} hidden sm:flex absolute top-1/2 -translate-y-1/2 z-10 p-2
-        bg-light-bg-secondary dark:bg-dark-bg-tertiary
+        bg-light-bg-secondary dark:bg-dark-bg-secondary
         hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover
         border border-light-border-primary dark:border-dark-border-primary
         text-light-text-primary dark:text-dark-text-primary
@@ -83,7 +83,7 @@ export default function ImageGallery({
                   }
                   className={`relative group h-35 w-auto shrink-0 rounded-md overflow-hidden transition-all ${
                     isCoverImage
-                      ? "ring-1 ring-green-500 border-0 shadow-md"
+                      ? "ring-2 ring-light-text-primary border-0 shadow-md"
                       : "border border-light-border-primary dark:border-dark-border-primary hover:shadow-md"
                   } bg-light-bg-secondary dark:bg-dark-bg-secondary`}
                 >
@@ -103,7 +103,7 @@ export default function ImageGallery({
 
                   {/* Cover Badge */}
                   {isCoverImage && (
-                    <div className="absolute top-2 left-2 px-2 py-1 rounded-md bg-green-500 text-white text-xs font-semibold flex items-center gap-1">
+                    <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-light-text-primary text-white dark:bg-dark-text-primary dark:text-dark-bg-primary text-xs font-semibold flex items-center gap-1 shadow-md">
                       <Image size={14} />
                       Cover
                     </div>

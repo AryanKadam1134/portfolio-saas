@@ -109,7 +109,7 @@ export default function SocialPlatforms() {
           <a
             href={`${link}`}
             target="_blank"
-            className="text-blue-500 hover:text-blue-600"
+            className="text-blue-400 hover:text-blue-500 transition-colors"
           >
             <ExternalLink size={18} />
           </a>

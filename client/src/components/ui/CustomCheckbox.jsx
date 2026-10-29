@@ -3,7 +3,7 @@ export default function CustomCheckbox({ ...props }) {
     <input
       {...props}
       type="checkbox"
-      className="accent-blue-500 dark:accent-blue-400 cursor-pointer"
+      className="size-4 accent-blue-500 cursor-pointer"
     />
   );
 }

@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 
 export default function Table({ tableHeading, tableBody, loading }) {
   return (
-    <div className="w-full overflow-hidden rounded-md border border-light-border-primary dark:border-dark-border-primary bg-light-bg-primary dark:bg-dark-bg-tertiary shadow-sm">
+    <div className="w-full overflow-hidden rounded-2xl border border-light-border-primary dark:border-dark-border-primary bg-light-bg-primary dark:bg-dark-bg-primary shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)]">
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-light-text-primary dark:text-dark-text-primary">
           {/* Header */}
@@ -11,7 +11,7 @@ export default function Table({ tableHeading, tableBody, loading }) {
               {tableHeading?.map((h, index) => (
                 <th
                   key={h?.label || index}
-                  className="px-5 py-4 text-left font-semibold text-light-text-secondary dark:text-dark-text-secondary whitespace-nowrap"
+                  className="px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-light-text-tertiary dark:text-dark-text-tertiary whitespace-nowrap"
                 >
                   {h?.label}
                 </th>
@@ -43,7 +43,7 @@ export default function Table({ tableHeading, tableBody, loading }) {
                   {row?.cells?.map((c, cellIndex) => (
                     <td
                       key={cellIndex}
-                      className="px-5 py-4 text-left whitespace-nowrap"
+                      className="px-5 py-4 text-left whitespace-nowrap first:font-medium"
                     >
                       {c ?? "-"}
                     </td>

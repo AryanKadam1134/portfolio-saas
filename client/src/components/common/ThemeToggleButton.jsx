@@ -15,11 +15,11 @@ export default function ThemeToggleButton() {
       aria-label="Toggle dark mode"
       aria-pressed={isDark}
       className={`relative w-8.5 h-4.5 rounded-full transition-all duration-300 cursor-pointer
-          ${isDark ? "bg-zinc-800 border-zinc-600" : "bg-zinc-200 border-zinc-300"}`}
+          ${isDark ? "bg-dark-bg-tertiary border-dark-border-secondary" : "bg-light-bg-tertiary border-light-border-secondary"}`}
     >
       <span
         className={`absolute top-px left-px p-0.5 rounded-full flex items-center justify-center shadow-sm transition-all duration-300
-            ${isDark ? "translate-x-4 bg-zinc-900 text-violet-400" : "translate-x-0 bg-white text-amber-400"}`}
+            ${isDark ? "translate-x-4 bg-dark-bg-primary text-violet-400" : "translate-x-0 bg-light-bg-primary text-amber-400"}`}
       >
         {isDark ? <Moon size={12} /> : <SunDim size={12} />}
       </span>

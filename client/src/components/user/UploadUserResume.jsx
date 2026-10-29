@@ -105,15 +105,15 @@ export default function UploadUserResume() {
           flex-1 min-h-32 flex flex-col items-center justify-center gap-3
           border-2 border-dashed border-light-border-secondary dark:border-dark-border-secondary rounded-md cursor-pointer
           transition-all duration-200 px-4 py-5 text-center
-          ${isDragging && "bg-blue-500/10 dark:bg-blue-950/20 border-blue-400 dark:border-blue-500"}
-          ${!resumeLoading && "hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-hover"}
+          ${isDragging && "bg-light-bg-secondary dark:bg-dark-bg-secondary border-light-border-secondary dark:border-dark-border-secondary"}
+          ${!resumeLoading && "hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-tertiary"}
         `}
       >
         {resumeLoading ? (
           <>
             <Loader
               size={24}
-              className="text-blue-500 dark:text-blue-400 animate-spin"
+              className="text-light-text-primary dark:text-dark-text-primary animate-spin"
             />
           </>
         ) : resumeUrl ? (

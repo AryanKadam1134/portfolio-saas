@@ -14,8 +14,8 @@ export default function ActionButton({
   return (
     <button
       {...props}
-      className={`p-1.5 ${variants[variant]} ${className}
-      rounded-sm shadow-sm hover:shadow-md transition-all
+      className={`p-2 ${variants[variant]} ${className}
+      rounded-lg transition-all duration-200 hover:-translate-y-px
       enabled:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed`}
     >
       <Icon size={18} />

@@ -192,7 +192,7 @@ export default function SelectDropdown({
             ref={(node) => refs.setFloating(node)}
             style={floatingStyles}
             {...getFloatingProps()}
-            className="z-10000 flex flex-col overflow-hidden rounded-md border border-light-border-secondary bg-light-bg-primary shadow-md dark:border-dark-border-secondary dark:bg-dark-bg-tertiary"
+            className="z-10000 flex flex-col overflow-hidden rounded-md border border-light-border-secondary bg-light-bg-primary shadow-md dark:border-dark-border-secondary dark:bg-dark-bg-primary"
           >
             <div className="relative shrink-0 border-b border-light-border-secondary p-2 dark:border-dark-border-secondary">
               <CustomInput
@@ -237,7 +237,7 @@ export default function SelectDropdown({
                       onClick={() => handleSelect(option.value)}
                       className={`w-full rounded px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                         selected
-                          ? "bg-light-bg-tertiary font-medium text-light-text-primary dark:bg-dark-bg-secondary dark:text-dark-text-primary"
+                          ? "bg-light-bg-tertiary font-medium text-light-text-primary dark:bg-dark-bg-tertiary dark:text-dark-text-primary"
                           : "text-light-text-secondary hover:bg-light-bg-hover dark:text-dark-text-secondary dark:hover:bg-dark-bg-hover"
                       }`}
                     >

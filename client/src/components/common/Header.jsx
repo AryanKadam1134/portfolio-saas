@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Menu } from "lucide-react";
+import { Menu, Sparkles } from "lucide-react";
 
 import ThemeToggleButton from "./ThemeToggleButton";
 
@@ -26,49 +26,39 @@ export default function Header({ onMenuClick }) {
   const dateNum = now.getDate();
 
   return (
-    <div
-      className="shrink-0 h-16 w-full px-5 sm:px-8 flex items-center justify-between
-        bg-light-bg-primary dark:bg-dark-bg-primary
-        border-b border-light-border-primary dark:border-dark-border-primary
-        text-light-text-primary dark:text-dark-text-primary
-        shadow-sm z-10"
-    >
-      {/* LEFT (Mobile Menu) */}
-      <button
-        onClick={onMenuClick}
-        className="md:hidden p-2 rounded-md
-        hover:bg-light-bg-secondary dark:hover:bg-dark-bg-hover
-        transition"
-      >
-        <Menu size={22} />
-      </button>
+    <div className="z-10 flex h-[70px] w-full shrink-0 items-center justify-between border-b border-light-border-primary bg-light-bg-primary/90 px-4 text-light-text-primary shadow-[0_4px_24px_-20px_rgba(0,0,0,0.08)] backdrop-blur-xl dark:border-dark-border-primary dark:bg-dark-bg-primary/90 dark:text-dark-text-primary sm:px-7 lg:px-10">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          aria-label="Open navigation menu"
+          className="rounded-xl p-2.5 text-light-text-secondary transition hover:bg-light-bg-secondary dark:text-dark-text-secondary dark:hover:bg-dark-bg-secondary md:hidden"
+        >
+          <Menu size={21} />
+        </button>
+        <div className="hidden items-center gap-2 rounded-full bg-light-bg-secondary px-3 py-1.5 text-xs font-medium text-light-text-primary dark:bg-dark-bg-secondary dark:text-dark-text-primary sm:flex">
+          <Sparkles size={14} />
+          <span>Build a portfolio you’re proud of</span>
+        </div>
+      </div>
 
-      {/* RIGHT SECTION */}
-      <div className="flex items-center gap-6 ml-auto">
-        {/* Theme Toggle */}
+      <div className="ml-auto flex items-center gap-4 sm:gap-6">
+        <div className="hidden text-right sm:block">
+          <p className="text-xs font-semibold">
+            {user?.firstName} {user?.lastName}
+          </p>
+          <p className="mt-1 text-[11px] text-light-text-tertiary dark:text-dark-text-tertiary">
+            {dayName}, {dateNum}
+          </p>
+        </div>
+
         <ThemeToggleButton />
 
-        {/* User Section */}
-        <div className="flex items-center gap-3">
-          {/* Text */}
-          <div className="hidden sm:flex flex-col items-end text-xs leading-tight">
-            <p className="font-semibold">
-              {user?.firstName} {user?.lastName}
-            </p>
-
-            <p className="text-light-text-secondary dark:text-dark-text-secondary">
-              {dayName}, {dateNum}
-            </p>
-          </div>
-
-          {/* Avatar */}
-          <div className="relative rounded-full overflow-hidden border-2 border-light-border-primary dark:border-dark-border-primary">
-            <img
-              src={user?.image?.url || defaultProfileImage}
-              alt="User"
-              className="size-10 object-contain"
-            />
-          </div>
+        <div className="relative overflow-hidden rounded-full border-2 border-white shadow-md shadow-black/10 ring-1 ring-light-border-primary dark:border-dark-bg-tertiary dark:ring-dark-border-primary">
+          <img
+            src={user?.image?.url || defaultProfileImage}
+            alt="User profile"
+            className="size-10 object-cover"
+          />
         </div>
       </div>
     </div>

@@ -21,14 +21,14 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   for (let i = startPage; i <= endPage; i++) pageNumbers.push(i);
 
   const buttonBaseClasses =
-    "px-3.5 py-1.5 text-dark-text-primary rounded-md transition-colors font-medium";
-  const inactiveButtonClasses = `${buttonBaseClasses} bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover cursor-pointer`;
+    "px-3.5 py-1.5 rounded-xl transition-all font-medium";
+  const activeButtonClasses = `${buttonBaseClasses} text-white bg-blue-500`;
+  const inactiveButtonClasses = `${buttonBaseClasses} text-light-text-primary dark:text-dark-text-primary bg-light-bg-secondary dark:bg-dark-bg-secondary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover cursor-pointer`;
   const disabledButtonClasses = `${buttonBaseClasses} bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-tertiary dark:text-dark-text-tertiary opacity-50 cursor-not-allowed`;
-  const activeButtonClasses = `${buttonBaseClasses} bg-blue-500 hover:bg-blue-600`;
   const navButtonClasses = (isDisabled) =>
     isDisabled
       ? disabledButtonClasses
-      : `${buttonBaseClasses} bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-primary dark:text-dark-text-primary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover cursor-pointer`;
+      : `${buttonBaseClasses} text-light-text-primary dark:text-dark-text-primary bg-light-bg-secondary dark:bg-dark-bg-secondary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover cursor-pointer`;
 
   return (
     <div className="flex justify-center gap-2 text-sm">

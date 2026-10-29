@@ -63,7 +63,7 @@ export default function UserSessionCard({ session, onDelete }) {
   };
 
   return (
-    <div className="flex flex-col gap-5 rounded-md border border-light-border-primary bg-light-bg-primary p-5 shadow-sm dark:border-dark-border-primary dark:bg-dark-bg-tertiary">
+    <div className="flex flex-col gap-5 rounded-md border border-light-border-primary bg-light-bg-primary p-5 shadow-sm dark:border-dark-border-primary dark:bg-dark-bg-primary">
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex size-11 shrink-0 items-center justify-center rounded-md bg-light-bg-secondary text-light-text-primary dark:bg-dark-bg-secondary dark:text-dark-text-primary">
@@ -81,7 +81,7 @@ export default function UserSessionCard({ session, onDelete }) {
         </div>
 
         {isCurrentSession && (
-          <span className="flex shrink-0 items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">
+          <span className="flex shrink-0 items-center gap-1 rounded-full text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/15 px-2.5 py-1 text-[11px] font-medium">
             <Check size={13} /> Current
           </span>
         )}

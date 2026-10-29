@@ -216,7 +216,7 @@ export default function AddEditExperiences() {
 
       <form
         onSubmit={handleSubmit(addUpdateExperience)}
-        className="grid grid-cols-12 gap-6 text-sm"
+        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
         {id && (
           <>
@@ -331,7 +331,7 @@ export default function AddEditExperiences() {
               <a
                 href={organizationWebsite}
                 target="_blank"
-                className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer"
+                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
               >
                 <ExternalLink size={13} /> <p>Visit Link</p>
               </a>
@@ -457,7 +457,7 @@ export default function AddEditExperiences() {
         </FormField>
 
         {/* Highlights */}
-        <div className="col-span-12 flex flex-col gap-4 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary divide-y divide-light-border-primary dark:divide-dark-border-primary rounded-md shadow-sm">
+        <div className="col-span-12 flex flex-col gap-4 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-secondary border border-light-border-primary dark:border-dark-border-primary divide-y divide-light-border-primary dark:divide-dark-border-primary rounded-md shadow-sm">
           <div className="pb-4 flex items-center justify-between gap-3">
             <p className="font-medium text-[16px] text-light-text-primary dark:text-dark-text-primary">
               Highlights{" "}
@@ -514,7 +514,7 @@ export default function AddEditExperiences() {
         </div>
 
         {/* Positions */}
-        <div className="col-span-12 flex flex-col gap-4 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary divide-y divide-light-border-primary dark:divide-dark-border-primary rounded-md shadow-sm">
+        <div className="col-span-12 flex flex-col gap-4 p-4 w-full bg-light-bg-secondary dark:bg-dark-bg-secondary border border-light-border-primary dark:border-dark-border-primary divide-y divide-light-border-primary dark:divide-dark-border-primary rounded-md shadow-sm">
           <div className="pb-4 flex items-center justify-between gap-3">
             <p className="font-medium text-[16px] text-light-text-primary dark:text-dark-text-primary">
               Positions / Posts

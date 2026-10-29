@@ -27,7 +27,7 @@ export default function Settings() {
         subHeading="Manage your password, active sessions, and account"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {[
           {
             name: "Change Password",
@@ -48,15 +48,20 @@ export default function Settings() {
           const Icon = icon;
 
           return (
-            <div
+            <button
               key={name || idx}
               onClick={onClick}
-              className="p-4 bg-light-bg-secondary dark:bg-dark-bg-tertiary hover:bg-light-bg-hover dark:hover:bg-dark-bg-hover text-light-text-primary dark:text-dark-text-primary border border-light-border-primary dark:border-dark-border-primary rounded-md cursor-pointer transition-all shadow-sm hover:shadow-md"
+              type="button"
+              className="group min-h-36 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-left text-light-text-primary shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] transition-all duration-200 hover:-translate-y-1 hover:border-light-border-secondary hover:shadow-lg dark:border-dark-border-primary dark:bg-dark-bg-primary dark:text-dark-text-primary dark:hover:border-dark-border-secondary"
             >
-              <div className="flex items-center gap-3">
-                <Icon size={18} /> {name}
+              <div className="mb-5 flex size-11 items-center justify-center rounded-xl bg-light-bg-secondary text-light-text-primary transition-colors group-hover:bg-light-bg-tertiary dark:bg-dark-bg-secondary dark:text-dark-text-primary dark:group-hover:bg-dark-bg-tertiary">
+                <Icon size={20} />
               </div>
-            </div>
+              <p className="font-semibold">{name}</p>
+              <p className="mt-1 text-xs text-light-text-tertiary dark:text-dark-text-tertiary">
+                Manage your {name.toLowerCase()} settings
+              </p>
+            </button>
           );
         })}
       </div>

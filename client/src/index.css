@@ -7,6 +7,19 @@
 
 body {
   font-family: "Poppins", sans-serif;
+  @apply bg-light-bg-secondary text-light-text-primary antialiased dark:bg-dark-bg-secondary dark:text-dark-text-primary;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  @apply bg-light-bg-tertiary text-light-text-primary dark:bg-dark-bg-tertiary dark:text-dark-text-primary;
 }
 
 .ant-message {
@@ -49,7 +62,7 @@ body {
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-light-border-secondary rounded-full;
+    @apply bg-light-bg-tertiary rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -58,11 +71,11 @@ body {
 
   /* Dark */
   .dark ::-webkit-scrollbar-track {
-    @apply bg-dark-bg-tertiary;
+    @apply bg-dark-bg-secondary;
   }
 
   .dark ::-webkit-scrollbar-thumb {
-    @apply bg-dark-border-secondary;
+    @apply bg-dark-bg-tertiary;
   }
 
   .dark ::-webkit-scrollbar-thumb:hover {
@@ -77,11 +90,11 @@ body {
   @media (min-width: 768px) {
     * {
       scrollbar-width: thin;
-      scrollbar-color: #d1d5db #f6f7f9; /* thumb track */
+      scrollbar-color: #e4e4e7 #f4f4f5; /* thumb track */
     }
 
     .dark * {
-      scrollbar-color: #404040 #242424;
+      scrollbar-color: #27272a #18181b;
     }
   }
 }

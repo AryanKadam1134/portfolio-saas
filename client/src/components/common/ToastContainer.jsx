@@ -174,7 +174,7 @@ function Toast({ toast, onRemove, onPause, onResume }) {
       className={`notification-toast ${positionClass} ${isClosing ? "notification-toast--closing" : ""} ${swipeClasses}
       p-4 w-[calc(100vw-2rem)] sm:w-96 flex ${description ? "items-start" : "items-center"} gap-3
       text-light-text-primary dark:text-dark-text-primary
-      bg-light-bg-primary dark:bg-dark-bg-tertiary
+      bg-light-bg-primary dark:bg-dark-bg-primary
       border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-lg
       pointer-events-auto ${isDragging && "select-none"}`}
     >

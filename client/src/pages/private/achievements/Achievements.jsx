@@ -109,7 +109,7 @@ export default function Achievements() {
           <a
             href={`${link}`}
             target="_blank"
-            className="text-blue-500 hover:text-blue-600"
+            className="text-light-text-primary hover:text-light-text-primary dark:text-dark-text-primary dark:hover:text-dark-text-primary transition-colors"
           >
             <ExternalLink size={18} />
           </a>

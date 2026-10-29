@@ -26,7 +26,7 @@ export default function GlobalModal() {
 
   return (
     <div className="fixed inset-0 z-100 flex justify-center items-center bg-black/50">
-      <div className="relative max-w-[90%] max-h-[95%] bg-light-bg-primary dark:bg-dark-bg-tertiary border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-2xl flex flex-col overflow-hidden">
+      <div className="relative max-w-[90%] max-h-[95%] bg-light-bg-primary dark:bg-dark-bg-primary border border-light-border-primary dark:border-dark-border-primary rounded-lg shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <div
           className={`sticky top-0 flex justify-between items-center px-4 py-3 text-[16px] text-white font-semibold ${className}`}
@@ -44,7 +44,7 @@ export default function GlobalModal() {
         </div>
 
         {/* Scrollable Content */}
-        <div className="place-items-center overflow-y-auto px-5 py-4 hide-scrollbar w-auto bg-light-bg-primary dark:bg-dark-bg-tertiary">
+        <div className="place-items-center overflow-y-auto px-5 py-4 hide-scrollbar w-auto bg-light-bg-primary dark:bg-dark-bg-primary">
           {renderContent}
         </div>
       </div>
