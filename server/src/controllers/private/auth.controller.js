@@ -15,7 +15,6 @@ import {
 
 import {
   SESSION_COOKIE_OPTIONS,
-  ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_OPTIONS,
 } from "../../constants.js";
 
@@ -183,7 +182,7 @@ const googleAuth = asynchandler(async (req, res) => {
   // ✅ SAME cookie logic as your login
   return res
     .status(200)
-    .cookie("accessToken", accessToken, ACCESS_TOKEN_COOKIE_OPTIONS)
+    .cookie("accessToken", accessToken, SESSION_COOKIE_OPTIONS)
     .cookie(
       "refreshToken",
       refreshToken,
@@ -241,7 +240,7 @@ const refreshAccessToken = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, ACCESS_TOKEN_COOKIE_OPTIONS)
+    .cookie("accessToken", accessToken, SESSION_COOKIE_OPTIONS)
     .cookie(
       "refreshToken",
       refreshToken,
@@ -339,7 +338,7 @@ const loginUser = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, ACCESS_TOKEN_COOKIE_OPTIONS)
+    .cookie("accessToken", accessToken, SESSION_COOKIE_OPTIONS)
     .cookie(
       "refreshToken",
       refreshToken,
