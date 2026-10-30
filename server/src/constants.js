@@ -51,19 +51,19 @@ const VISIBILITY = [
 const COOKIE_OPTIONS = {
   httpOnly: true, // set to true in production
   secure: isProduction ? true : false,
-  sameSite: "strict",
+  sameSite: isProduction ? "none" : "strict",
 };
 
 const ACCESS_TOKEN_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: isProduction ? true : false, // set to true in production
-  sameSite: "strict",
+  sameSite: isProduction ? "none" : "strict",
 };
 
 const REFRESH_TOKEN_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: isProduction ? true : false, // true in production (HTTPS)
-  sameSite: "strict",
+  sameSite: isProduction ? "none" : "strict",
   maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ 7 days
 };
 
