@@ -14,7 +14,7 @@ import {
 } from "../../utils/emailTemplates.js";
 
 import {
-  COOKIE_OPTIONS,
+  SESSION_COOKIE_OPTIONS,
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_OPTIONS,
 } from "../../constants.js";
@@ -187,7 +187,7 @@ const googleAuth = asynchandler(async (req, res) => {
     .cookie(
       "refreshToken",
       refreshToken,
-      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
+      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : SESSION_COOKIE_OPTIONS,
     )
     .json(new ApiRes(200, loggedUser, "Google auth successful!"));
 });
@@ -245,7 +245,7 @@ const refreshAccessToken = asynchandler(async (req, res) => {
     .cookie(
       "refreshToken",
       refreshToken,
-      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
+      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : SESSION_COOKIE_OPTIONS,
     )
     .json(new ApiRes(200, user, "Session restored!"));
 });
@@ -343,7 +343,7 @@ const loginUser = asynchandler(async (req, res) => {
     .cookie(
       "refreshToken",
       refreshToken,
-      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : COOKIE_OPTIONS,
+      rememberMe ? REFRESH_TOKEN_COOKIE_OPTIONS : SESSION_COOKIE_OPTIONS,
     )
     .json(new ApiRes(200, loggedUser, "Logged in!"));
 });
@@ -357,8 +357,8 @@ const logoutUser = asynchandler(async (req, res) => {
 
   return res
     .status(204)
-    .clearCookie("accessToken", COOKIE_OPTIONS)
-    .clearCookie("refreshToken", COOKIE_OPTIONS)
+    .clearCookie("accessToken", SESSION_COOKIE_OPTIONS)
+    .clearCookie("refreshToken", SESSION_COOKIE_OPTIONS)
     .json(new ApiRes(204, {}, "Logged out!"));
 });
 
@@ -390,8 +390,8 @@ const removeSession = asynchandler(async (req, res) => {
   if (isCurrentSession) {
     return res
       .status(200)
-      .clearCookie("accessToken", COOKIE_OPTIONS)
-      .clearCookie("refreshToken", COOKIE_OPTIONS)
+      .clearCookie("accessToken", SESSION_COOKIE_OPTIONS)
+      .clearCookie("refreshToken", SESSION_COOKIE_OPTIONS)
       .json(new ApiRes(200, { isCurrentSession }, "Logged out!"));
   }
 

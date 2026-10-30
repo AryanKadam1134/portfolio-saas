@@ -48,22 +48,23 @@ const VISIBILITY = [
   { label: "Private", value: "private" },
 ];
 
-const COOKIE_OPTIONS = {
-  httpOnly: true, // set to true in production
-  secure: isProduction ? true : false,
+const BASE_COOKIE_OPTIONS = {
+  httpOnly: true, // Restric FE form doing document.cookie
+  secure: isProduction, // true for https requests in productions
   sameSite: isProduction ? "none" : "strict",
+};
+
+const SESSION_COOKIE_OPTIONS = {
+  ...BASE_COOKIE_OPTIONS,
 };
 
 const ACCESS_TOKEN_COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: isProduction ? true : false, // set to true in production
-  sameSite: isProduction ? "none" : "strict",
+  ...BASE_COOKIE_OPTIONS,
+  maxAge: 24 * 60 * 60 * 1000, // ✅ 1 day
 };
 
 const REFRESH_TOKEN_COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: isProduction ? true : false, // true in production (HTTPS)
-  sameSite: isProduction ? "none" : "strict",
+  ...BASE_COOKIE_OPTIONS,
   maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ 7 days
 };
 
@@ -76,7 +77,7 @@ export {
   LOCATION_TYPE,
   VISIBILITY,
   isProduction,
-  COOKIE_OPTIONS,
+  SESSION_COOKIE_OPTIONS,
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE_OPTIONS,
 };
