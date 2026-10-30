@@ -51,7 +51,7 @@ const VISIBILITY = [
 const BASE_COOKIE_OPTIONS = {
   httpOnly: true, // Restric FE form doing document.cookie
   secure: isProduction, // true for https requests in productions
-  sameSite: isProduction ? "none" : "strict",
+  sameSite: "strict",
 };
 
 const SESSION_COOKIE_OPTIONS = {
