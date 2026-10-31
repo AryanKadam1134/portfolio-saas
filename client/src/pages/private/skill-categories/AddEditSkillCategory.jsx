@@ -94,10 +94,6 @@ export default function AddEditSkillCategory() {
     fetchSkillCategory();
   }, [fetchSkillCategory, id]);
 
-  if (id && loading.categoryLoading) {
-    return <CommonSkeleton count={4} />;
-  }
-
   return (
     <div className="flex flex-col gap-6 text-sm">
       <PageHeader
@@ -111,89 +107,95 @@ export default function AddEditSkillCategory() {
 
       <form
         onSubmit={handleSubmit(addUpdateSkillCategory)}
-        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
+        className="rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
-        {/* Category Name */}
-        <FormField
-          id="name"
-          label="Category Name"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.name?.message}
-        >
-          <CustomInput
-            id="name"
-            type="text"
-            placeholder="e.g., Frontend, Backend, DevOps"
-            {...register("name", {
-              required: "Category name is required!",
-              minLength: {
-                value: 2,
-                message: "Category name must be at least 2 characters",
-              },
-              maxLength: {
-                value: 50,
-                message: "Category name must not exceed 50 characters",
-              },
-            })}
-          />
-        </FormField>
+        {id && loading.categoryLoading ? (
+          <CommonSkeleton count={4} />
+        ) : (
+          <div className="grid grid-cols-12 gap-6">
+            {/* Category Name */}
+            <FormField
+              id="name"
+              label="Category Name"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.name?.message}
+            >
+              <CustomInput
+                id="name"
+                type="text"
+                placeholder="e.g., Frontend, Backend, DevOps"
+                {...register("name", {
+                  required: "Category name is required!",
+                  minLength: {
+                    value: 2,
+                    message: "Category name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "Category name must not exceed 50 characters",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Category Logo URL */}
-        <FormField
-          id="logoUrl"
-          label="Logo URL"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.logoUrl?.message}
-        >
-          <CustomInput
-            id="logoUrl"
-            type="text"
-            placeholder="e.g. /images/frontend.svg"
-            {...register("logoUrl")}
-          />
-        </FormField>
+            {/* Category Logo URL */}
+            <FormField
+              id="logoUrl"
+              label="Logo URL"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.logoUrl?.message}
+            >
+              <CustomInput
+                id="logoUrl"
+                type="text"
+                placeholder="e.g. /images/frontend.svg"
+                {...register("logoUrl")}
+              />
+            </FormField>
 
-        {/* Sort Order */}
-        <FormField
-          id="sortOrder"
-          label="Display Order"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.sortOrder?.message}
-        >
-          <CustomInput
-            id="sortOrder"
-            type="number"
-            min={0}
-            placeholder="0 (appears first)"
-            {...register("sortOrder", { valueAsNumber: true })}
-          />
-        </FormField>
+            {/* Sort Order */}
+            <FormField
+              id="sortOrder"
+              label="Display Order"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.sortOrder?.message}
+            >
+              <CustomInput
+                id="sortOrder"
+                type="number"
+                min={0}
+                placeholder="0 (appears first)"
+                {...register("sortOrder", { valueAsNumber: true })}
+              />
+            </FormField>
 
-        {/* Visibility  */}
-        <FormField
-          id="visibility"
-          label="Visibility"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.visibility?.message}
-        >
-          <CustomRadioButtons
-            id="visibility"
-            name="visibility"
-            options={visibilities}
-            {...register("visibility", {
-              required: "Visibility is required!",
-            })}
-          />
-        </FormField>
+            {/* Visibility  */}
+            <FormField
+              id="visibility"
+              label="Visibility"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.visibility?.message}
+            >
+              <CustomRadioButtons
+                id="visibility"
+                name="visibility"
+                options={visibilities}
+                {...register("visibility", {
+                  required: "Visibility is required!",
+                })}
+              />
+            </FormField>
 
-        <CustomButton
-          type="submit"
-          name={loading.updating ? "Saving..." : "Save"}
-          className="col-span-12 place-self-end"
-          loading={loading.updating}
-        />
+            <CustomButton
+              type="submit"
+              name={loading.updating ? "Saving..." : "Save"}
+              className="col-span-12 place-self-end"
+              loading={loading.updating}
+            />
+          </div>
+        )}
       </form>
     </div>
   );

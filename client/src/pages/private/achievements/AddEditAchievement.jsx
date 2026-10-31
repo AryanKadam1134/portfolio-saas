@@ -190,10 +190,6 @@ export default function AddEditAchievement() {
     fetchAchievement();
   }, [fetchAchievement, id]);
 
-  if (id && loading.achievementLoading) {
-    return <CommonSkeleton count={9} />;
-  }
-
   return (
     <div className="flex flex-col gap-6 text-sm">
       <PageHeader
@@ -207,241 +203,247 @@ export default function AddEditAchievement() {
 
       <form
         onSubmit={handleSubmit(addUpdateAchievement)}
-        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
+        className="rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
-        {id && (
-          <>
-            {/* Upload Achievement Images  */}
+        {id && loading.achievementLoading ? (
+          <CommonSkeleton count={9} />
+        ) : (
+          <div className="grid grid-cols-12 gap-6">
+            {id && (
+              <>
+                {/* Upload Achievement Images  */}
+                <FormField
+                  id="upload"
+                  label="Upload Achievement Images (5 max)"
+                  colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+                >
+                  <DragDropUpload
+                    id="upload"
+                    multiple
+                    accept="image/*"
+                    loading={loading.uploadingImages}
+                    onChange={(files) => updateAchievementImage(files)}
+                  />
+                </FormField>
+
+                <ImageGallery
+                  className="col-span-12 sm:col-span-9"
+                  images={achievementImages}
+                  coverImageIndex={coverImageIndex}
+                  imageDeletingId={imageDeleting}
+                  handleCoverChange={handleCoverChange}
+                  deleteImage={deleteAchievementImage}
+                />
+
+                <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+              </>
+            )}
+
+            {/* Achievement Name */}
             <FormField
-              id="upload"
-              label="Upload Achievement Images (5 max)"
-              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              id="title"
+              label="Achievement Name"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.title?.message}
             >
-              <DragDropUpload
-                id="upload"
-                multiple
-                accept="image/*"
-                loading={loading.uploadingImages}
-                onChange={(files) => updateAchievementImage(files)}
+              <CustomInput
+                id="title"
+                type="text"
+                placeholder="Enter achievement name"
+                {...register("title", {
+                  required: "Achievement name is required!",
+                  minLength: {
+                    value: 2,
+                    message: "Achievement name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: "Achievement name must not exceed 100 characters",
+                  },
+                })}
               />
             </FormField>
 
-            <ImageGallery
-              className="col-span-12 sm:col-span-9"
-              images={achievementImages}
-              coverImageIndex={coverImageIndex}
-              imageDeletingId={imageDeleting}
-              handleCoverChange={handleCoverChange}
-              deleteImage={deleteAchievementImage}
-            />
-
-            <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
-          </>
-        )}
-
-        {/* Achievement Name */}
-        <FormField
-          id="title"
-          label="Achievement Name"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.title?.message}
-        >
-          <CustomInput
-            id="title"
-            type="text"
-            placeholder="Enter achievement name"
-            {...register("title", {
-              required: "Achievement name is required!",
-              minLength: {
-                value: 2,
-                message: "Achievement name must be at least 2 characters",
-              },
-              maxLength: {
-                value: 100,
-                message: "Achievement name must not exceed 100 characters",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Issuer */}
-        <FormField
-          id="issuer"
-          label="Issued By"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.issuer?.message}
-        >
-          <CustomInput
-            id="issuer"
-            type="text"
-            placeholder="Organization or person name"
-            {...register("issuer", {
-              required: "Issuer is required!",
-              minLength: {
-                value: 2,
-                message: "Issuer name must be at least 2 characters",
-              },
-              maxLength: {
-                value: 100,
-                message: "Issuer name must not exceed 100 characters",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Attached Certificate */}
-        <FormField
-          id="certificateId"
-          label="Attach Existing Certificate"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.certificateId?.message}
-        >
-          <Controller
-            name="certificateId"
-            control={control}
-            render={({ field }) => (
-              <CustomSelect
-                id="certificateId"
-                placeholder="Select"
-                options={certificatesList}
-                value={field.value}
-                onChange={field.onChange} // send value to hook form
+            {/* Issuer */}
+            <FormField
+              id="issuer"
+              label="Issued By"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.issuer?.message}
+            >
+              <CustomInput
+                id="issuer"
+                type="text"
+                placeholder="Organization or person name"
+                {...register("issuer", {
+                  required: "Issuer is required!",
+                  minLength: {
+                    value: 2,
+                    message: "Issuer name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: "Issuer name must not exceed 100 characters",
+                  },
+                })}
               />
-            )}
-          />
-        </FormField>
+            </FormField>
 
-        {/* Reffered Link */}
-        <FormField
-          id="link"
-          label="Reffered Link"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.link?.message}
-          attachment={
-            link && (
-              <a
-                href={link}
-                target="_blank"
-                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
-              >
-                <ExternalLink size={13} /> <p>Visit Link</p>
-              </a>
-            )
-          }
-        >
-          <CustomInput
-            id="link"
-            type="text"
-            icon={Link}
-            placeholder="https://example.com (optional)"
-            {...register("link", {
-              pattern: {
-                value: /^https:\/\/.+$/,
-                message: "URL must start with https://",
-              },
-            })}
-          />
-        </FormField>
+            {/* Attached Certificate */}
+            <FormField
+              id="certificateId"
+              label="Attach Existing Certificate"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.certificateId?.message}
+            >
+              <Controller
+                name="certificateId"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    id="certificateId"
+                    placeholder="Select"
+                    options={certificatesList}
+                    value={field.value}
+                    onChange={field.onChange} // send value to hook form
+                  />
+                )}
+              />
+            </FormField>
 
-        {/* Description */}
-        <FormField
-          id="description"
-          label="Description"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.description?.message}
-        >
-          <CustomTextArea
-            id="description"
-            rows={6}
-            placeholder="Describe your achievement and why it matters..."
-            {...register("description", {
-              maxLength: {
-                value: 1000,
-                message: "Max 1000 characters allowed!",
-              },
-            })}
-          />
-        </FormField>
+            {/* Reffered Link */}
+            <FormField
+              id="link"
+              label="Reffered Link"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.link?.message}
+              attachment={
+                link && (
+                  <a
+                    href={link}
+                    target="_blank"
+                    className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
+                  >
+                    <ExternalLink size={13} /> <p>Visit Link</p>
+                  </a>
+                )
+              }
+            >
+              <CustomInput
+                id="link"
+                type="text"
+                icon={Link}
+                placeholder="https://example.com (optional)"
+                {...register("link", {
+                  pattern: {
+                    value: /^https:\/\/.+$/,
+                    message: "URL must start with https://",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Date */}
-        <FormField
-          id="date"
-          label="Date"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.date?.message}
-        >
-          <CustomDatePicker
-            id="date"
-            icon={Calendar}
-            placeholder="Select Date"
-            {...register("date", {
-              required: "Date is required!",
-            })}
-          />
-        </FormField>
+            {/* Description */}
+            <FormField
+              id="description"
+              label="Description"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.description?.message}
+            >
+              <CustomTextArea
+                id="description"
+                rows={6}
+                placeholder="Describe your achievement and why it matters..."
+                {...register("description", {
+                  maxLength: {
+                    value: 1000,
+                    message: "Max 1000 characters allowed!",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Featured */}
-        <FormField
-          id="featured"
-          label="Featured"
-          colSpan="col-span-12 sm:col-span-6"
-          type="checkbox"
-          attachment={
-            <p className="font-normal text-xs opacity-80">
-              Helps in filtering the achievements
-            </p>
-          }
-        >
-          <CustomCheckbox
-            id="featured"
-            {...register("featured")}
-            error={errors?.featured?.message}
-          />
-        </FormField>
+            {/* Date */}
+            <FormField
+              id="date"
+              label="Date"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.date?.message}
+            >
+              <CustomDatePicker
+                id="date"
+                icon={Calendar}
+                placeholder="Select Date"
+                {...register("date", {
+                  required: "Date is required!",
+                })}
+              />
+            </FormField>
 
-        {/* Sort Order */}
-        <FormField
-          id="sortOrder"
-          label="Sort Order"
-          colSpan="col-span-12 sm:col-span-6"
-        >
-          <CustomInput
-            id="sortOrder"
-            type="number"
-            min={0}
-            placeholder="Sort Order"
-            {...register("sortOrder", { valueAsNumber: true })}
-            error={errors?.sortOrder?.message}
-          />
-        </FormField>
+            {/* Featured */}
+            <FormField
+              id="featured"
+              label="Featured"
+              colSpan="col-span-12 sm:col-span-6"
+              type="checkbox"
+              attachment={
+                <p className="font-normal text-xs opacity-80">
+                  Helps in filtering the achievements
+                </p>
+              }
+            >
+              <CustomCheckbox
+                id="featured"
+                {...register("featured")}
+                error={errors?.featured?.message}
+              />
+            </FormField>
 
-        {/* Visibility  */}
-        <FormField
-          id="visibility"
-          label="Visibility"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-        >
-          <CustomRadioButtons
-            id="visibility"
-            name="visibility"
-            options={visibilities}
-            {...register("visibility", {
-              required: "Visibility is required!",
-            })}
-            error={errors?.visibility?.message}
-          />
-        </FormField>
+            {/* Sort Order */}
+            <FormField
+              id="sortOrder"
+              label="Sort Order"
+              colSpan="col-span-12 sm:col-span-6"
+            >
+              <CustomInput
+                id="sortOrder"
+                type="number"
+                min={0}
+                placeholder="Sort Order"
+                {...register("sortOrder", { valueAsNumber: true })}
+                error={errors?.sortOrder?.message}
+              />
+            </FormField>
 
-        <CustomButton
-          type="submit"
-          name={loading.updatingAchievement ? "Saving..." : "Save"}
-          className="col-span-12 place-self-end"
-          loading={loading.updatingAchievement}
-        />
+            {/* Visibility  */}
+            <FormField
+              id="visibility"
+              label="Visibility"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+            >
+              <CustomRadioButtons
+                id="visibility"
+                name="visibility"
+                options={visibilities}
+                {...register("visibility", {
+                  required: "Visibility is required!",
+                })}
+                error={errors?.visibility?.message}
+              />
+            </FormField>
+
+            <CustomButton
+              type="submit"
+              name={loading.updatingAchievement ? "Saving..." : "Save"}
+              className="col-span-12 place-self-end"
+              loading={loading.updatingAchievement}
+            />
+          </div>
+        )}
       </form>
     </div>
   );

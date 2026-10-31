@@ -45,7 +45,7 @@ function NavItem({ menu, onClick }) {
       className={({ isActive }) =>
         `${menuStyle} ${
           isActive
-            ? "bg-light-bg-tertiary font-semibold text-light-text-primary dark:bg-dark-bg-tertiary dark:text-dark-text-primary"
+            ? "bg-light-bg-tertiary font-medium text-light-text-primary dark:bg-dark-bg-tertiary dark:text-dark-text-primary"
             : "text-light-text-secondary hover:bg-light-bg-hover hover:text-light-text-primary dark:text-dark-text-secondary dark:hover:bg-dark-bg-hover dark:hover:text-dark-text-primary"
         }`
       }

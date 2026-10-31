@@ -32,8 +32,6 @@ export default function Dashboard() {
   const { genders } = useGenders();
   const { loading, callApi } = useApi({ detailsLoading: true });
 
-  const detailsLoading = loading.detailsLoading;
-
   const {
     register,
     handleSubmit,
@@ -73,329 +71,330 @@ export default function Dashboard() {
     fetchUserDetails();
   }, [fetchUserDetails]);
 
-  if (detailsLoading) {
-    return <UserDetailsSkeleton />;
-  }
-
   return (
-    <div>
+    <div className="flex flex-col gap-6 text-sm">
       <PageHeader
         heading="User Details"
         subHeading="Manage the personal information shown on your portfolio"
-        className="mb-6"
       />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
+        className="rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
-        {/* User Image */}
-        <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
-          <UploadUserImage />
-        </div>
+        {loading.detailsLoading ? (
+          <UserDetailsSkeleton />
+        ) : (
+          <div className="grid grid-cols-12 gap-6">
+            {/* User Image */}
+            <div className="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3 flex items-center justify-center">
+              <UploadUserImage />
+            </div>
 
-        {/* First Name */}
-        <FormField
-          id="firstName"
-          label="First Name"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-          error={errors?.firstName?.message}
-        >
-          <CustomInput
-            id="firstName"
-            type="text"
-            placeholder="Enter your first name"
-            {...register("firstName", {
-              required: "First name is required!",
-              minLength: {
-                value: 2,
-                message: "First name must be at least 2 characters",
-              },
-              maxLength: {
-                value: 50,
-                message: "First name must not exceed 50 characters",
-              },
-            })}
-          />
-        </FormField>
+            {/* First Name */}
+            <FormField
+              id="firstName"
+              label="First Name"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              required
+              error={errors?.firstName?.message}
+            >
+              <CustomInput
+                id="firstName"
+                type="text"
+                placeholder="Enter your first name"
+                {...register("firstName", {
+                  required: "First name is required!",
+                  minLength: {
+                    value: 2,
+                    message: "First name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "First name must not exceed 50 characters",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Middle Name */}
-        <FormField
-          id="middleName"
-          label="Middle Name"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          error={errors?.middleName?.message}
-        >
-          <CustomInput
-            id="middleName"
-            type="text"
-            placeholder="Enter middle name (optional)"
-            {...register("middleName", {})}
-          />
-        </FormField>
+            {/* Middle Name */}
+            <FormField
+              id="middleName"
+              label="Middle Name"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              error={errors?.middleName?.message}
+            >
+              <CustomInput
+                id="middleName"
+                type="text"
+                placeholder="Enter middle name (optional)"
+                {...register("middleName", {})}
+              />
+            </FormField>
 
-        {/* Last Name */}
-        <FormField
-          id="lastName"
-          label="Last Name"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          error={errors?.lastName?.message}
-        >
-          <CustomInput
-            id="lastName"
-            type="text"
-            placeholder="Enter your last name"
-            {...register("lastName", {
-              maxLength: {
-                value: 50,
-                message: "Last name must not exceed 50 characters",
-              },
-            })}
-          />
-        </FormField>
+            {/* Last Name */}
+            <FormField
+              id="lastName"
+              label="Last Name"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              error={errors?.lastName?.message}
+            >
+              <CustomInput
+                id="lastName"
+                type="text"
+                placeholder="Enter your last name"
+                {...register("lastName", {
+                  maxLength: {
+                    value: 50,
+                    message: "Last name must not exceed 50 characters",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Username */}
-        <FormField
-          id="username"
-          label="Username"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-          error={errors?.username?.message}
-        >
-          <CustomInput
-            id="username"
-            type="text"
-            placeholder="Enter a unique username"
-            {...register("username", {
-              required: "Username is required!",
-              minLength: {
-                value: 3,
-                message: "Username must be at least 3 characters",
-              },
-              maxLength: {
-                value: 30,
-                message: "Username must not exceed 30 characters",
-              },
-              pattern: {
-                value: /^[a-zA-Z0-9_-]+$/,
-                message:
-                  "Username can only contain letters, numbers, hyphens, and underscores",
-              },
-            })}
-          />
-        </FormField>
+            {/* Username */}
+            <FormField
+              id="username"
+              label="Username"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              required
+              error={errors?.username?.message}
+            >
+              <CustomInput
+                id="username"
+                type="text"
+                placeholder="Enter a unique username"
+                {...register("username", {
+                  required: "Username is required!",
+                  minLength: {
+                    value: 3,
+                    message: "Username must be at least 3 characters",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "Username must not exceed 30 characters",
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9_-]+$/,
+                    message:
+                      "Username can only contain letters, numbers, hyphens, and underscores",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Email */}
-        <FormField
-          id="email"
-          label="Email"
-          // attachment={
-          //   <div className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
-          //     <Edit size={13} /> <p>Update Email</p>
-          //   </div>
-          // }
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-          error={errors?.email?.message}
-        >
-          <CustomInput
-            id="email"
-            type="email"
-            icon={Mail}
-            placeholder="your.email@example.com"
-            {...register("email", {
-              required: "Email is required!",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Please enter a valid email address",
-              },
-            })}
-            disabled
-          />
-        </FormField>
+            {/* Email */}
+            <FormField
+              id="email"
+              label="Email"
+              // attachment={
+              //   <div className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 cursor-pointer">
+              //     <Edit size={13} /> <p>Update Email</p>
+              //   </div>
+              // }
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              required
+              error={errors?.email?.message}
+            >
+              <CustomInput
+                id="email"
+                type="email"
+                icon={Mail}
+                placeholder="your.email@example.com"
+                {...register("email", {
+                  required: "Email is required!",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Please enter a valid email address",
+                  },
+                })}
+                disabled
+              />
+            </FormField>
 
-        {/* Mobile No. */}
-        <FormField
-          id="mobileNo"
-          label="Mobile No."
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-          error={errors?.mobileNo?.message}
-        >
-          <CustomInput
-            id="mobileNo"
-            type="tel"
-            icon={Phone}
-            placeholder="Enter 10-digit phone number"
-            {...register("mobileNo", {
-              required: "Mobile number is required!",
-              pattern: {
-                value: /^[0-9]{10}$/,
-                message: "Mobile number must be exactly 10 digits",
-              },
-            })}
-          />
-        </FormField>
+            {/* Mobile No. */}
+            <FormField
+              id="mobileNo"
+              label="Mobile No."
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              required
+              error={errors?.mobileNo?.message}
+            >
+              <CustomInput
+                id="mobileNo"
+                type="tel"
+                icon={Phone}
+                placeholder="Enter 10-digit phone number"
+                {...register("mobileNo", {
+                  required: "Mobile number is required!",
+                  pattern: {
+                    value: /^[0-9]{10}$/,
+                    message: "Mobile number must be exactly 10 digits",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Gender */}
-        <FormField
-          id="gender"
-          label="Gender"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          required
-          error={errors?.gender?.message}
-        >
-          <CustomRadioButtons
-            name="gender"
-            options={genders}
-            {...register("gender", {
-              required: "Gender is required!",
-            })}
-          />
-        </FormField>
+            {/* Gender */}
+            <FormField
+              id="gender"
+              label="Gender"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              required
+              error={errors?.gender?.message}
+            >
+              <CustomRadioButtons
+                name="gender"
+                options={genders}
+                {...register("gender", {
+                  required: "Gender is required!",
+                })}
+              />
+            </FormField>
 
-        <div className="hidden lg:block col-span-6"></div>
+            <div className="hidden lg:block col-span-6"></div>
 
-        {/* Resume PDF - Drag & Drop */}
-        <FormField
-          id="resumeOrCv"
-          label="Resume PDF"
-          colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
-          className="order-98 lg:order-0"
-          required
-        >
-          <UploadUserResume />
-        </FormField>
+            {/* Resume PDF - Drag & Drop */}
+            <FormField
+              id="resumeOrCv"
+              label="Resume PDF"
+              colSpan="row-span-3 col-span-12 sm:col-span-6 lg:col-span-3"
+              className="order-98 lg:order-0"
+              required
+            >
+              <UploadUserResume />
+            </FormField>
 
-        {/* Headline */}
-        <FormField
-          id="headline"
-          label="Professional Headline"
-          colSpan="row-span-3 col-span-12 lg:col-span-3"
-          error={errors?.headline?.message}
-        >
-          <CustomTextArea
-            id="headline"
-            rows={6}
-            placeholder="e.g., Full Stack Developer | React & Node.js Expert"
-            {...register("headline", {
-              maxLength: {
-                value: 100,
-                message: "Headline must not exceed 100 characters",
-              },
-            })}
-          />
-        </FormField>
+            {/* Headline */}
+            <FormField
+              id="headline"
+              label="Professional Headline"
+              colSpan="row-span-3 col-span-12 lg:col-span-3"
+              error={errors?.headline?.message}
+            >
+              <CustomTextArea
+                id="headline"
+                rows={6}
+                placeholder="e.g., Full Stack Developer | React & Node.js Expert"
+                {...register("headline", {
+                  maxLength: {
+                    value: 100,
+                    message: "Headline must not exceed 100 characters",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* About */}
-        <FormField
-          id="about"
-          label="About You"
-          colSpan="row-span-3 col-span-12 lg:col-span-6"
-          error={errors?.about?.message}
-        >
-          <CustomTextArea
-            id="about"
-            rows={6}
-            placeholder="Tell us about yourself, your experience, and what you're passionate about..."
-            {...register("about", {
-              maxLength: {
-                value: 1000,
-                message: "About section must not exceed 1000 characters",
-              },
-            })}
-          />
-        </FormField>
+            {/* About */}
+            <FormField
+              id="about"
+              label="About You"
+              colSpan="row-span-3 col-span-12 lg:col-span-6"
+              error={errors?.about?.message}
+            >
+              <CustomTextArea
+                id="about"
+                rows={6}
+                placeholder="Tell us about yourself, your experience, and what you're passionate about..."
+                {...register("about", {
+                  maxLength: {
+                    value: 1000,
+                    message: "About section must not exceed 1000 characters",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Resume Link */}
-        <FormField
-          id="documentUrl"
-          label="Resume Link"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          className="order-99 lg:order-0"
-          error={errors?.documentUrl?.message}
-        >
-          <CustomInput
-            id="documentUrl"
-            type="text"
-            icon={Link}
-            placeholder="https://drive.google.com/... (optional)"
-            {...register("documentUrl", {
-              pattern: {
-                value: /^(https:\/\/.+)?$/,
-                message: "URL must start with https://",
-              },
-            })}
-          />
-        </FormField>
+            {/* Resume Link */}
+            <FormField
+              id="documentUrl"
+              label="Resume Link"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              className="order-99 lg:order-0"
+              error={errors?.documentUrl?.message}
+            >
+              <CustomInput
+                id="documentUrl"
+                type="text"
+                icon={Link}
+                placeholder="https://drive.google.com/... (optional)"
+                {...register("documentUrl", {
+                  pattern: {
+                    value: /^(https:\/\/.+)?$/,
+                    message: "URL must start with https://",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* City */}
-        <FormField
-          id="city"
-          label="City"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          error={errors?.location?.city?.message}
-        >
-          <CustomInput
-            id="city"
-            type="text"
-            placeholder="Enter your city"
-            {...register("location.city", {
-              maxLength: {
-                value: 50,
-                message: "City name must not exceed 50 characters",
-              },
-            })}
-          />
-        </FormField>
+            {/* City */}
+            <FormField
+              id="city"
+              label="City"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              error={errors?.location?.city?.message}
+            >
+              <CustomInput
+                id="city"
+                type="text"
+                placeholder="Enter your city"
+                {...register("location.city", {
+                  maxLength: {
+                    value: 50,
+                    message: "City name must not exceed 50 characters",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* State */}
-        <FormField
-          id="state"
-          label="State / Province"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          error={errors?.location?.state?.message}
-        >
-          <CustomInput
-            id="state"
-            type="text"
-            placeholder="Enter your state or province"
-            {...register("location.state", {
-              maxLength: {
-                value: 50,
-                message: "State name must not exceed 50 characters",
-              },
-            })}
-          />
-        </FormField>
+            {/* State */}
+            <FormField
+              id="state"
+              label="State / Province"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              error={errors?.location?.state?.message}
+            >
+              <CustomInput
+                id="state"
+                type="text"
+                placeholder="Enter your state or province"
+                {...register("location.state", {
+                  maxLength: {
+                    value: 50,
+                    message: "State name must not exceed 50 characters",
+                  },
+                })}
+              />
+            </FormField>
 
-        {/* Country */}
-        <FormField
-          id="country"
-          label="Country"
-          colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
-          error={errors?.location?.country?.message}
-        >
-          <CustomInput
-            id="country"
-            type="text"
-            placeholder="Enter your country"
-            {...register("location.country", {
-              maxLength: {
-                value: 50,
-                message: "Country name must not exceed 50 characters",
-              },
-            })}
-          />
-        </FormField>
+            {/* Country */}
+            <FormField
+              id="country"
+              label="Country"
+              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              error={errors?.location?.country?.message}
+            >
+              <CustomInput
+                id="country"
+                type="text"
+                placeholder="Enter your country"
+                {...register("location.country", {
+                  maxLength: {
+                    value: 50,
+                    message: "Country name must not exceed 50 characters",
+                  },
+                })}
+              />
+            </FormField>
 
-        <CustomButton
-          type="submit"
-          name={loading.updating ? "Saving..." : "Save"}
-          className="col-span-12 place-self-end order-last lg:order-0"
-          loading={loading.updating}
-        />
+            <CustomButton
+              type="submit"
+              name={loading.updating ? "Saving..." : "Save"}
+              className="col-span-12 place-self-end order-last lg:order-0"
+              loading={loading.updating}
+            />
+          </div>
+        )}
       </form>
     </div>
   );

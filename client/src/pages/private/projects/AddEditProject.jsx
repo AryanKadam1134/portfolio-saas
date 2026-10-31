@@ -191,10 +191,6 @@ export default function AddEditProject() {
     fetchProject();
   }, [fetchProject, id]);
 
-  if (id && loading.projectLoading) {
-    return <CommonSkeleton count={13} />;
-  }
-
   return (
     <div className="flex flex-col gap-6 text-sm">
       <PageHeader
@@ -208,333 +204,343 @@ export default function AddEditProject() {
 
       <form
         onSubmit={handleSubmit(addUpdateProject)}
-        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
+        className="rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
-        {id && (
-          <>
-            {/* Upload Project Images */}
+        {id && loading.projectLoading ? (
+          <CommonSkeleton count={13} />
+        ) : (
+          <div className="grid grid-cols-12 gap-6">
+            {id && (
+              <>
+                {/* Upload Project Images */}
+                <FormField
+                  id="upload"
+                  label="Upload Project Images (5 max)"
+                  colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+                >
+                  <DragDropUpload
+                    id="upload"
+                    multiple
+                    accept="image/*"
+                    loading={loading.uploadingImages}
+                    onChange={(files) => updateProjectImage(files)}
+                  />
+                </FormField>
+
+                <ImageGallery
+                  className="col-span-12 sm:col-span-9"
+                  images={projectImages}
+                  coverImageIndex={coverImageIndex}
+                  imageDeletingId={imageDeleting}
+                  handleCoverChange={handleCoverChange}
+                  deleteImage={deleteProjectImage}
+                />
+
+                <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+              </>
+            )}
+
+            {/* Project Name */}
             <FormField
-              id="upload"
-              label="Upload Project Images (5 max)"
-              colSpan="col-span-12 sm:col-span-6 lg:col-span-3"
+              id="title"
+              label="Project Name"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.title?.message}
             >
-              <DragDropUpload
-                id="upload"
-                multiple
-                accept="image/*"
-                loading={loading.uploadingImages}
-                onChange={(files) => updateProjectImage(files)}
+              <CustomInput
+                id="title"
+                type="text"
+                placeholder="Enter project name"
+                {...register("title", {
+                  required: "Project name is required!",
+                  minLength: {
+                    value: 2,
+                    message: "Project name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: "Project name must not exceed 100 characters",
+                  },
+                })}
               />
             </FormField>
 
-            <ImageGallery
-              className="col-span-12 sm:col-span-9"
-              images={projectImages}
-              coverImageIndex={coverImageIndex}
-              imageDeletingId={imageDeleting}
-              handleCoverChange={handleCoverChange}
-              deleteImage={deleteProjectImage}
+            {/* Organization */}
+            <FormField
+              id="organizationId"
+              label="Organization (Link Company you worked in)"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.organizationId?.message}
+            >
+              <Controller
+                name="organizationId"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    id="organizationId"
+                    placeholder="Select Company you worked in"
+                    options={organizationsList}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </FormField>
+
+            {/* Live Link */}
+            <FormField
+              id="liveLink"
+              label="Live Link"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.liveLink?.message}
+              attachment={
+                liveLink && (
+                  <a
+                    href={liveLink}
+                    target="_blank"
+                    className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
+                  >
+                    <ExternalLink size={13} /> <p>Visit Link</p>
+                  </a>
+                )
+              }
+            >
+              <CustomInput
+                id="liveLink"
+                type="text"
+                icon={Link}
+                placeholder="https://example.com"
+                {...register("liveLink", {
+                  pattern: {
+                    value: /^(https:\/\/.+)?$/,
+                    message: "URL must start with https://",
+                  },
+                })}
+              />
+            </FormField>
+
+            {/* Github Link */}
+            <FormField
+              id="githubLink"
+              label="GitHub Link"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.githubLink?.message}
+              attachment={
+                githubLink && (
+                  <a
+                    href={githubLink}
+                    target="_blank"
+                    className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
+                  >
+                    <ExternalLink size={13} /> <p>Visit Link</p>
+                  </a>
+                )
+              }
+            >
+              <CustomInput
+                id="githubLink"
+                type="text"
+                icon={Link}
+                placeholder="https://github.com/username/repo"
+                {...register("githubLink", {
+                  pattern: {
+                    value: /^(https:\/\/.+)?$/,
+                    message: "URL must start with https://",
+                  },
+                })}
+              />
+            </FormField>
+
+            {/* Description */}
+            <FormField
+              id="description"
+              label="Description"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.description?.message}
+            >
+              <CustomTextArea
+                id="description"
+                rows={6}
+                placeholder="Describe your project, its goals, and key features..."
+                {...register("description", {
+                  maxLength: {
+                    value: 1000,
+                    message: "Description must not exceed 1000 characters",
+                  },
+                })}
+              />
+            </FormField>
+
+            {/* Tech Stack */}
+            <FormField
+              id="techStack"
+              label="Tech Stack"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.techStack?.message}
+            >
+              <Controller
+                name="techStack"
+                control={control}
+                render={({ field }) => (
+                  <CustomMultiSelect
+                    id="techStack"
+                    placeholder="Select Tech Stack"
+                    options={skillsList}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </FormField>
+
+            {/* Project Category */}
+            <FormField
+              id="category"
+              label="Project Category"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.category?.message}
+            >
+              <Controller
+                name="category"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    id="category"
+                    placeholder="e.g. Personal, Freelance, Hackathon"
+                    options={projectCategoriesList}
+                    value={field.value}
+                    onChange={field.onChange} // send value to hook form
+                  />
+                )}
+              />
+            </FormField>
+
+            {/* Featured */}
+            <FormField
+              id="featured"
+              label="Featured"
+              colSpan="col-span-12 sm:col-span-6"
+              type="checkbox"
+              error={errors?.featured?.message}
+              attachment={
+                <p className="font-normal text-xs opacity-80">
+                  Helps in filtering the projects
+                </p>
+              }
+            >
+              <CustomCheckbox id="featured" {...register("featured")} />
+            </FormField>
+
+            {/* Start Date */}
+            <FormField
+              id="startDate"
+              label="Start Date"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.startDate?.message}
+            >
+              <CustomDatePicker
+                id="startDate"
+                icon={Calendar}
+                placeholder="YYYY-MM-DD"
+                {...register("startDate", {
+                  required: "Start date is required!",
+                  validate: (value) => {
+                    if (
+                      endDate &&
+                      value &&
+                      dayjs(value).isAfter(dayjs(endDate))
+                    ) {
+                      return "Start date cannot be after end date";
+                    }
+                    return true;
+                  },
+                })}
+              />
+            </FormField>
+
+            {/* End Date */}
+            <FormField
+              id="endDate"
+              label="End Date"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.endDate?.message}
+            >
+              <CustomDatePicker
+                id="endDate"
+                icon={Calendar}
+                placeholder="YYYY-MM-DD (leave blank if current)"
+                {...register("endDate", {
+                  validate: (value) => {
+                    if (
+                      value &&
+                      startDate &&
+                      dayjs(value).isBefore(dayjs(startDate))
+                    ) {
+                      return "End date cannot be before start date";
+                    }
+                    return true;
+                  },
+                })}
+              />
+            </FormField>
+
+            {/* Present */}
+            <FormField
+              id="isCurrent"
+              label="Currently working"
+              colSpan="col-span-12 sm:col-span-6"
+              type="checkbox"
+              error={errors?.isCurrent?.message}
+            >
+              <CustomCheckbox id="isCurrent" {...register("isCurrent")} />
+            </FormField>
+
+            {/* Sort Order */}
+            <FormField
+              id="sortOrder"
+              label="Display Order"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.sortOrder?.message}
+            >
+              <CustomInput
+                id="sortOrder"
+                type="number"
+                min={0}
+                placeholder="0 (appears first)"
+                {...register("sortOrder", { valueAsNumber: true })}
+              />
+            </FormField>
+
+            {/* Visibility  */}
+            <FormField
+              id="visibility"
+              label="Visibility"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.visibility?.message}
+            >
+              <CustomRadioButtons
+                id="visibility"
+                name="visibility"
+                options={visibilities}
+                {...register("visibility", {
+                  required: "Visibility is required!",
+                })}
+              />
+            </FormField>
+
+            <div className="hidden sm:block col-span-6" />
+
+            <CustomButton
+              type="submit"
+              name={loading.updatingProject ? "Saving..." : "Save"}
+              className="col-span-12 place-self-end"
+              loading={loading.updatingProject}
             />
-
-            <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
-          </>
+          </div>
         )}
-
-        {/* Project Name */}
-        <FormField
-          id="title"
-          label="Project Name"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.title?.message}
-        >
-          <CustomInput
-            id="title"
-            type="text"
-            placeholder="Enter project name"
-            {...register("title", {
-              required: "Project name is required!",
-              minLength: {
-                value: 2,
-                message: "Project name must be at least 2 characters",
-              },
-              maxLength: {
-                value: 100,
-                message: "Project name must not exceed 100 characters",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Organization */}
-        <FormField
-          id="organizationId"
-          label="Organization (Link Company you worked in)"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.organizationId?.message}
-        >
-          <Controller
-            name="organizationId"
-            control={control}
-            render={({ field }) => (
-              <CustomSelect
-                id="organizationId"
-                placeholder="Select Company you worked in"
-                options={organizationsList}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </FormField>
-
-        {/* Live Link */}
-        <FormField
-          id="liveLink"
-          label="Live Link"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.liveLink?.message}
-          attachment={
-            liveLink && (
-              <a
-                href={liveLink}
-                target="_blank"
-                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
-              >
-                <ExternalLink size={13} /> <p>Visit Link</p>
-              </a>
-            )
-          }
-        >
-          <CustomInput
-            id="liveLink"
-            type="text"
-            icon={Link}
-            placeholder="https://example.com"
-            {...register("liveLink", {
-              pattern: {
-                value: /^(https:\/\/.+)?$/,
-                message: "URL must start with https://",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Github Link */}
-        <FormField
-          id="githubLink"
-          label="GitHub Link"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.githubLink?.message}
-          attachment={
-            githubLink && (
-              <a
-                href={githubLink}
-                target="_blank"
-                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
-              >
-                <ExternalLink size={13} /> <p>Visit Link</p>
-              </a>
-            )
-          }
-        >
-          <CustomInput
-            id="githubLink"
-            type="text"
-            icon={Link}
-            placeholder="https://github.com/username/repo"
-            {...register("githubLink", {
-              pattern: {
-                value: /^(https:\/\/.+)?$/,
-                message: "URL must start with https://",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Description */}
-        <FormField
-          id="description"
-          label="Description"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.description?.message}
-        >
-          <CustomTextArea
-            id="description"
-            rows={6}
-            placeholder="Describe your project, its goals, and key features..."
-            {...register("description", {
-              maxLength: {
-                value: 1000,
-                message: "Description must not exceed 1000 characters",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Tech Stack */}
-        <FormField
-          id="techStack"
-          label="Tech Stack"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.techStack?.message}
-        >
-          <Controller
-            name="techStack"
-            control={control}
-            render={({ field }) => (
-              <CustomMultiSelect
-                id="techStack"
-                placeholder="Select Tech Stack"
-                options={skillsList}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </FormField>
-
-        {/* Project Category */}
-        <FormField
-          id="category"
-          label="Project Category"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.category?.message}
-        >
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <CustomSelect
-                id="category"
-                placeholder="e.g. Personal, Freelance, Hackathon"
-                options={projectCategoriesList}
-                value={field.value}
-                onChange={field.onChange} // send value to hook form
-              />
-            )}
-          />
-        </FormField>
-
-        {/* Featured */}
-        <FormField
-          id="featured"
-          label="Featured"
-          colSpan="col-span-12 sm:col-span-6"
-          type="checkbox"
-          error={errors?.featured?.message}
-          attachment={
-            <p className="font-normal text-xs opacity-80">
-              Helps in filtering the projects
-            </p>
-          }
-        >
-          <CustomCheckbox id="featured" {...register("featured")} />
-        </FormField>
-
-        {/* Start Date */}
-        <FormField
-          id="startDate"
-          label="Start Date"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.startDate?.message}
-        >
-          <CustomDatePicker
-            id="startDate"
-            icon={Calendar}
-            placeholder="YYYY-MM-DD"
-            {...register("startDate", {
-              required: "Start date is required!",
-              validate: (value) => {
-                if (endDate && value && dayjs(value).isAfter(dayjs(endDate))) {
-                  return "Start date cannot be after end date";
-                }
-                return true;
-              },
-            })}
-          />
-        </FormField>
-
-        {/* End Date */}
-        <FormField
-          id="endDate"
-          label="End Date"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.endDate?.message}
-        >
-          <CustomDatePicker
-            id="endDate"
-            icon={Calendar}
-            placeholder="YYYY-MM-DD (leave blank if current)"
-            {...register("endDate", {
-              validate: (value) => {
-                if (
-                  value &&
-                  startDate &&
-                  dayjs(value).isBefore(dayjs(startDate))
-                ) {
-                  return "End date cannot be before start date";
-                }
-                return true;
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Present */}
-        <FormField
-          id="isCurrent"
-          label="Currently working"
-          colSpan="col-span-12 sm:col-span-6"
-          type="checkbox"
-          error={errors?.isCurrent?.message}
-        >
-          <CustomCheckbox id="isCurrent" {...register("isCurrent")} />
-        </FormField>
-
-        {/* Sort Order */}
-        <FormField
-          id="sortOrder"
-          label="Display Order"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.sortOrder?.message}
-        >
-          <CustomInput
-            id="sortOrder"
-            type="number"
-            min={0}
-            placeholder="0 (appears first)"
-            {...register("sortOrder", { valueAsNumber: true })}
-          />
-        </FormField>
-
-        {/* Visibility  */}
-        <FormField
-          id="visibility"
-          label="Visibility"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.visibility?.message}
-        >
-          <CustomRadioButtons
-            id="visibility"
-            name="visibility"
-            options={visibilities}
-            {...register("visibility", {
-              required: "Visibility is required!",
-            })}
-          />
-        </FormField>
-
-        <div className="hidden sm:block col-span-6" />
-
-        <CustomButton
-          type="submit"
-          name={loading.updatingProject ? "Saving..." : "Save"}
-          className="col-span-12 place-self-end"
-          loading={loading.updatingProject}
-        />
       </form>
     </div>
   );

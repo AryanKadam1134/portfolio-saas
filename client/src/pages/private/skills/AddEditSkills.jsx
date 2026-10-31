@@ -138,10 +138,6 @@ export default function AddEditSkills() {
     fetchSkill();
   }, [fetchSkill, id]);
 
-  if (id && loading.skillLoading) {
-    return <CommonSkeleton count={6} />;
-  }
-
   return (
     <div className="flex flex-col gap-6 text-sm">
       <PageHeader
@@ -155,159 +151,165 @@ export default function AddEditSkills() {
 
       <form
         onSubmit={handleSubmit(addUpdateSkill)}
-        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
+        className="rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
-        {!id && (
-          <>
+        {id && loading.skillLoading ? (
+          <CommonSkeleton count={6} />
+        ) : (
+          <div className="grid grid-cols-12 gap-6">
+            {!id && (
+              <>
+                <FormField
+                  id="popular"
+                  label="Popular Skills"
+                  colSpan="col-span-12 sm:col-span-6"
+                >
+                  <CustomSelect
+                    id="popular"
+                    placeholder="Select Skill"
+                    options={SKILLS}
+                    value={null}
+                    onChange={(value) => reset({ name: value })}
+                  />
+                </FormField>
+
+                <div className="hidden sm:block col-span-6" />
+
+                <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+              </>
+            )}
+
+            {/* Skill Name */}
             <FormField
-              id="popular"
-              label="Popular Skills"
+              id="name"
+              label="Skill Name"
               colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.name?.message}
             >
-              <CustomSelect
-                id="popular"
-                placeholder="Select Skill"
-                options={SKILLS}
-                value={null}
-                onChange={(value) => reset({ name: value })}
+              <CustomInput
+                id="name"
+                type="text"
+                placeholder="e.g., React, Python, UI Design"
+                {...register("name", {
+                  required: "Skill name is required!",
+                  minLength: {
+                    value: 2,
+                    message: "Skill name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "Skill name must not exceed 50 characters",
+                  },
+                })}
               />
             </FormField>
 
-            <div className="hidden sm:block col-span-6" />
+            {/* Skill Category */}
+            <FormField
+              id="categoryId"
+              label="Skill Category"
+              colSpan="col-span-12 sm:col-span-6"
+              className="w-full"
+              error={errors?.categoryId?.message}
+            >
+              <Controller
+                name="categoryId"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    id="categoryId"
+                    placeholder="Select Category"
+                    options={categoriesList}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </FormField>
 
-            <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
-          </>
+            {/* Skill Logo URL */}
+            <FormField
+              id="logoUrl"
+              label="Logo URL"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.logoUrl?.message}
+            >
+              <CustomInput
+                id="logoUrl"
+                type="text"
+                placeholder="/images/react_light.svg"
+                {...register("logoUrl")}
+              />
+            </FormField>
+
+            {/* Skill Level */}
+            <FormField
+              id="level"
+              label="Level"
+              colSpan="col-span-12 sm:col-span-6"
+              className="w-full"
+              required
+              error={errors?.level?.message}
+            >
+              <Controller
+                name="level"
+                control={control}
+                rules={{ required: "Skill Level is required!" }}
+                render={({ field }) => (
+                  <CustomSelect
+                    id="level"
+                    placeholder="Select"
+                    options={skillLevels}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </FormField>
+
+            {/* Sort Order */}
+            <FormField
+              id="sortOrder"
+              label="Display Order"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.sortOrder?.message}
+            >
+              <CustomInput
+                id="sortOrder"
+                type="number"
+                min={0}
+                placeholder="0 (appears first)"
+                {...register("sortOrder", { valueAsNumber: true })}
+              />
+            </FormField>
+
+            {/* Visibility  */}
+            <FormField
+              id="visibility"
+              label="Visibility"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.visibility?.message}
+            >
+              <CustomRadioButtons
+                id="visibility"
+                name="visibility"
+                options={visibilities}
+                {...register("visibility", {
+                  required: "Visibility is required!",
+                })}
+              />
+            </FormField>
+
+            <CustomButton
+              type="submit"
+              name={loading.updating ? "Saving..." : "Save"}
+              className="col-span-12 place-self-end"
+              loading={loading.updating}
+            />
+          </div>
         )}
-
-        {/* Skill Name */}
-        <FormField
-          id="name"
-          label="Skill Name"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.name?.message}
-        >
-          <CustomInput
-            id="name"
-            type="text"
-            placeholder="e.g., React, Python, UI Design"
-            {...register("name", {
-              required: "Skill name is required!",
-              minLength: {
-                value: 2,
-                message: "Skill name must be at least 2 characters",
-              },
-              maxLength: {
-                value: 50,
-                message: "Skill name must not exceed 50 characters",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Skill Category */}
-        <FormField
-          id="categoryId"
-          label="Skill Category"
-          colSpan="col-span-12 sm:col-span-6"
-          className="w-full"
-          error={errors?.categoryId?.message}
-        >
-          <Controller
-            name="categoryId"
-            control={control}
-            render={({ field }) => (
-              <CustomSelect
-                id="categoryId"
-                placeholder="Select Category"
-                options={categoriesList}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </FormField>
-
-        {/* Skill Logo URL */}
-        <FormField
-          id="logoUrl"
-          label="Logo URL"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.logoUrl?.message}
-        >
-          <CustomInput
-            id="logoUrl"
-            type="text"
-            placeholder="/images/react_light.svg"
-            {...register("logoUrl")}
-          />
-        </FormField>
-
-        {/* Skill Level */}
-        <FormField
-          id="level"
-          label="Level"
-          colSpan="col-span-12 sm:col-span-6"
-          className="w-full"
-          required
-          error={errors?.level?.message}
-        >
-          <Controller
-            name="level"
-            control={control}
-            rules={{ required: "Skill Level is required!" }}
-            render={({ field }) => (
-              <CustomSelect
-                id="level"
-                placeholder="Select"
-                options={skillLevels}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </FormField>
-
-        {/* Sort Order */}
-        <FormField
-          id="sortOrder"
-          label="Display Order"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.sortOrder?.message}
-        >
-          <CustomInput
-            id="sortOrder"
-            type="number"
-            min={0}
-            placeholder="0 (appears first)"
-            {...register("sortOrder", { valueAsNumber: true })}
-          />
-        </FormField>
-
-        {/* Visibility  */}
-        <FormField
-          id="visibility"
-          label="Visibility"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.visibility?.message}
-        >
-          <CustomRadioButtons
-            id="visibility"
-            name="visibility"
-            options={visibilities}
-            {...register("visibility", {
-              required: "Visibility is required!",
-            })}
-          />
-        </FormField>
-
-        <CustomButton
-          type="submit"
-          name={loading.updating ? "Saving..." : "Save"}
-          className="col-span-12 place-self-end"
-          loading={loading.updating}
-        />
       </form>
     </div>
   );

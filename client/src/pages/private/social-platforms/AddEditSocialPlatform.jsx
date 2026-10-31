@@ -339,12 +339,8 @@ export default function AddEditSocialPlatform() {
     fetchSocialPlatform();
   }, [fetchSocialPlatform, id]);
 
-  if (id && loading.platformLoading) {
-    return <CommonSkeleton count={5} />;
-  }
-
   return (
-    <div>
+    <div className="flex flex-col gap-6 text-sm">
       <PageHeader
         heading={id ? "Edit Platform" : "Add Platform"}
         subHeading={
@@ -352,148 +348,153 @@ export default function AddEditSocialPlatform() {
             ? "Update this social platform in your portfolio"
             : "Add a social platform to your portfolio"
         }
-        className="mb-6"
       />
 
       <form
         onSubmit={handleSubmit(addUpdatePlatform)}
-        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
+        className="rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
-        {!id && (
-          <>
+        {id && loading.platformLoading ? (
+          <CommonSkeleton count={5} className="col-span-12" />
+        ) : (
+          <div className="grid grid-cols-12 gap-6">
+            {!id && (
+              <>
+                <FormField
+                  id="popular"
+                  label="Popular Platforms"
+                  colSpan="col-span-12 sm:col-span-6"
+                >
+                  <CustomSelect
+                    id="popular"
+                    placeholder="Select Platform"
+                    options={SOCIAL_APPS}
+                    value={null}
+                    onChange={(value) => reset({ name: value })}
+                  />
+                </FormField>
+
+                <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
+              </>
+            )}
+
+            {/* Platform Name */}
             <FormField
-              id="popular"
-              label="Popular Platforms"
+              id="name"
+              label="Platform Name"
               colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.name?.message}
             >
-              <CustomSelect
-                id="popular"
-                placeholder="Select Platform"
-                options={SOCIAL_APPS}
-                value={null}
-                onChange={(value) => reset({ name: value })}
+              <CustomInput
+                id="name"
+                type="text"
+                placeholder="e.g., GitHub, LinkedIn, Twitter"
+                {...register("name", {
+                  required: "Platform name is required!",
+                  minLength: {
+                    value: 1,
+                    message: "Platform name must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "Platform name must not exceed 50 characters",
+                  },
+                })}
               />
             </FormField>
 
-            <div className="col-span-12 border-b border-dashed border-light-border-primary dark:border-dark-border-primary" />
-          </>
+            {/* Logo URL */}
+            <FormField
+              id="logoUrl"
+              label="Logo URL"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.logoUrl?.message}
+            >
+              <CustomInput
+                id="logoUrl"
+                type="text"
+                placeholder="e.g., /images/github.svg"
+                {...register("logoUrl")}
+              />
+            </FormField>
+
+            {/* Platform Link */}
+            <FormField
+              id="link"
+              label="Link"
+              colSpan="col-span-12 sm:col-span-6"
+              attachment={
+                platformLink && (
+                  <a
+                    href={platformLink}
+                    target="_blank"
+                    className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
+                  >
+                    <ExternalLink size={13} /> <p>Visit Link</p>
+                  </a>
+                )
+              }
+              required
+              error={errors?.link?.message}
+            >
+              <CustomInput
+                id="link"
+                type="text"
+                icon={Link}
+                placeholder="https://github.com/username or your profile URL"
+                {...register("link", {
+                  required: "Platform link is required!",
+                  pattern: {
+                    value: /^(https:\/\/.+)?$/,
+                    message: "URL must start with https://",
+                  },
+                })}
+              />
+            </FormField>
+
+            {/* Sort Order */}
+            <FormField
+              id="sortOrder"
+              label="Display Order"
+              colSpan="col-span-12 sm:col-span-6"
+              error={errors?.sortOrder?.message}
+            >
+              <CustomInput
+                id="sortOrder"
+                type="number"
+                min={0}
+                placeholder="0 (appears first)"
+                {...register("sortOrder", { valueAsNumber: true })}
+              />
+            </FormField>
+
+            {/* Visibility  */}
+            <FormField
+              id="visibility"
+              label="Visibility"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.visibility?.message}
+            >
+              <CustomRadioButtons
+                id="visibility"
+                name="visibility"
+                options={visibilities}
+                {...register("visibility", {
+                  required: "Visibility is required!",
+                })}
+              />
+            </FormField>
+
+            <CustomButton
+              type="submit"
+              name={loading.updating ? "Saving..." : "Save"}
+              className="col-span-12 place-self-end"
+              loading={loading.updating}
+            />
+          </div>
         )}
-
-        {/* Platform Name */}
-        <FormField
-          id="name"
-          label="Platform Name"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.name?.message}
-        >
-          <CustomInput
-            id="name"
-            type="text"
-            placeholder="e.g., GitHub, LinkedIn, Twitter"
-            {...register("name", {
-              required: "Platform name is required!",
-              minLength: {
-                value: 1,
-                message: "Platform name must be at least 2 characters",
-              },
-              maxLength: {
-                value: 50,
-                message: "Platform name must not exceed 50 characters",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Logo URL */}
-        <FormField
-          id="logoUrl"
-          label="Logo URL"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.logoUrl?.message}
-        >
-          <CustomInput
-            id="logoUrl"
-            type="text"
-            placeholder="e.g., /images/github.svg"
-            {...register("logoUrl")}
-          />
-        </FormField>
-
-        {/* Platform Link */}
-        <FormField
-          id="link"
-          label="Link"
-          colSpan="col-span-12 sm:col-span-6"
-          attachment={
-            platformLink && (
-              <a
-                href={platformLink}
-                target="_blank"
-                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-500 cursor-pointer"
-              >
-                <ExternalLink size={13} /> <p>Visit Link</p>
-              </a>
-            )
-          }
-          required
-          error={errors?.link?.message}
-        >
-          <CustomInput
-            id="link"
-            type="text"
-            icon={Link}
-            placeholder="https://github.com/username or your profile URL"
-            {...register("link", {
-              required: "Platform link is required!",
-              pattern: {
-                value: /^(https:\/\/.+)?$/,
-                message: "URL must start with https://",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Sort Order */}
-        <FormField
-          id="sortOrder"
-          label="Display Order"
-          colSpan="col-span-12 sm:col-span-6"
-          error={errors?.sortOrder?.message}
-        >
-          <CustomInput
-            id="sortOrder"
-            type="number"
-            min={0}
-            placeholder="0 (appears first)"
-            {...register("sortOrder", { valueAsNumber: true })}
-          />
-        </FormField>
-
-        {/* Visibility  */}
-        <FormField
-          id="visibility"
-          label="Visibility"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.visibility?.message}
-        >
-          <CustomRadioButtons
-            id="visibility"
-            name="visibility"
-            options={visibilities}
-            {...register("visibility", {
-              required: "Visibility is required!",
-            })}
-          />
-        </FormField>
-
-        <CustomButton
-          type="submit"
-          name={loading.updating ? "Saving..." : "Save"}
-          className="col-span-12 place-self-end"
-          loading={loading.updating}
-        />
       </form>
     </div>
   );

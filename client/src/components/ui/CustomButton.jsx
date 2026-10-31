@@ -20,7 +20,7 @@ export default function CustomButton({
   return (
     <button
       {...props}
-      className={`shrink-0 px-5 py-2.5 flex items-center justify-center gap-2 ${variants[variant]} ${className} font-semibold rounded-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-md active:scale-97`}
+      className={`shrink-0 px-5 py-2.5 flex items-center justify-center gap-2 ${variants[variant]} ${className} font-medium rounded-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-md active:scale-97`}
       disabled={loading || disabled}
     >
       {Icon && (

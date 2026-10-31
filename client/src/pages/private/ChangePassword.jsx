@@ -70,10 +70,6 @@ export default function ChangePassword() {
     checkPassword();
   }, [callApi, notify, reset]);
 
-  if (loading.checking) {
-    return <CommonSkeleton count={3} />;
-  }
-
   return (
     <div className="flex flex-col gap-6 text-sm">
       <PageHeader
@@ -83,100 +79,106 @@ export default function ChangePassword() {
 
       <form
         onSubmit={handleSubmit(changePassword)}
-        className="grid grid-cols-12 gap-6 rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
+        className="rounded-2xl border border-light-border-primary bg-light-bg-primary p-5 text-sm shadow-[0_12px_40px_-28px_rgba(0,0,0,0.08)] dark:border-dark-border-primary dark:bg-dark-bg-primary sm:p-7"
       >
-        {/* Old Password */}
-        {hasPassword && (
-          <FormField
-            id="old_password"
-            label="Current Password"
-            colSpan="col-span-12 sm:col-span-6"
-            required
-            error={errors?.old_password?.message}
-          >
-            <CustomInputPassword
-              id="old_password"
-              icon={LockKeyholeOpen}
-              placeholder="Enter your current password"
-              {...register("old_password", {
-                required: "Current password is required!",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-                maxLength: {
-                  value: 16,
-                  message: "Password must not exceed 16 characters",
-                },
-              })}
+        {loading.checking ? (
+          <CommonSkeleton count={3} />
+        ) : (
+          <div className="grid grid-cols-12 gap-6">
+            {/* Old Password */}
+            {hasPassword && (
+              <FormField
+                id="old_password"
+                label="Current Password"
+                colSpan="col-span-12 sm:col-span-6"
+                required
+                error={errors?.old_password?.message}
+              >
+                <CustomInputPassword
+                  id="old_password"
+                  icon={LockKeyholeOpen}
+                  placeholder="Enter your current password"
+                  {...register("old_password", {
+                    required: "Current password is required!",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                    maxLength: {
+                      value: 16,
+                      message: "Password must not exceed 16 characters",
+                    },
+                  })}
+                />
+              </FormField>
+            )}
+
+            {/* New Password */}
+            <FormField
+              id="new_password"
+              label="New Password"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.new_password?.message}
+            >
+              <CustomInputPassword
+                id="new_password"
+                icon={LockKeyholeOpen}
+                placeholder="Create a new password"
+                {...register("new_password", {
+                  required: "New password is required!",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                  maxLength: {
+                    value: 16,
+                    message: "Password must not exceed 16 characters",
+                  },
+                })}
+              />
+            </FormField>
+
+            {/* Confirm Password */}
+            <FormField
+              id="confirm_password"
+              label="Confirm New Password"
+              colSpan="col-span-12 sm:col-span-6"
+              required
+              error={errors?.confirm_password?.message}
+            >
+              <CustomInputPassword
+                id="confirm_password"
+                icon={LockKeyholeOpen}
+                placeholder="Re-enter your new password"
+                {...register("confirm_password", {
+                  required: "Please confirm your password!",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                  maxLength: {
+                    value: 16,
+                    message: "Password must not exceed 16 characters",
+                  },
+                  validate: (value) => {
+                    if (value !== newPassword) {
+                      return "Passwords do not match!";
+                    }
+                    return true;
+                  },
+                })}
+              />
+            </FormField>
+
+            <CustomButton
+              type="submit"
+              name={loading.changing ? "Saving..." : "Save"}
+              className="col-span-12 place-self-end"
+              loading={loading.changing}
             />
-          </FormField>
+          </div>
         )}
-
-        {/* New Password */}
-        <FormField
-          id="new_password"
-          label="New Password"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.new_password?.message}
-        >
-          <CustomInputPassword
-            id="new_password"
-            icon={LockKeyholeOpen}
-            placeholder="Create a new password"
-            {...register("new_password", {
-              required: "New password is required!",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters",
-              },
-              maxLength: {
-                value: 16,
-                message: "Password must not exceed 16 characters",
-              },
-            })}
-          />
-        </FormField>
-
-        {/* Confirm Password */}
-        <FormField
-          id="confirm_password"
-          label="Confirm New Password"
-          colSpan="col-span-12 sm:col-span-6"
-          required
-          error={errors?.confirm_password?.message}
-        >
-          <CustomInputPassword
-            id="confirm_password"
-            icon={LockKeyholeOpen}
-            placeholder="Re-enter your new password"
-            {...register("confirm_password", {
-              required: "Please confirm your password!",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters",
-              },
-              maxLength: {
-                value: 16,
-                message: "Password must not exceed 16 characters",
-              },
-              validate: (value) => {
-                if (value !== newPassword) {
-                  return "Passwords do not match!";
-                }
-                return true;
-              },
-            })}
-          />
-        </FormField>
-
-        <CustomButton
-          type="submit"
-          name={loading.changing ? "Saving..." : "Save"}
-          className="col-span-12 place-self-end"
-          loading={loading.changing}
-        />
       </form>
     </div>
   );
