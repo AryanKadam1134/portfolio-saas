@@ -257,18 +257,32 @@ const registerUser = asynchandler(async (req, res) => {
       (field) => typeof field == "string" && field?.trim() == "",
     )
   ) {
-    throw new ApiError(400, "All fields are required!");
+    throw new ApiError(400, "All fields are required!", {
+      firstName: ["First Name is required!"],
+      username: ["Username is required!"],
+      email: ["Email is required!"],
+      password: ["Password is required!"],
+    });
   }
 
-  const userExists = await User.findOne({
-    $or: [{ username }, { email }],
+  const userExistsWithUsername = await User.findOne({
+    username,
   });
 
-  if (userExists) {
-    throw new ApiError(
-      409,
-      "User already exist with similar username or email!",
-    );
+  const userExistsWithEmail = await User.findOne({
+    email,
+  });
+
+  if (userExistsWithUsername) {
+    throw new ApiError(409, "Username already taken!", {
+      username: ["Username already exists!"],
+    });
+  }
+
+  if (userExistsWithEmail) {
+    throw new ApiError(409, "User already exist with this email!", {
+      email: ["Email already exists!"],
+    });
   }
 
   const newUser = await User.create({
@@ -298,11 +312,15 @@ const loginUser = asynchandler(async (req, res) => {
   const { userCredential, password, rememberMe } = req.body;
 
   if (!userCredential) {
-    throw new ApiError(400, "Username or Email is required!");
+    throw new ApiError(400, "Username or Email is required!", {
+      userCredential: ["Username or Email is required!"],
+    });
   }
 
   if (!password) {
-    throw new ApiError(400, "Password is required!");
+    throw new ApiError(400, "Password is required!", {
+      password: ["Password is required!"],
+    });
   }
 
   const userExist = await User.findOne({
@@ -316,7 +334,10 @@ const loginUser = asynchandler(async (req, res) => {
   const isPasswordCorrect = await userExist.isPasswordCorrect(password);
 
   if (!isPasswordCorrect) {
-    throw new ApiError(401, "Invalid password!");
+    throw new ApiError(401, "Invalid credentials!", {
+      userCredential: ["Invalid credentials!"],
+      password: ["Invalid credentials!"],
+    });
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(

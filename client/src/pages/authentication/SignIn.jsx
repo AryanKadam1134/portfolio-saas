@@ -12,6 +12,7 @@ import CustomCheckbox from "../../components/ui/CustomCheckbox";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
 import { useAuth } from "../../context/auth/useAuth";
+import useFieldErrors from "../../hooks/useFieldErrors";
 
 export default function SignIn() {
   const { error, login } = useAuth();
@@ -22,16 +23,22 @@ export default function SignIn() {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onChange",
   });
 
+  const { addErrors } = useFieldErrors(setError);
+
   const rememberMe = useWatch({ control, name: "rememberMe" });
 
   const onSubmit = async (payload) => {
-    const success = await login(payload);
-    if (success) navigate("/details");
+    await login(payload)
+      .then(() => {
+        navigate("/details");
+      })
+      .catch((error) => addErrors(error));
   };
 
   return (

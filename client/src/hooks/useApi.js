@@ -21,7 +21,7 @@ export default function useApi(defaults) {
       } catch (error) {
         console.error("Error: ", error);
         onError?.(error);
-        return undefined;
+        throw error;
       } finally {
         setLoadingKey(keyName, false);
       }

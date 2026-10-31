@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (payload) => {
-    const res = await callApi(
+    return await callApi(
       "loading",
       () => authEndpoints.login(payload, config),
       {
@@ -64,12 +64,9 @@ export function AuthProvider({ children }) {
         },
         onError: (error) => {
           notify.error({ title: error?.message || "Login failed!" });
-          setError(error?.message);
         },
       },
     );
-
-    return res?.success;
   };
 
   const logout = () => {

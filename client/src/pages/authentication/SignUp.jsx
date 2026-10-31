@@ -15,6 +15,7 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 import { authEndpoints } from "../../services/auth.service";
 
 import useApi from "../../hooks/useApi";
+import useFieldErrors from "../../hooks/useFieldErrors";
 
 import { useNotify } from "../../context/notification/useNotify";
 
@@ -23,7 +24,7 @@ export default function SignUp() {
 
   const { loading, callApi } = useApi();
 
-  const [error, setError] = useState(null);
+  const [error, setApiError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -31,16 +32,19 @@ export default function SignUp() {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     mode: "onChange",
   });
 
+  const { addErrors } = useFieldErrors(setError);
+
   const onSubmit = (payload) => {
     callApi("registering", () => authEndpoints.register(payload), {
       onSuccess: (res) => {
         reset();
-        setError(null);
+        setApiError(null);
         notify.success({
           title: res?.message || "Account created!",
         });
@@ -48,7 +52,7 @@ export default function SignUp() {
       },
       onError: (error) => {
         notify.error({ title: error?.message || "Registration failed!" });
-        setError(error?.message);
+        addErrors(error);
       },
     });
   };
@@ -102,7 +106,7 @@ export default function SignUp() {
               type="text"
               placeholder="username"
               {...register("username", {
-                required: "username is required!",
+                required: "Username is required!",
               })}
             />
           </FormField>
@@ -120,7 +124,7 @@ export default function SignUp() {
               icon={Mail}
               placeholder="example@gmail.com"
               {...register("email", {
-                required: "email is required!",
+                required: "Email is required!",
                 pattern: {
                   value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                   message: "Invalid email format",
@@ -141,7 +145,7 @@ export default function SignUp() {
               icon={LockKeyholeOpen}
               placeholder="••••••••"
               {...register("password", {
-                required: "password is required!",
+                required: "Password is required!",
                 minLength: {
                   value: 8,
                   message: "Minimum 6 characters",
