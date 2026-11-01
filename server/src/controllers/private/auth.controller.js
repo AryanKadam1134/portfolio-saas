@@ -347,17 +347,21 @@ const loginUser = asynchandler(async (req, res) => {
     $or: [{ username: userCredential }, { email: userCredential }],
   });
 
+  const message = "Incorrect credentials!";
+
   if (!userExist) {
-    throw new ApiError(404, "User not found!", {
-      userCredential: ["No account was found for this username or email."],
+    throw new ApiError(401, "The credentials you entered are incorrect.", {
+      userCredential: [message],
+      password: [message],
     });
   }
 
   const isPasswordCorrect = await userExist.isPasswordCorrect(password);
 
   if (!isPasswordCorrect) {
-    throw new ApiError(401, "Invalid credentials!", {
-      password: ["Password is incorrect."],
+    throw new ApiError(401, "The credentials you entered are incorrect.", {
+      userCredential: [message],
+      password: [message],
     });
   }
 
