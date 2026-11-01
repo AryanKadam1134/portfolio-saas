@@ -30,8 +30,10 @@ const addProject = asynchandler(async (req, res) => {
     organizationId,
   } = req.body;
 
-  if (!title) {
-    throw new ApiError(400, "Project name is required!");
+  if (typeof title !== "string" || !title.trim()) {
+    throw new ApiError(400, "Project name is required!", {
+      title: ["Project name is required!"],
+    });
   }
 
   const projectExists = await Project.findOne({
@@ -40,7 +42,9 @@ const addProject = asynchandler(async (req, res) => {
   });
 
   if (projectExists) {
-    throw new ApiError(409, "Project already exists!");
+    throw new ApiError(409, "Project already exists!", {
+      title: ["A project with this name already exists!"],
+    });
   }
 
   const fields = {};
@@ -69,7 +73,9 @@ const addProject = asynchandler(async (req, res) => {
     const organizationExists = await Experience.findById(organizationId);
 
     if (!organizationExists) {
-      throw new ApiError(404, "Organization not found!");
+      throw new ApiError(404, "Organization not found!", {
+        organizationId: ["Select a valid organization."],
+      });
     }
 
     fields.organizationId = organizationId;
@@ -131,7 +137,9 @@ const updateProjectDetails = asynchandler(async (req, res) => {
     });
 
     if (sameProjectName) {
-      throw new ApiError(409, "Project name already exists!");
+      throw new ApiError(409, "Project name already exists!", {
+        title: ["A project with this name already exists!"],
+      });
     }
   }
 
@@ -163,7 +171,9 @@ const updateProjectDetails = asynchandler(async (req, res) => {
 
     // if null do not throw error
     if (organizationId && !organizationExists) {
-      throw new ApiError(404, "Organization not found!");
+      throw new ApiError(404, "Organization not found!", {
+        organizationId: ["Select a valid organization."],
+      });
     }
 
     fields.organizationId = organizationId;

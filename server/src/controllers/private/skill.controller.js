@@ -21,8 +21,10 @@ const addSkill = asynchandler(async (req, res) => {
     sortOrder,
   } = req.body;
 
-  if (!name) {
-    throw new ApiError(400, "Skill name is required!");
+  if (typeof name !== "string" || !name.trim()) {
+    throw new ApiError(400, "Skill name is required!", {
+      name: ["Skill name is required!"],
+    });
   }
 
   const skillExists = await Skill.findOne({
@@ -31,7 +33,9 @@ const addSkill = asynchandler(async (req, res) => {
   });
 
   if (skillExists) {
-    throw new ApiError(409, "Skill already exists!");
+    throw new ApiError(409, "Skill already exists!", {
+      name: ["A skill with this name already exists!"],
+    });
   }
 
   const fields = {};
@@ -51,7 +55,9 @@ const addSkill = asynchandler(async (req, res) => {
     const categoryExists = await SkillCategory.findById(categoryId);
 
     if (!categoryExists) {
-      throw new ApiError(404, "Category not found!");
+      throw new ApiError(404, "Category not found!", {
+        categoryId: ["Select a valid skill category."],
+      });
     }
 
     fields.categoryId = categoryId;
@@ -86,7 +92,9 @@ const updateSkill = asynchandler(async (req, res) => {
     });
 
     if (sameSkillName) {
-      throw new ApiError(409, "Skill name already exists!");
+      throw new ApiError(409, "Skill name already exists!", {
+        name: ["A skill with this name already exists!"],
+      });
     }
   }
 
@@ -108,7 +116,9 @@ const updateSkill = asynchandler(async (req, res) => {
 
     // if null do not throw error
     if (categoryId && !categoryExists) {
-      throw new ApiError(404, "Category not found!");
+      throw new ApiError(404, "Category not found!", {
+        categoryId: ["Select a valid skill category."],
+      });
     }
 
     fields.categoryId = categoryId;
@@ -123,7 +133,7 @@ const updateSkill = asynchandler(async (req, res) => {
     {
       $set: fields,
     },
-    { new: true },
+    { new: true, runValidators: true },
   );
 
   return res.status(200).json(new ApiRes(200, updatedSkill, "Skill updated!"));

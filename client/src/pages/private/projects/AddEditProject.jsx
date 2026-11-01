@@ -26,6 +26,7 @@ import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 import { projectEndpoints } from "../../../services/project.service";
 
 import useApi from "../../../hooks/useApi";
+import useFieldErrors from "../../../hooks/useFieldErrors";
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useOrganizationsList from "../../../hooks/useOrganizationsList";
@@ -55,6 +56,7 @@ export default function AddEditProject() {
     formState: { errors, dirtyFields },
     setValue,
     watch,
+    setError,
   } = useForm({
     defaultValues: {
       featured: true,
@@ -62,6 +64,8 @@ export default function AddEditProject() {
     },
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const projectImages = useWatch({ control, name: "projectImages" });
   const coverImageIndex = useWatch({ control, name: "coverImageIndex" });
@@ -111,6 +115,7 @@ export default function AddEditProject() {
           });
         },
         onError: (error) => {
+          addErrors(error);
           notify.error({
             title: error?.message || "Failed to save project!",
           });

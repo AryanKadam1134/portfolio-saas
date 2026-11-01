@@ -19,6 +19,7 @@ import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 import { educationEndpoints } from "../../../services/education.service";
 
 import useApi from "../../../hooks/useApi";
+import useFieldErrors from "../../../hooks/useFieldErrors";
 
 import { useNotify } from "../../../context/notification/useNotify";
 
@@ -38,7 +39,10 @@ export default function AddEditEducation() {
     reset,
     formState: { errors, dirtyFields },
     watch,
+    setError,
   } = useForm({ mode: "onChange" });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const instituteImage = useWatch({ control, name: "instituteImage" });
   const startYear = watch("startYear");
@@ -78,6 +82,7 @@ export default function AddEditEducation() {
           });
         },
         onError: (error) => {
+          addErrors(error);
           notify.error({
             title: error?.message || "Failed to save education!",
           });

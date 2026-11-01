@@ -27,8 +27,10 @@ const addAchievement = asynchandler(async (req, res) => {
     certificateId,
   } = req.body;
 
-  if (!title) {
-    throw new ApiError(400, "Achievement name is required!");
+  if (typeof title !== "string" || !title.trim()) {
+    throw new ApiError(400, "Achievement name is required!", {
+      title: ["Achievement name is required!"],
+    });
   }
 
   const achievementExists = await Achievement.findOne({
@@ -37,7 +39,9 @@ const addAchievement = asynchandler(async (req, res) => {
   });
 
   if (achievementExists) {
-    throw new ApiError(409, "Achievement already exists!");
+    throw new ApiError(409, "Achievement already exists!", {
+      title: ["An achievement with this title already exists!"],
+    });
   }
 
   const fields = {};
@@ -59,7 +63,9 @@ const addAchievement = asynchandler(async (req, res) => {
     const certificateExists = await Certificate.findById(certificateId);
 
     if (!certificateExists) {
-      throw new ApiError(404, "Certificate not found!");
+      throw new ApiError(404, "Certificate not found!", {
+        certificateId: ["Select a valid certificate."],
+      });
     }
 
     fields.certificateId = certificateId;
@@ -118,7 +124,9 @@ const updateAchievement = asynchandler(async (req, res) => {
     });
 
     if (sameAchievementName) {
-      throw new ApiError(409, "Achievement name already exists!");
+      throw new ApiError(409, "Achievement name already exists!", {
+        title: ["An achievement with this title already exists!"],
+      });
     }
   }
 
@@ -143,7 +151,9 @@ const updateAchievement = asynchandler(async (req, res) => {
 
     // if null do not throw error
     if (certificateId && !certificateExists) {
-      throw new ApiError(404, "Certificate not found!");
+      throw new ApiError(404, "Certificate not found!", {
+        certificateId: ["Select a valid certificate."],
+      });
     }
 
     fields.certificateId = certificateId;

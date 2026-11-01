@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LockKeyholeOpen, Mail } from "lucide-react";
@@ -24,8 +22,6 @@ export default function SignUp() {
 
   const { loading, callApi } = useApi();
 
-  const [error, setApiError] = useState(null);
-
   const navigate = useNavigate();
 
   const {
@@ -44,15 +40,14 @@ export default function SignUp() {
     callApi("registering", () => authEndpoints.register(payload), {
       onSuccess: (res) => {
         reset();
-        setApiError(null);
         notify.success({
           title: res?.message || "Account created!",
         });
         navigate("/signin");
       },
       onError: (error) => {
-        notify.error({ title: error?.message || "Registration failed!" });
         addErrors(error);
+        notify.error({ title: error?.message || "Registration failed!" });
       },
     });
   };
@@ -148,7 +143,7 @@ export default function SignUp() {
                 required: "Password is required!",
                 minLength: {
                   value: 8,
-                  message: "Minimum 6 characters",
+                  message: "Minimum 8 characters",
                 },
                 maxLength: {
                   value: 16,
@@ -157,8 +152,6 @@ export default function SignUp() {
               })}
             />
           </FormField>
-
-          {error && <p className="text-center text-sm text-red-400">{error}</p>}
 
           {/* Submit */}
           <CustomButton

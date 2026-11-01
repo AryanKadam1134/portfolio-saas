@@ -13,6 +13,7 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 import { authEndpoints } from "../../services/auth.service";
 
 import useApi from "../../hooks/useApi";
+import useFieldErrors from "../../hooks/useFieldErrors";
 
 import { useNotify } from "../../context/notification/useNotify";
 
@@ -25,12 +26,13 @@ export default function ResetPassword() {
   const location = useLocation();
   const email = location.state?.email;
 
-  const [error, setError] = useState(null);
+  const [apiError, setApiError] = useState(null);
 
   const {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -39,18 +41,21 @@ export default function ResetPassword() {
     mode: "onChange",
   });
 
+  const { addErrors } = useFieldErrors(setError);
+
   const newPassword = watch("new_password");
 
   const onSubmit = (payload) => {
     callApi("resetting", () => authEndpoints.resetPassword(payload), {
       onSuccess: (res) => {
-        setError(null);
+        setApiError(null);
         navigate("/signin");
         notify.success({ title: res?.message || "Password changed!" });
       },
       onError: (error) => {
+        addErrors(error);
+        setApiError(error?.message);
         notify.error({ title: error?.message || "Failed to change password!" });
-        setError(error?.message);
       },
     });
   };
@@ -120,7 +125,9 @@ export default function ResetPassword() {
             />
           </FormField>
 
-          {error && <p className="text-center text-sm text-red-400">{error}</p>}
+          {apiError && (
+            <p className="text-center text-sm text-red-400">{apiError}</p>
+          )}
 
           {/* Submit */}
           <CustomButton

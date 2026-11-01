@@ -10,8 +10,10 @@ const addSkillCategory = asynchandler(async (req, res) => {
 
   const { name, logoUrl, visibility, sortOrder } = req.body;
 
-  if (!name) {
-    throw new ApiError(400, "Category name is required!");
+  if (typeof name !== "string" || !name.trim()) {
+    throw new ApiError(400, "Category name is required!", {
+      name: ["Category name is required!"],
+    });
   }
 
   const category = await SkillCategory.findOne({
@@ -20,7 +22,9 @@ const addSkillCategory = asynchandler(async (req, res) => {
   });
 
   if (category) {
-    throw new ApiError(409, "Category already exists!");
+    throw new ApiError(409, "Category already exists!", {
+      name: ["A category with this name already exists!"],
+    });
   }
 
   const fields = {};
@@ -52,7 +56,9 @@ const updateSkillCategory = asynchandler(async (req, res) => {
     });
 
     if (sameCategoryName) {
-      throw new ApiError(409, "Category name already exists!");
+      throw new ApiError(409, "Category name already exists!", {
+        name: ["A category with this name already exists!"],
+      });
     }
   }
 
@@ -73,7 +79,7 @@ const updateSkillCategory = asynchandler(async (req, res) => {
     {
       $set: fields,
     },
-    { new: true },
+    { new: true, runValidators: true },
   );
 
   return res

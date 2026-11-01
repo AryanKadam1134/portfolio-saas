@@ -26,6 +26,7 @@ import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 import { experienceEndpoints } from "../../../services/experience.service";
 
 import useApi from "../../../hooks/useApi";
+import useFieldErrors from "../../../hooks/useFieldErrors";
 import useSkillsList from "../../../hooks/useSkillsList";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useEmploymentTypes from "../../../hooks/useEmploymentTypes";
@@ -52,6 +53,7 @@ export default function AddEditExperiences() {
     control,
     reset,
     formState: { errors, dirtyFields },
+    setError,
   } = useForm({
     defaultValues: {
       sortOrder: 0,
@@ -69,6 +71,8 @@ export default function AddEditExperiences() {
     },
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const {
     fields: highlightFields,
@@ -142,6 +146,7 @@ export default function AddEditExperiences() {
           });
         },
         onError: (error) => {
+          addErrors(error);
           notify.error({
             title: error?.message || "Failed to save experience!",
           });

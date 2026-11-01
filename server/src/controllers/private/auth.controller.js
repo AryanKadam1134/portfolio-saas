@@ -252,17 +252,37 @@ const refreshAccessToken = asynchandler(async (req, res) => {
 const registerUser = asynchandler(async (req, res) => {
   const { firstName, lastName, username, email, password } = req.body;
 
-  if (
-    [firstName, username, email, password].some(
-      (field) => typeof field == "string" && field?.trim() == "",
-    )
-  ) {
-    throw new ApiError(400, "All fields are required!", {
-      firstName: ["First Name is required!"],
-      username: ["Username is required!"],
-      email: ["Email is required!"],
-      password: ["Password is required!"],
-    });
+  const fieldErrors = {};
+
+  if (typeof firstName !== "string" || !firstName.trim())
+    fieldErrors.firstName = ["First name is required!"];
+  if (typeof username !== "string" || !username.trim())
+    fieldErrors.username = ["Username is required!"];
+  if (typeof email !== "string" || !email.trim())
+    fieldErrors.email = ["Email is required!"];
+  else if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email))
+    fieldErrors.email = ["Enter a valid email address."];
+
+  if (typeof password !== "string" || !password)
+    fieldErrors.password = ["Password is required!"];
+  else if (password.length < 8 || password.length > 16)
+    fieldErrors.password = ["Password must be between 8 and 16 characters."];
+
+  if (typeof username === "string" && username.trim()) {
+    if (username.length < 3 || username.length > 30)
+      fieldErrors.username = ["Username must be between 3 and 30 characters."];
+    else if (!/^[a-zA-Z0-9_-]+$/.test(username))
+      fieldErrors.username = [
+        "Username can only contain letters, numbers, hyphens, and underscores.",
+      ];
+  }
+
+  if (Object.keys(fieldErrors).length) {
+    throw new ApiError(
+      400,
+      "Please correct the highlighted fields.",
+      fieldErrors,
+    );
   }
 
   const userExistsWithUsername = await User.findOne({
@@ -328,15 +348,16 @@ const loginUser = asynchandler(async (req, res) => {
   });
 
   if (!userExist) {
-    throw new ApiError(404, "User not found!");
+    throw new ApiError(404, "User not found!", {
+      userCredential: ["No account was found for this username or email."],
+    });
   }
 
   const isPasswordCorrect = await userExist.isPasswordCorrect(password);
 
   if (!isPasswordCorrect) {
     throw new ApiError(401, "Invalid credentials!", {
-      userCredential: ["Invalid credentials!"],
-      password: ["Invalid credentials!"],
+      password: ["Password is incorrect."],
     });
   }
 
@@ -424,29 +445,52 @@ const changePassword = asynchandler(async (req, res) => {
 
   const loggedUser = await User.findById(req.user?._id);
 
+  const errors = {};
+  if (!isInitializing && (typeof old_password !== "string" || !old_password))
+    errors.old_password = ["Current password is required!"];
+  if (typeof new_password !== "string" || !new_password)
+    errors.new_password = ["New password is required!"];
+  if (typeof confirm_password !== "string" || !confirm_password)
+    errors.confirm_password = ["Please confirm your new password!"];
+
+  if (Object.keys(errors).length) {
+    throw new ApiError(400, "Please complete the highlighted fields.", errors);
+  }
+
+  if (new_password.length < 8 || new_password.length > 16) {
+    throw new ApiError(400, "New password is invalid.", {
+      new_password: ["Password must be between 8 and 16 characters."],
+    });
+  }
+
+  if (confirm_password.length < 8 || confirm_password.length > 16) {
+    throw new ApiError(400, "Password confirmation is invalid.", {
+      confirm_password: ["Password must be between 8 and 16 characters."],
+    });
+  }
+
+  if (new_password !== confirm_password) {
+    throw new ApiError(
+      400,
+      "Passwords do not match! Please ensure new password and confirm password are the same.",
+      { confirm_password: ["Passwords do not match."] },
+    );
+  }
+
   if (!isInitializing) {
-    if (!old_password || !new_password || !confirm_password) {
-      throw new ApiError(400, "All fields are required!");
-    }
-
-    // Validate password confirmation match
-    if (new_password !== confirm_password) {
-      throw new ApiError(
-        400,
-        "Passwords do not match! Please ensure new password and confirm password are the same.",
-      );
-    }
-
     const isPasswordCorrect = await loggedUser.isPasswordCorrect(old_password);
 
     if (!isPasswordCorrect) {
-      throw new ApiError(401, "Invalid current password!");
+      throw new ApiError(401, "Invalid current password!", {
+        old_password: ["Current password is incorrect."],
+      });
     }
 
     if (new_password === old_password) {
       throw new ApiError(
         400,
         "New password cannot be the same as old password!",
+        { new_password: ["Choose a password you have not used before."] },
       );
     }
   }
@@ -472,14 +516,24 @@ const changePassword = asynchandler(async (req, res) => {
 const forgotPassword = asynchandler(async (req, res) => {
   const { email } = req.body;
 
-  if (!email) {
-    throw new ApiError(400, "Email is required!");
+  if (typeof email !== "string" || !email.trim()) {
+    throw new ApiError(400, "Email is required!", {
+      email: ["Email is required!"],
+    });
+  }
+
+  if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email)) {
+    throw new ApiError(400, "Enter a valid email address.", {
+      email: ["Enter a valid email address."],
+    });
   }
 
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new ApiError(404, "User not found!");
+    throw new ApiError(404, "User not found!", {
+      email: ["No account was found with this email address."],
+    });
   }
 
   const otp = Math.floor(100000 + Math.random() * 900000);
@@ -503,10 +557,35 @@ const forgotPassword = asynchandler(async (req, res) => {
 const verifyOTP = asynchandler(async (req, res) => {
   const { email, otp } = req.body;
 
+  const fieldErrors = {};
+  if (typeof email !== "string" || !email.trim())
+    fieldErrors.email = ["Email is required!"];
+  if (typeof otp !== "string" && typeof otp !== "number")
+    fieldErrors.otp = ["Verification code is required!"];
+  else if (!String(otp)) fieldErrors.otp = ["Verification code is required!"];
+  else if (!/^\d{6}$/.test(String(otp)))
+    fieldErrors.otp = ["Enter the 6-digit verification code."];
+
+  if (Object.keys(fieldErrors).length) {
+    throw new ApiError(
+      400,
+      "Please correct the highlighted fields.",
+      fieldErrors,
+    );
+  }
+
   const user = await User.findOne({ email });
 
+  if (!user) {
+    throw new ApiError(404, "User not found!", {
+      email: ["No account was found with this email address."],
+    });
+  }
+
   if (user.otp !== Number(otp) || user.otpExpiryDate < Date.now()) {
-    throw new ApiError(400, "Invalid or expired OTP!");
+    throw new ApiError(400, "Invalid or expired verification code.", {
+      otp: ["The verification code is invalid or expired."],
+    });
   }
 
   return res.status(200).json(new ApiRes(200, null, "OTP verified!"));
@@ -515,20 +594,64 @@ const verifyOTP = asynchandler(async (req, res) => {
 const resetPassword = asynchandler(async (req, res) => {
   const { email, new_password, confirm_password } = req.body;
 
-  if (!new_password || !confirm_password) {
-    throw new ApiError(400, "New password is required!");
+  if (typeof email !== "string" || !email.trim()) {
+    throw new ApiError(400, "Email is required!", {
+      email: ["Email is required!"],
+    });
+  }
+
+  if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email)) {
+    throw new ApiError(400, "Enter a valid email address.", {
+      email: ["Enter a valid email address."],
+    });
+  }
+
+  if (
+    typeof new_password !== "string" ||
+    !new_password ||
+    typeof confirm_password !== "string" ||
+    !confirm_password
+  ) {
+    const errors = {};
+    if (typeof new_password !== "string" || !new_password)
+      errors.new_password = ["New password is required!"];
+    if (typeof confirm_password !== "string" || !confirm_password)
+      errors.confirm_password = ["Please confirm your new password!"];
+    throw new ApiError(400, "Please complete the highlighted fields.", errors);
+  }
+
+  if (new_password.length < 8 || new_password.length > 16) {
+    throw new ApiError(400, "New password is invalid.", {
+      new_password: ["Password must be between 8 and 16 characters."],
+    });
+  }
+
+  if (confirm_password.length < 8 || confirm_password.length > 16) {
+    throw new ApiError(400, "Password confirmation is invalid.", {
+      confirm_password: ["Password must be between 8 and 16 characters."],
+    });
   }
 
   if (new_password !== confirm_password) {
-    throw new ApiError(400, "Password do not match!");
+    throw new ApiError(400, "Passwords do not match!", {
+      confirm_password: ["Passwords do not match."],
+    });
   }
 
   const user = await User.findOne({ email });
 
+  if (!user) {
+    throw new ApiError(404, "User not found!", {
+      email: ["No account was found with this email address."],
+    });
+  }
+
   const isPasswordCorrect = await user.isPasswordCorrect(new_password);
 
   if (isPasswordCorrect) {
-    throw new ApiError(409, "New password cannot be same as old password!");
+    throw new ApiError(409, "New password cannot be same as old password!", {
+      new_password: ["Choose a password you have not used before."],
+    });
   }
 
   user.password = new_password;

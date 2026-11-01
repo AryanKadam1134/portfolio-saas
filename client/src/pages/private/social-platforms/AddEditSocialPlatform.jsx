@@ -18,6 +18,7 @@ import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 import { socialPlatformEndpoints } from "../../../services/socialPlatform.service";
 
 import useApi from "../../../hooks/useApi";
+import useFieldErrors from "../../../hooks/useFieldErrors";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/notification/useNotify";
@@ -278,12 +279,15 @@ export default function AddEditSocialPlatform() {
     reset,
     control,
     formState: { errors, dirtyFields },
+    setError,
   } = useForm({
     defaultValues: {
       visibility: "public",
     },
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const platformLink = useWatch({ control, name: "link" });
 
@@ -326,6 +330,7 @@ export default function AddEditSocialPlatform() {
           });
         },
         onError: (error) => {
+          addErrors(error);
           notify.error({
             title: error?.message || "Failed to save social platform!",
           });

@@ -21,6 +21,7 @@ import { userEndpoints } from "../../services/user.service";
 
 import useApi from "../../hooks/useApi";
 import useGenders from "../../hooks/useGenders";
+import useFieldErrors from "../../hooks/useFieldErrors";
 
 import { useAuth } from "../../context/auth/useAuth";
 import { useNotify } from "../../context/notification/useNotify";
@@ -36,10 +37,13 @@ export default function Dashboard() {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors, dirtyFields },
   } = useForm({
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const fetchUserDetails = useCallback(() => {
     callApi("detailsLoading", userEndpoints.getCurrentUser, {
@@ -60,6 +64,7 @@ export default function Dashboard() {
         notify.success({ title: res?.message || "Details updated!" });
       },
       onError: (error) => {
+        addErrors(error);
         notify.error({
           title: error?.message || "Failed to update user details!",
         });

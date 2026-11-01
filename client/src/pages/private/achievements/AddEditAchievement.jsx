@@ -24,6 +24,7 @@ import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 import { achievementEndpoints } from "../../../services/achievement.service";
 
 import useApi from "../../../hooks/useApi";
+import useFieldErrors from "../../../hooks/useFieldErrors";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCertificatesList from "../../../hooks/useCertificatesList";
 
@@ -49,6 +50,7 @@ export default function AddEditAchievement() {
     reset,
     formState: { errors, dirtyFields },
     setValue,
+    setError,
   } = useForm({
     defaultValues: {
       sortOrder: 0,
@@ -57,6 +59,8 @@ export default function AddEditAchievement() {
     },
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const achievementImages = useWatch({ control, name: "achievementImages" });
   const coverImageIndex = useWatch({ control, name: "coverImageIndex" });
@@ -106,6 +110,7 @@ export default function AddEditAchievement() {
           });
         },
         onError: (error) => {
+          addErrors(error);
           notify.error({
             title: error?.message || "Failed to save achievement!",
           });

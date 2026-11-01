@@ -13,6 +13,7 @@ import CustomButton from "../../components/ui/CustomButton";
 import { authEndpoints } from "../../services/auth.service";
 
 import useApi from "../../hooks/useApi";
+import useFieldErrors from "../../hooks/useFieldErrors";
 
 import { useNotify } from "../../context/notification/useNotify";
 
@@ -23,16 +24,19 @@ export default function ForogtPassword() {
 
   const navigate = useNavigate();
 
-  const [error, setError] = useState(null);
+  const [apiError, setApiError] = useState(null);
   const [isOtp, setIsOtp] = useState(false);
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const onSubmit = (payload) => {
     callApi(
@@ -49,12 +53,13 @@ export default function ForogtPassword() {
             setIsOtp(true);
           }
 
-          setError(null);
+          setApiError(null);
           notify.success({ title: res?.message });
         },
         onError: (error) => {
+          addErrors(error);
+          setApiError(error?.message);
           notify.error({ title: error?.message });
-          setError(error?.message);
         },
       },
     );
@@ -117,7 +122,9 @@ export default function ForogtPassword() {
             </FormField>
           )}
 
-          {error && <p className="text-center text-sm text-red-400">{error}</p>}
+          {apiError && (
+            <p className="text-center text-sm text-red-400">{apiError}</p>
+          )}
 
           {/* Submit */}
           <CustomButton

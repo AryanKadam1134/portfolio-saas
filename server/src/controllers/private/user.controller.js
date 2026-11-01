@@ -48,6 +48,57 @@ const updateUserDetails = asynchandler(async (req, res) => {
     documentUrl,
   } = req.body;
 
+  const fieldErrors = {};
+  if (username !== undefined) {
+    if (typeof username !== "string" || !username.trim())
+      fieldErrors.username = ["Username is required!"];
+    else if (username.length < 3 || username.length > 30)
+      fieldErrors.username = ["Username must be between 3 and 30 characters."];
+    else if (!/^[a-zA-Z0-9_-]+$/.test(username))
+      fieldErrors.username = [
+        "Username can only contain letters, numbers, hyphens, and underscores.",
+      ];
+  }
+
+  if (firstName !== undefined) {
+    if (typeof firstName !== "string" || !firstName.trim())
+      fieldErrors.firstName = ["First name is required!"];
+    else if (firstName.length < 2 || firstName.length > 50)
+      fieldErrors.firstName = [
+        "First name must be between 2 and 50 characters.",
+      ];
+  }
+
+  if (lastName && lastName.length > 50)
+    fieldErrors.lastName = ["Last name must not exceed 50 characters."];
+
+  if (mobileNo !== undefined && !/^[0-9]{10}$/.test(String(mobileNo)))
+    fieldErrors.mobileNo = ["Mobile number must be exactly 10 digits."];
+
+  if (headline && headline.length > 100)
+    fieldErrors.headline = ["Headline must not exceed 100 characters."];
+
+  if (about && about.length > 1000)
+    fieldErrors.about = ["About section must not exceed 1000 characters."];
+
+  if (documentUrl && !/^https:\/\/.+/.test(documentUrl))
+    fieldErrors.documentUrl = ["URL must start with https://"];
+
+  for (const field of ["city", "state", "country"]) {
+    if (location?.[field] && location[field].length > 50)
+      fieldErrors[`location.${field}`] = [
+        `${field[0].toUpperCase()}${field.slice(1)} must not exceed 50 characters.`,
+      ];
+  }
+
+  if (Object.keys(fieldErrors).length) {
+    throw new ApiError(
+      400,
+      "Please correct the highlighted fields.",
+      fieldErrors,
+    );
+  }
+
   const fields = {};
 
   if (username) fields.username = username;
@@ -79,7 +130,9 @@ const updateUserDetails = asynchandler(async (req, res) => {
     });
 
     if (userExists) {
-      throw new ApiError(409, "User already exists with similar username");
+      throw new ApiError(409, "Username is already in use.", {
+        username: ["This username is already taken."],
+      });
     }
   }
 
@@ -90,7 +143,11 @@ const updateUserDetails = asynchandler(async (req, res) => {
     });
 
     if (userExists) {
-      throw new ApiError(409, "User already exists with same mobile no");
+      throw new ApiError(409, "Mobile number is already in use.", {
+        mobileNo: [
+          "This mobile number is already associated with another account.",
+        ],
+      });
     }
   }
 
@@ -99,7 +156,7 @@ const updateUserDetails = asynchandler(async (req, res) => {
     {
       $set: fields,
     },
-    { new: true },
+    { new: true, runValidators: true },
   ).select("-password -sessions -googleId -otp -otpExpiryDate");
 
   return res.status(200).json(new ApiRes(200, updatedUser, "Details updated!"));

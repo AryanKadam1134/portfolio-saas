@@ -3,9 +3,13 @@ const normalizeFieldErrors = (error = {}) => {
     (fieldErrors, [field, messages]) => {
       const message = Array.isArray(messages)
         ? messages.filter(Boolean).join(", ")
-        : messages;
+        : typeof messages === "string"
+          ? messages
+          : messages?.message || messages?.properties?.message;
 
-      if (message) fieldErrors.push([field, message]);
+      if (typeof message === "string" && message) {
+        fieldErrors.push([field, message]);
+      }
 
       return fieldErrors;
     },

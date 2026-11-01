@@ -26,6 +26,7 @@ import { certificateEndpoints } from "../../../services/certificate.service";
 
 import useApi from "../../../hooks/useApi";
 import useSkillsList from "../../../hooks/useSkillsList";
+import useFieldErrors from "../../../hooks/useFieldErrors";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/notification/useNotify";
@@ -48,6 +49,7 @@ export default function AddEditCertificate() {
     reset,
     formState: { errors, dirtyFields },
     watch,
+    setError,
   } = useForm({
     defaultValues: {
       sortOrder: 0,
@@ -56,6 +58,8 @@ export default function AddEditCertificate() {
     },
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const credentialUrl = useWatch({ control, name: "credentialUrl" });
   const certificateImage = useWatch({ control, name: "certificateImage" });
@@ -107,6 +111,7 @@ export default function AddEditCertificate() {
           });
         },
         onError: (error) => {
+          addErrors(error);
           notify.error({
             title: error?.message || "Failed to save certificate!",
           });

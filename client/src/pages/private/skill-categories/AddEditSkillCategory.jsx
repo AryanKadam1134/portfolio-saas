@@ -16,6 +16,7 @@ import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 import { skillCategoryEndpoints } from "../../../services/skillCategory.service";
 
 import useApi from "../../../hooks/useApi";
+import useFieldErrors from "../../../hooks/useFieldErrors";
 import useVisibilities from "../../../hooks/useVisibilities";
 
 import { useNotify } from "../../../context/notification/useNotify";
@@ -35,12 +36,15 @@ export default function AddEditSkillCategory() {
     handleSubmit,
     reset,
     formState: { errors, dirtyFields },
+    setError,
   } = useForm({
     defaultValues: {
       visibility: "public",
     },
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const fetchSkillCategory = useCallback(() => {
     callApi(
@@ -81,6 +85,7 @@ export default function AddEditSkillCategory() {
           });
         },
         onError: (error) => {
+          addErrors(error);
           notify.error({
             title: error?.message || "Failed to save category!",
           });

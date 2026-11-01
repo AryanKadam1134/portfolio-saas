@@ -25,12 +25,16 @@ const addEducation = asynchandler(async (req, res) => {
     cgpa,
   } = req.body;
 
-  if (!instituteName) {
-    throw new ApiError(400, "Institute name is required!");
+  if (typeof instituteName !== "string" || !instituteName.trim()) {
+    throw new ApiError(400, "Institute name is required!", {
+      instituteName: ["Institute name is required!"],
+    });
   }
 
-  if (!qualification) {
-    throw new ApiError(400, "Qualification is required!");
+  if (typeof qualification !== "string" || !qualification.trim()) {
+    throw new ApiError(400, "Qualification is required!", {
+      qualification: ["Qualification is required!"],
+    });
   }
 
   const educationExists = await Education.findOne({
@@ -39,7 +43,9 @@ const addEducation = asynchandler(async (req, res) => {
   });
 
   if (educationExists) {
-    throw new ApiError(409, "Education already exists!");
+    throw new ApiError(409, "Education already exists!", {
+      instituteName: ["An education entry for this institute already exists!"],
+    });
   }
 
   const fields = {};
@@ -104,7 +110,11 @@ const updateEducationDetails = asynchandler(async (req, res) => {
     });
 
     if (sameInstituteName) {
-      throw new ApiError(409, "Institute name already exists!");
+      throw new ApiError(409, "Institute name already exists!", {
+        instituteName: [
+          "An education entry for this institute already exists!",
+        ],
+      });
     }
   }
 

@@ -13,6 +13,7 @@ import CustomInputPassword from "../../components/ui/CustomInputPassword";
 import { authEndpoints } from "../../services/auth.service";
 
 import useApi from "../../hooks/useApi";
+import useFieldErrors from "../../hooks/useFieldErrors";
 
 import { useNotify } from "../../context/notification/useNotify";
 
@@ -28,10 +29,13 @@ export default function ChangePassword() {
     handleSubmit,
     reset,
     watch,
+    setError,
     formState: { errors },
   } = useForm({
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   // Watch password fields for real-time validation
   const newPassword = watch("new_password");
@@ -45,6 +49,7 @@ export default function ChangePassword() {
         });
       },
       onError: (error) => {
+        addErrors(error);
         notify.error({ title: error?.message || "Failed to change password!" });
       },
     });

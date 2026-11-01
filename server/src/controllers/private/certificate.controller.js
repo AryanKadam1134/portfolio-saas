@@ -27,12 +27,16 @@ const addCertificate = asynchandler(async (req, res) => {
     sortOrder,
   } = req.body;
 
-  if (!title) {
-    throw new ApiError(400, "Certificate name is required!");
+  if (typeof title !== "string" || !title.trim()) {
+    throw new ApiError(400, "Certificate name is required!", {
+      title: ["Certificate name is required!"],
+    });
   }
 
-  if (!issuer) {
-    throw new ApiError(400, "Issuer is required!");
+  if (typeof issuer !== "string" || !issuer.trim()) {
+    throw new ApiError(400, "Issuer is required!", {
+      issuer: ["Issuer is required!"],
+    });
   }
 
   const certificateExists = await Certificate.findOne({
@@ -41,7 +45,9 @@ const addCertificate = asynchandler(async (req, res) => {
   });
 
   if (certificateExists) {
-    throw new ApiError(409, "Certificate already exists!");
+    throw new ApiError(409, "Certificate already exists!", {
+      title: ["A certificate with this name already exists!"],
+    });
   }
 
   const fields = {};
@@ -115,7 +121,9 @@ const updateCertificate = asynchandler(async (req, res) => {
     });
 
     if (sameCertificateTitle) {
-      throw new ApiError(409, "Certificate name already exists!");
+      throw new ApiError(409, "Certificate name already exists!", {
+        title: ["A certificate with this name already exists!"],
+      });
     }
   }
 

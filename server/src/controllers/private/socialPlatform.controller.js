@@ -60,12 +60,16 @@ const addSocialPlatform = asynchandler(async (req, res) => {
 
   const { name, logoUrl, link, visibility, sortOrder } = req.body;
 
-  if (!name) {
-    throw new ApiError(400, "Platform name is required!");
+  if (typeof name !== "string" || !name.trim()) {
+    throw new ApiError(400, "Platform name is required!", {
+      name: ["Platform name is required!"],
+    });
   }
 
-  if (!link) {
-    throw new ApiError(400, "Link is required!");
+  if (typeof link !== "string" || !link.trim()) {
+    throw new ApiError(400, "Link is required!", {
+      link: ["Link is required!"],
+    });
   }
 
   const platformExists = await SocialPlatform.findOne({
@@ -74,7 +78,9 @@ const addSocialPlatform = asynchandler(async (req, res) => {
   });
 
   if (platformExists) {
-    throw new ApiError(409, "Platform already exists!");
+    throw new ApiError(409, "Platform already exists!", {
+      name: ["A platform with this name already exists!"],
+    });
   }
 
   const fields = {};
@@ -108,7 +114,9 @@ const updateSocialPlatform = asynchandler(async (req, res) => {
     });
 
     if (samePlatformName) {
-      throw new ApiError(409, "Platform name already exists!");
+      throw new ApiError(409, "Platform name already exists!", {
+        name: ["A platform with this name already exists!"],
+      });
     }
   }
 
@@ -129,7 +137,7 @@ const updateSocialPlatform = asynchandler(async (req, res) => {
     {
       $set: fields,
     },
-    { new: true },
+    { new: true, runValidators: true },
   );
 
   return res

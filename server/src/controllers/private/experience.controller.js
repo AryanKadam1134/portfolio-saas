@@ -26,8 +26,10 @@ const addExperience = asynchandler(async (req, res) => {
     visibility,
   } = req.body;
 
-  if (!organization) {
-    throw new ApiError(400, "Organization name is required!");
+  if (typeof organization !== "string" || !organization.trim()) {
+    throw new ApiError(400, "Organization name is required!", {
+      organization: ["Organization name is required!"],
+    });
   }
 
   const oragnizationExists = await Experience.findOne({
@@ -36,7 +38,11 @@ const addExperience = asynchandler(async (req, res) => {
   });
 
   if (oragnizationExists) {
-    throw new ApiError(409, "Organization already exists!");
+    throw new ApiError(409, "Organization already exists!", {
+      organization: [
+        "An experience entry for this organization already exists!",
+      ],
+    });
   }
 
   const fields = {};
@@ -116,7 +122,11 @@ const updateExperience = asynchandler(async (req, res) => {
     });
 
     if (sameOrganizationName) {
-      throw new ApiError(409, "Organization name already exists!");
+      throw new ApiError(409, "Organization name already exists!", {
+        organization: [
+          "An experience entry for this organization already exists!",
+        ],
+      });
     }
   }
 

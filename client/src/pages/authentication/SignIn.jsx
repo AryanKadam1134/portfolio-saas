@@ -11,11 +11,12 @@ import CustomButton from "../../components/ui/CustomButton";
 import CustomCheckbox from "../../components/ui/CustomCheckbox";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
-import { useAuth } from "../../context/auth/useAuth";
 import useFieldErrors from "../../hooks/useFieldErrors";
 
+import { useAuth } from "../../context/auth/useAuth";
+
 export default function SignIn() {
-  const { error, login } = useAuth();
+  const { login } = useAuth();
 
   const navigate = useNavigate();
 
@@ -38,7 +39,7 @@ export default function SignIn() {
       .then(() => {
         navigate("/details");
       })
-      .catch((error) => addErrors(error));
+      .catch(addErrors);
   };
 
   return (
@@ -87,7 +88,7 @@ export default function SignIn() {
                 required: "password is required!",
                 minLength: {
                   value: 8,
-                  message: "Minimum 6 characters",
+                  message: "Minimum 8 characters",
                 },
                 maxLength: {
                   value: 16,
@@ -106,8 +107,6 @@ export default function SignIn() {
           >
             <CustomCheckbox id="rememberMe" {...register("rememberMe")} />
           </FormField>
-
-          {error && <p className="text-center text-sm text-red-400">{error}</p>}
 
           {/* Submit */}
           <CustomButton

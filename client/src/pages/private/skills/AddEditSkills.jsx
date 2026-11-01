@@ -17,6 +17,7 @@ import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 import { skillEndpoints } from "../../../services/skill.service";
 
 import useApi from "../../../hooks/useApi";
+import useFieldErrors from "../../../hooks/useFieldErrors";
 import useSkillLevels from "../../../hooks/useSkillLevels";
 import useVisibilities from "../../../hooks/useVisibilities";
 import useCategoriesList from "../../../hooks/useCategoriesList";
@@ -84,12 +85,15 @@ export default function AddEditSkills() {
     reset,
     control,
     formState: { errors, dirtyFields },
+    setError,
   } = useForm({
     defaultValues: {
       visibility: "public",
     },
     mode: "onChange",
   });
+
+  const { addErrors } = useFieldErrors(setError);
 
   const fetchSkill = useCallback(() => {
     callApi("skillLoading", () => skillEndpoints.getSkill(id), {
@@ -125,6 +129,7 @@ export default function AddEditSkills() {
           });
         },
         onError: (error) => {
+          addErrors(error);
           notify.error({
             title: error?.message || "Failed to save skill!",
           });
