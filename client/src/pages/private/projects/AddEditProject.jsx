@@ -21,6 +21,7 @@ import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDateInISO } from "../../../utils/formatDate";
+import { urlValidation } from "../../../utils/formValidations";
 import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 
 import { projectEndpoints } from "../../../services/project.service";
@@ -317,10 +318,7 @@ export default function AddEditProject() {
                 icon={Link}
                 placeholder="https://example.com"
                 {...register("liveLink", {
-                  pattern: {
-                    value: /^(https:\/\/.+)?$/,
-                    message: "URL must start with https://",
-                  },
+                  ...urlValidation(),
                 })}
               />
             </FormField>
@@ -349,10 +347,7 @@ export default function AddEditProject() {
                 icon={Link}
                 placeholder="https://github.com/username/repo"
                 {...register("githubLink", {
-                  pattern: {
-                    value: /^(https:\/\/.+)?$/,
-                    message: "URL must start with https://",
-                  },
+                  ...urlValidation(),
                 })}
               />
             </FormField>

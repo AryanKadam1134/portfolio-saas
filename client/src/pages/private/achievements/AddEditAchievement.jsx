@@ -19,6 +19,7 @@ import CustomDatePicker from "../../../components/ui/CustomDatePicker";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDateInISO } from "../../../utils/formatDate";
+import { urlValidation } from "../../../utils/formValidations";
 import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 
 import { achievementEndpoints } from "../../../services/achievement.service";
@@ -342,10 +343,7 @@ export default function AddEditAchievement() {
                 icon={Link}
                 placeholder="https://example.com (optional)"
                 {...register("link", {
-                  pattern: {
-                    value: /^https:\/\/.+$/,
-                    message: "URL must start with https://",
-                  },
+                  ...urlValidation({ allowEmpty: false }),
                 })}
               />
             </FormField>

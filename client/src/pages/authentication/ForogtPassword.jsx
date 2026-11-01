@@ -10,6 +10,8 @@ import FormField from "../../components/ui/FormField";
 import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 
+import { emailValidation } from "../../utils/formValidations";
+
 import { authEndpoints } from "../../services/auth.service";
 
 import useApi from "../../hooks/useApi";
@@ -93,10 +95,7 @@ export default function ForogtPassword() {
                 placeholder="example@gmail.com"
                 {...register("email", {
                   required: "email is required!",
-                  pattern: {
-                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                    message: "Invalid email format",
-                  },
+                  ...emailValidation(),
                 })}
               />
             </FormField>

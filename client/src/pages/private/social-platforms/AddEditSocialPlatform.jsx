@@ -13,6 +13,7 @@ import CustomButton from "../../../components/ui/CustomButton";
 import CustomSelect from "../../../components/ui/CustomSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
+import { urlValidation } from "../../../utils/formValidations";
 import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 
 import { socialPlatformEndpoints } from "../../../services/socialPlatform.service";
@@ -450,10 +451,7 @@ export default function AddEditSocialPlatform() {
                 placeholder="https://github.com/username or your profile URL"
                 {...register("link", {
                   required: "Platform link is required!",
-                  pattern: {
-                    value: /^(https:\/\/.+)?$/,
-                    message: "URL must start with https://",
-                  },
+                  ...urlValidation(),
                 })}
               />
             </FormField>

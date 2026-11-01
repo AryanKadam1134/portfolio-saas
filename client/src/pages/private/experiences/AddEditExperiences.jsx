@@ -21,6 +21,7 @@ import CustomMultiSelect from "../../../components/ui/CustomMultiSelect";
 import CustomRadioButtons from "../../../components/ui/CustomRadioButtons";
 
 import { formatDateInISO } from "../../../utils/formatDate";
+import { urlValidation } from "../../../utils/formValidations";
 import { getUpdatedFields } from "../../../utils/getUpdatedFields";
 
 import { experienceEndpoints } from "../../../services/experience.service";
@@ -349,10 +350,7 @@ export default function AddEditExperiences() {
                 icon={Link}
                 placeholder="https://example.com"
                 {...register("organizationWebsite", {
-                  pattern: {
-                    value: /^(https:\/\/.+)?$/,
-                    message: "URL must start with https://",
-                  },
+                  ...urlValidation(),
                 })}
               />
             </FormField>

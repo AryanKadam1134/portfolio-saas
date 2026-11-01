@@ -16,6 +16,11 @@ import CustomTextArea from "../../components/ui/CustomTextArea";
 import CustomRadioButtons from "../../components/ui/CustomRadioButtons";
 
 import { getUpdatedFields } from "../../utils/getUpdatedFields";
+import {
+  emailValidation,
+  usernameValidation,
+  urlValidation,
+} from "../../utils/formValidations";
 
 import { userEndpoints } from "../../services/user.service";
 
@@ -171,19 +176,7 @@ export default function Dashboard() {
                 placeholder="Enter a unique username"
                 {...register("username", {
                   required: "Username is required!",
-                  minLength: {
-                    value: 3,
-                    message: "Username must be at least 3 characters",
-                  },
-                  maxLength: {
-                    value: 30,
-                    message: "Username must not exceed 30 characters",
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z0-9_-]+$/,
-                    message:
-                      "Username can only contain letters, numbers, hyphens, and underscores",
-                  },
+                  ...usernameValidation(),
                 })}
               />
             </FormField>
@@ -208,10 +201,7 @@ export default function Dashboard() {
                 placeholder="your.email@example.com"
                 {...register("email", {
                   required: "Email is required!",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Please enter a valid email address",
-                  },
+                  ...emailValidation(),
                 })}
                 disabled
               />
@@ -324,10 +314,7 @@ export default function Dashboard() {
                 icon={Link}
                 placeholder="https://drive.google.com/... (optional)"
                 {...register("documentUrl", {
-                  pattern: {
-                    value: /^(https:\/\/.+)?$/,
-                    message: "URL must start with https://",
-                  },
+                  ...urlValidation(),
                 })}
               />
             </FormField>

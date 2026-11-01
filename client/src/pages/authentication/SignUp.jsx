@@ -10,6 +10,12 @@ import CustomInput from "../../components/ui/CustomInput";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
+import {
+  emailValidation,
+  passwordValidation,
+  usernameValidation,
+} from "../../utils/formValidations";
+
 import { authEndpoints } from "../../services/auth.service";
 
 import useApi from "../../hooks/useApi";
@@ -102,6 +108,7 @@ export default function SignUp() {
               placeholder="username"
               {...register("username", {
                 required: "Username is required!",
+                ...usernameValidation(),
               })}
             />
           </FormField>
@@ -120,10 +127,7 @@ export default function SignUp() {
               placeholder="example@gmail.com"
               {...register("email", {
                 required: "Email is required!",
-                pattern: {
-                  value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                  message: "Invalid email format",
-                },
+                ...emailValidation(),
               })}
             />
           </FormField>
@@ -141,14 +145,7 @@ export default function SignUp() {
               placeholder="••••••••"
               {...register("password", {
                 required: "Password is required!",
-                minLength: {
-                  value: 8,
-                  message: "Minimum 8 characters",
-                },
-                maxLength: {
-                  value: 16,
-                  message: "Maximum 16 characters",
-                },
+                ...passwordValidation(),
               })}
             />
           </FormField>

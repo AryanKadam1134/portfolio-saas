@@ -10,6 +10,8 @@ import FormField from "../../components/ui/FormField";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomInputPassword from "../../components/ui/CustomInputPassword";
 
+import { passwordValidation } from "../../utils/formValidations";
+
 import { authEndpoints } from "../../services/auth.service";
 
 import useApi from "../../hooks/useApi";
@@ -81,14 +83,7 @@ export default function ResetPassword() {
               placeholder="Create a new password"
               {...register("new_password", {
                 required: "New password is required!",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-                maxLength: {
-                  value: 16,
-                  message: "Password must not exceed 16 characters",
-                },
+                ...passwordValidation(),
               })}
             />
           </FormField>
@@ -107,14 +102,7 @@ export default function ResetPassword() {
               placeholder="Re-enter your new password"
               {...register("confirm_password", {
                 required: "Please confirm your password!",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-                maxLength: {
-                  value: 16,
-                  message: "Password must not exceed 16 characters",
-                },
+                ...passwordValidation(),
                 validate: (value) => {
                   if (value !== newPassword) {
                     return "Passwords do not match!";
