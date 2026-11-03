@@ -13,6 +13,7 @@ export const asynchandler = (func) => {
           return validMessages.length ? [[field, validMessages]] : [];
         }),
       );
+
       const duplicateErrors =
         error.code === 11000
           ? Object.fromEntries(
@@ -21,10 +22,13 @@ export const asynchandler = (func) => {
                 .map(([field]) => [field, [`${field} is already in use.`]]),
             )
           : {};
+
       const errors = { ...duplicateErrors, ...validationErrors };
 
-      res.status(error.statusCode || 500).json({
-        statusCode: error.statusCode || 500,
+      const statusCode = error.statusCode || 500;
+
+      res.status(statusCode).json({
+        statusCode,
         message: error.message || "",
         errors,
       });
