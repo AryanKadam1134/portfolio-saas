@@ -17,6 +17,13 @@ export function AuthProvider({ children }) {
 
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const authenticated =
+      localStorage.getItem("isAuthenticated") === "true" ? true : false;
+
+    return authenticated;
+  });
+
   const authLoading = loading.authLoading;
 
   const [deviceId] = useState(() => {
@@ -38,10 +45,16 @@ export function AuthProvider({ children }) {
     };
   }, [deviceId]);
 
+  const updateSession = (user, authFlag) => {
+    setUser(user);
+    setIsAuthenticated(authFlag);
+    localStorage.setItem("isAuthenticated", authFlag);
+  };
+
   const googleAuth = (body) => {
     callApi("authLoading", () => authEndpoints.googleAuth(body, config), {
       onSuccess: (res) => {
-        setUser(res?.data);
+        updateSession(res?.data, true);
         setError(null);
       },
       onError: (error) => {
@@ -59,7 +72,7 @@ export function AuthProvider({ children }) {
       () => authEndpoints.login(payload, config),
       {
         onSuccess: (res) => {
-          setUser(res?.data);
+          updateSession(res?.data, true);
           setError(null);
         },
         onError: (error) => {
@@ -72,7 +85,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     callApi("loggingOut", authEndpoints.logout, {
       onSuccess: () => {
-        setUser(null);
+        updateSession(null, false);
       },
     });
   };
@@ -81,7 +94,10 @@ export function AuthProvider({ children }) {
     const restoreSession = () => {
       callApi("authLoading", () => authEndpoints.restoreSession(config), {
         onSuccess: (res) => {
-          setUser(res?.data);
+          updateSession(res?.data, true);
+        },
+        onError: () => {
+          updateSession(null, false);
         },
       });
     };
@@ -97,6 +113,7 @@ export function AuthProvider({ children }) {
         user,
         setUser,
         deviceId,
+        isAuthenticated,
         authLoading,
         googleAuth,
         login,

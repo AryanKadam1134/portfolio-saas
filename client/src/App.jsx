@@ -50,24 +50,16 @@ import UserSessions from "./pages/private/UserSessions.jsx";
 import { useAuth } from "./context/auth/useAuth";
 
 function PublicRoute() {
-  const { user, authLoading } = useAuth();
-
-  if (authLoading) {
-    return <LoadingScreen />;
-  }
+  const { isAuthenticated } = useAuth();
 
   // ❌ If logged in → redirect to details
-  return user ? <Navigate to="/details" replace /> : <Outlet />;
+  return isAuthenticated ? <Navigate to="/details" replace /> : <Outlet />;
 }
 
 function ProtectedRoute() {
-  const { user, authLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  if (authLoading) {
-    return <LoadingScreen />;
-  }
-
-  return user ? <Outlet /> : <Navigate to="/signin" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/signin" replace />;
 }
 
 function CommonLayout() {

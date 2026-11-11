@@ -256,8 +256,18 @@ const registerUser = asynchandler(async (req, res) => {
 
   if (typeof firstName !== "string" || !firstName.trim())
     fieldErrors.firstName = ["First name is required!"];
+
   if (typeof username !== "string" || !username.trim())
     fieldErrors.username = ["Username is required!"];
+  if (typeof username === "string" && username.trim()) {
+    if (username.length < 3 || username.length > 30)
+      fieldErrors.username = ["Username must be between 3 and 30 characters."];
+    else if (!/^[a-zA-Z0-9_-]+$/.test(username))
+      fieldErrors.username = [
+        "Username can only contain letters, numbers, hyphens, and underscores.",
+      ];
+  }
+
   if (typeof email !== "string" || !email.trim())
     fieldErrors.email = ["Email is required!"];
   else if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email))
@@ -267,15 +277,6 @@ const registerUser = asynchandler(async (req, res) => {
     fieldErrors.password = ["Password is required!"];
   else if (password.length < 8 || password.length > 16)
     fieldErrors.password = ["Password must be between 8 and 16 characters."];
-
-  if (typeof username === "string" && username.trim()) {
-    if (username.length < 3 || username.length > 30)
-      fieldErrors.username = ["Username must be between 3 and 30 characters."];
-    else if (!/^[a-zA-Z0-9_-]+$/.test(username))
-      fieldErrors.username = [
-        "Username can only contain letters, numbers, hyphens, and underscores.",
-      ];
-  }
 
   if (Object.keys(fieldErrors).length) {
     throw new ApiError(
@@ -450,10 +451,13 @@ const changePassword = asynchandler(async (req, res) => {
   const loggedUser = await User.findById(req.user?._id);
 
   const errors = {};
+
   if (!isInitializing && (typeof old_password !== "string" || !old_password))
     errors.old_password = ["Current password is required!"];
+
   if (typeof new_password !== "string" || !new_password)
     errors.new_password = ["New password is required!"];
+
   if (typeof confirm_password !== "string" || !confirm_password)
     errors.confirm_password = ["Please confirm your new password!"];
 
@@ -525,7 +529,6 @@ const forgotPassword = asynchandler(async (req, res) => {
       email: ["Email is required!"],
     });
   }
-
   if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email)) {
     throw new ApiError(400, "Enter a valid email address.", {
       email: ["Enter a valid email address."],
@@ -564,10 +567,12 @@ const verifyOTP = asynchandler(async (req, res) => {
   const fieldErrors = {};
   if (typeof email !== "string" || !email.trim())
     fieldErrors.email = ["Email is required!"];
+
   if (typeof otp !== "string" && typeof otp !== "number")
     fieldErrors.otp = ["Verification code is required!"];
-  else if (!String(otp)) fieldErrors.otp = ["Verification code is required!"];
-  else if (!/^\d{6}$/.test(String(otp)))
+  else if (!String(otp)) {
+    fieldErrors.otp = ["Verification code is required!"];
+  } else if (!/^\d{6}$/.test(String(otp)))
     fieldErrors.otp = ["Enter the 6-digit verification code."];
 
   if (Object.keys(fieldErrors).length) {
