@@ -1,6 +1,8 @@
 import api from "./api.service";
 
 export const authEndpoints = {
+  healthCheck: () => api.get(`/health`),
+
   googleAuth: (body, config) => api.post(`/auth/google`, body, config),
 
   register: (body) => api.post(`/auth/register`, body),

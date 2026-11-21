@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,6 +16,8 @@ export function AuthProvider({ children }) {
   const { loading, callApi } = useApi({ authLoading: true });
 
   const [error, setError] = useState(null);
+
+  const [isServerRunning, setIsServerRunning] = useState(false);
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const authenticated =
@@ -45,11 +47,11 @@ export function AuthProvider({ children }) {
     };
   }, [deviceId]);
 
-  const updateSession = (user, authFlag) => {
+  const updateSession = useCallback((user, authFlag) => {
     setUser(user);
     setIsAuthenticated(authFlag);
     localStorage.setItem("isAuthenticated", authFlag);
-  };
+  }, []);
 
   const googleAuth = (body) => {
     callApi("authLoading", () => authEndpoints.googleAuth(body, config), {
@@ -90,24 +92,45 @@ export function AuthProvider({ children }) {
     });
   };
 
-  useEffect(() => {
-    const restoreSession = () => {
-      callApi("authLoading", () => authEndpoints.restoreSession(config), {
-        onSuccess: (res) => {
-          updateSession(res?.data, true);
-        },
-        onError: () => {
-          updateSession(null, false);
-        },
-      });
-    };
+  const restoreSession = useCallback(() => {
+    callApi("authLoading", () => authEndpoints.restoreSession(config), {
+      onSuccess: (res) => {
+        updateSession(res?.data, true);
+      },
+      onError: () => {
+        updateSession(null, false);
+      },
+    });
+  }, [callApi, config, updateSession]);
 
-    restoreSession();
-  }, [callApi, config, deviceId]);
+  const checkHealth = useCallback(() => {
+    callApi("checking", authEndpoints.healthCheck, {
+      onSuccess: () => {
+        setIsServerRunning(true);
+        restoreSession();
+      },
+      onError: () => {
+        updateSession(null, false);
+      },
+    });
+  }, [updateSession, restoreSession, callApi]);
+
+  useEffect(() => {
+    if (isServerRunning) return;
+
+    checkHealth();
+
+    const interval = setInterval(() => {
+      checkHealth();
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, [isServerRunning, checkHealth]);
 
   return (
     <AuthContext.Provider
       value={{
+        isServerRunning,
         error,
         setError,
         user,

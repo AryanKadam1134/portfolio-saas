@@ -8,8 +8,6 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import LoadingScreen from "./components/common/LoadingScreen.jsx";
-
 import DashboardLayout from "./layouts/DashboardLayout";
 
 import SignIn from "./pages/authentication/SignIn.jsx";
@@ -50,16 +48,24 @@ import UserSessions from "./pages/private/UserSessions.jsx";
 import { useAuth } from "./context/auth/useAuth";
 
 function PublicRoute() {
-  const { isAuthenticated } = useAuth();
+  const { isServerRunning, isAuthenticated } = useAuth();
 
   // ❌ If logged in → redirect to details
-  return isAuthenticated ? <Navigate to="/details" replace /> : <Outlet />;
+  return isServerRunning && isAuthenticated ? (
+    <Navigate to="/details" replace />
+  ) : (
+    <Outlet />
+  );
 }
 
 function ProtectedRoute() {
-  const { isAuthenticated } = useAuth();
+  const { isServerRunning, isAuthenticated } = useAuth();
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/signin" replace />;
+  return isServerRunning && isAuthenticated ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/signin" replace />
+  );
 }
 
 function CommonLayout() {

@@ -40,6 +40,8 @@ app.get("/api/health", publicCors, healthCheck);
 
 app.use("/api/admin", privateCors);
 
+app.get("/api/admin/health", healthCheck);
+
 app.use("/api/admin/auth", authRouter);
 app.use("/api/admin/users", userRouter);
 app.use("/api/admin/skills", skillRouter);

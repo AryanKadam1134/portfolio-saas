@@ -1,6 +1,8 @@
 import AppLogo from "../common/AppLogo";
 import PageHeader from "../common/PageHeader";
 
+import { useAuth } from "../../context/auth/useAuth";
+
 export default function Authentication({
   heading,
   subHeading,
@@ -8,9 +10,17 @@ export default function Authentication({
   onSubmit,
   formSubContent,
 }) {
+  const { isServerRunning } = useAuth();
+
   return (
     <div className="min-h-screen p-6 flex flex-col items-center justify-center gap-10 bg-light-bg-secondary dark:bg-dark-bg-secondary">
       <AppLogo className="size-12" />
+
+      {!isServerRunning && (
+        <span className="text-center font-mono text-green-500">
+          Waking up the server. Please wait for 10-15 seconds...
+        </span>
+      )}
 
       <div className="w-full max-w-md bg-light-bg-primary dark:bg-dark-bg-primary p-8 rounded-xl shadow-lg border border-light-border-primary dark:border-dark-border-primary">
         <PageHeader
