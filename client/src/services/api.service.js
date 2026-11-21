@@ -11,7 +11,23 @@ api.interceptors.response.use(
   (response) => {
     return response.data;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        return await api(originalRequest);
+      } catch (retryError) {
+        return Promise.reject(retryError);
+      }
+    }
+
     return Promise.reject(error.response?.data || error);
   },
 );
