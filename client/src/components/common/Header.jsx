@@ -26,7 +26,7 @@ export default function Header({ onMenuClick }) {
   const dateNum = now.getDate();
 
   return (
-    <div className="z-10 flex h-[70px] w-full shrink-0 items-center justify-between border-b border-light-border-primary bg-light-bg-primary/90 px-4 text-light-text-primary shadow-[0_4px_24px_-20px_rgba(0,0,0,0.08)] backdrop-blur-xl dark:border-dark-border-primary dark:bg-dark-bg-primary/90 dark:text-dark-text-primary sm:px-7 lg:px-10">
+    <div className="z-10 flex h-17.5 w-full shrink-0 items-center justify-between border-b border-light-border-primary bg-light-bg-primary/90 px-4 text-light-text-primary shadow-[0_4px_24px_-20px_rgba(0,0,0,0.08)] backdrop-blur-xl dark:border-dark-border-primary dark:bg-dark-bg-primary/90 dark:text-dark-text-primary sm:px-7 lg:px-10">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}

@@ -13,20 +13,16 @@ import { useNotify } from "../notification/useNotify";
 export function AuthProvider({ children }) {
   const { notify } = useNotify();
 
-  const { loading, callApi } = useApi({ authLoading: true });
-
-  const [error, setError] = useState(null);
+  const { callApi } = useApi({ authenticating: true });
 
   const [isServerRunning, setIsServerRunning] = useState(false);
-  const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const authenticated =
       localStorage.getItem("isAuthenticated") === "true" ? true : false;
 
     return authenticated;
   });
-
-  const authLoading = loading.authLoading;
+  const [user, setUser] = useState(null);
 
   const [deviceId] = useState(() => {
     let storedDeviceId = localStorage.getItem("deviceId");
@@ -54,28 +50,25 @@ export function AuthProvider({ children }) {
   }, []);
 
   const googleAuth = (body) => {
-    callApi("authLoading", () => authEndpoints.googleAuth(body, config), {
+    callApi("authenticating", () => authEndpoints.googleAuth(body, config), {
       onSuccess: (res) => {
         updateSession(res?.data, true);
-        setError(null);
       },
       onError: (error) => {
         notify.error({
           title: error?.message || "Google Authentication failed!",
         });
-        setError(error?.message);
       },
     });
   };
 
   const login = async (payload) => {
     return await callApi(
-      "loading",
+      "authenticating",
       () => authEndpoints.login(payload, config),
       {
         onSuccess: (res) => {
           updateSession(res?.data, true);
-          setError(null);
         },
         onError: (error) => {
           notify.error({ title: error?.message || "Login failed!" });
@@ -93,7 +86,7 @@ export function AuthProvider({ children }) {
   };
 
   const restoreSession = useCallback(() => {
-    callApi("authLoading", () => authEndpoints.restoreSession(config), {
+    callApi("authenticating", () => authEndpoints.restoreSession(config), {
       onSuccess: (res) => {
         updateSession(res?.data, true);
       },
@@ -130,14 +123,11 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider
       value={{
+        isAuthenticated,
         isServerRunning,
-        error,
-        setError,
         user,
         setUser,
         deviceId,
-        isAuthenticated,
-        authLoading,
         googleAuth,
         login,
         logout,
